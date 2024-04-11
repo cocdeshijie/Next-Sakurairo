@@ -17,9 +17,9 @@ const HeaderDialog = () => {
                 </svg>
             </Dialog.Trigger>
             <Dialog.Portal>
-                <Dialog.Overlay className={"fixed inset-0 bg-theme-950/30 dark:bg-theme-50/20"} />
+                <Dialog.Overlay className={"fixed inset-0 bg-theme-950/30 dark:bg-theme-50/20 z-50"} />
                 <Dialog.Content className={cn(
-                    "fixed bottom-0 left-0 right-0 rounded-t-lg p-4 h-5/6",
+                    "fixed bottom-0 left-0 right-0 rounded-t-lg p-4 h-5/6 z-50",
                     "bg-theme-50/70 dark:bg-theme-950/70",
                     "overflow-y-auto transform translate-y-full",
                     "motion-safe:transition-transform motion-safe:duration-300 data-[state=open]:transform-none"

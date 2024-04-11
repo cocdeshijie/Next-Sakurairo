@@ -7,10 +7,11 @@ import { blogConfig } from "@/config";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
 const Header = () => {
+
     return (
         <header className={cn(
-            "fixed top-0 left-0 right-0 p-5 md:p-3 md:top-4 md:left-4 md:right-4",
-            "bg-theme-50/30 dark:bg-theme-950/30 backdrop-filter backdrop-blur-lg",
+            "fixed top-0 left-0 right-0 p-5 md:p-3 md:top-4 md:left-4 md:right-4 z-50",
+            "bg-theme-100/50 dark:bg-theme-950/30 backdrop-filter backdrop-blur-lg",
             "rounded-none md:rounded-lg shadow-md flex justify-between items-center"
         )}>
             <HeaderDialog/>
@@ -19,7 +20,10 @@ const Header = () => {
                 <Logo/>
             </div>
 
-            <div className={"hidden md:flex w-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center"}>
+            <div className={cn(
+                "hidden md:flex w-full absolute items-center",
+                "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            )}>
                 <nav className={"relative w-full"}>
                     <NavigationMenu.Root>
                         <NavigationMenu.List className={"flex justify-center items-center space-x-4"}>
@@ -66,6 +70,7 @@ const Header = () => {
                     </NavigationMenu.Root>
                 </nav>
             </div>
+            <div className="glowing-gradient"/>
         </header>
     )
 }

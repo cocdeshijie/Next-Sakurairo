@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { JotaiProvider } from "@/providers/jotai-provider";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -19,8 +20,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Header/>
-      {children}
+      <JotaiProvider>
+          <Header/>
+          {children}
+      </JotaiProvider>
       </body>
     </html>
   );
