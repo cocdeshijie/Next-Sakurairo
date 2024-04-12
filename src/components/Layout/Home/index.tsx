@@ -1,5 +1,5 @@
-import HomeImage from "@/components/Home/HomeImage";
-import HomeHero from "@/components/Home/HomeHero";
+import HomeImage from "@/components/Layout/Home/HomeImage";
+import HomeHero from "@/components/Layout/Home/HomeHero";
 
 const Home = () => {
     return (

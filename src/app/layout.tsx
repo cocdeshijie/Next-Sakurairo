@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
+import Header from "../components/Layout/Header";
 import { JotaiProvider } from "@/providers/jotai-provider";
+import Footer from "../components/Layout/Footer";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <JotaiProvider>
           <Header/>
           {children}
+          <Footer/>
       </JotaiProvider>
       </body>
     </html>

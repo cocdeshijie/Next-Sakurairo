@@ -1,10 +1,10 @@
 import { Provider } from "jotai";
-import { FC, ReactNode } from "react";
+import { PropsWithChildren } from "react";
 
-interface JotaiProviderProps {
-    children: ReactNode;
+export function JotaiProvider({ children }: PropsWithChildren) {
+    return (
+        <Provider>
+            {children}
+        </Provider>
+    )
 }
-
-export const JotaiProvider: FC<JotaiProviderProps> = ({ children }) => {
-    return <Provider>{children}</Provider>;
-};

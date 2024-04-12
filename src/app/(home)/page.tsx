@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import Hero from "@/components/Home";
+import Hero from "../../components/Layout/Home";
 
 const Home = () => {
     return (

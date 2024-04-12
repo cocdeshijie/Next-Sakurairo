@@ -1,10 +1,11 @@
 "use client";
 
 import { cn } from "@/utils/cn";
-import Logo from "@/components/Header/Logo";
-import HeaderDialog from "@/components/Header/HeaderDialog";
+import Logo from "@/components/Layout/Header/Logo";
+import HeaderDialog from "@/components/Layout/Header/HeaderDialog";
 import { blogConfig } from "@/config";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+import ThemeSwitch from "@/components/ui/ThemeSwitch";
 
 const Header = () => {
 
@@ -70,6 +71,11 @@ const Header = () => {
                     </NavigationMenu.Root>
                 </nav>
             </div>
+
+            <div className={"ml-auto"}>
+                <ThemeSwitch/>
+            </div>
+
             <div className="glowing-gradient"/>
         </header>
     )
