@@ -5,23 +5,30 @@ import { useTheme } from "next-themes";
 
 type ThemeOption = "dark" | "light" | "system";
 
-const themeAtom = atom<ThemeOption>(
-    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-);
+const themeAtom = atom<ThemeOption>("system");
 const isHoldingAtom = atom(false);
 const highlightedOptionAtom = atom<ThemeOption | null>(null);
 const positionAtom = atom<"top" | "bottom" | "left" | "right">("bottom");
+const resolveThemeAtom = atom(false);
 
 const ThemeSwitch = () => {
     const [switchTheme, setSwitchTheme] = useAtom(themeAtom);
     const [isHolding, setIsHolding] = useAtom(isHoldingAtom);
     const [highlightedOption, setHighlightedOption] = useAtom(highlightedOptionAtom);
     const [position, setPosition] = useAtom(positionAtom);
+    const [isThemeResolved, setIsThemeResolved] = useAtom(resolveThemeAtom);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
     const stadiumRef = useRef<HTMLDivElement | null>(null);
     const holdTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isClickedRef = useRef(false);
     const { setTheme, resolvedTheme } = useTheme();
+
+    useEffect(() => {
+        if (resolvedTheme) {
+            setSwitchTheme(resolvedTheme as ThemeOption);
+            setIsThemeResolved(true);
+        }
+    }, [resolvedTheme]);
 
     useEffect(() => {
         const updatePosition = () => {
@@ -98,11 +105,7 @@ const ThemeSwitch = () => {
                 (window.event as MouseEvent)?.clientX || 0,
                 (window.event as MouseEvent)?.clientY || 0
             );
-            const newTheme = selectedOption === "system"
-                ? window.matchMedia("(prefers-color-scheme: dark)").matches
-                    ? "dark"
-                    : "light"
-                : (selectedOption as ThemeOption) || switchTheme;
+            const newTheme = selectedOption || switchTheme;
             setSwitchTheme(newTheme);
             setTheme(newTheme);
             setIsHolding(false);
@@ -112,17 +115,33 @@ const ThemeSwitch = () => {
 
     const handleClick = () => {
         if (!isHolding) {
-            const newTheme = switchTheme === "dark" ? "light" : "dark";
+            const newTheme = resolvedTheme === "dark" ? "light" : "dark";
             setSwitchTheme(newTheme);
             setTheme(newTheme);
         }
     };
 
-    const themeIcons: Record<ThemeOption, JSX.Element> = {
-        dark: <FaMoon size={24} />,
-        light: <FaSun size={24} />,
-        system: <FaDesktop size={24} />,
+    const getThemeIcon = (theme: ThemeOption) => {
+        switch (theme) {
+            case "dark":
+                return <FaMoon size={24} />;
+            case "light":
+                return <FaSun size={24} />;
+            case "system":
+                return <FaDesktop size={24} />;
+        }
     };
+
+    const getButtonThemeIcon = () => {
+        if (switchTheme === "system") {
+            return resolvedTheme === "dark" ? <FaMoon size={24} /> : <FaSun size={24} />;
+        }
+        return getThemeIcon(switchTheme);
+    };
+
+    if (!isThemeResolved) {
+        return null; // Render nothing until the theme is resolved
+    }
 
     return (
         <div className="relative">
@@ -133,7 +152,7 @@ const ThemeSwitch = () => {
                 onClick={handleClick}
                 onMouseUp={handleMouseUp}
             >
-                {themeIcons[switchTheme]}
+                {getButtonThemeIcon()}
             </button>
             {isHolding && (
                 <div
@@ -151,7 +170,7 @@ const ThemeSwitch = () => {
                                 highlightedOption === option ? "text-blue-500" : "text-gray-500 dark:text-gray-400"
                             }`}
                         >
-                            {themeIcons[option]}
+                            {getThemeIcon(option)}
                         </span>
                     ))}
                 </div>

@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "../components/Layout/Header";
 import { JotaiProvider } from "@/providers/jotai-provider";
 import Footer from "../components/Layout/Footer";
+import { ThemeProvider } from "@/providers/theme-provider";
+import {cn} from "@/utils/cn";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -19,12 +21,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en">
+    <html lang="en"
+          style={{ colorScheme: 'light' }}
+          className={cn('light')}>
       <body className={inter.className}>
       <JotaiProvider>
-          <Header/>
-          {children}
-          <Footer/>
+          <ThemeProvider>
+              <Header/>
+              {children}
+              <Footer/>
+          </ThemeProvider>
       </JotaiProvider>
       </body>
     </html>

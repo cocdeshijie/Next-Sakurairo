@@ -10,21 +10,11 @@ export const blogConfig: BlogConfig = {
 
     header_navigation: [
         {
-            title: "About",
-            href: "",
-            children: [
-                {
-                    title: "me",
-                    href: ""
-                },
-                {
-                    title: "this site",
-                    href: ""
-                }
-            ]
+            title: "Home",
+            href: ""
         },
         {
-            title: "Home",
+            title: "Placeholder",
             href: ""
         },
         {
@@ -40,21 +30,7 @@ export const blogConfig: BlogConfig = {
                     href: ""
                 },
                 {
-                    title: "this site this site this site",
-                    href: ""
-                }
-            ]
-        },
-        {
-            title: "About",
-            href: "",
-            children: [
-                {
-                    title: "me",
-                    href: ""
-                },
-                {
-                    title: "this site this site this site",
+                    title: "this site",
                     href: ""
                 }
             ]
