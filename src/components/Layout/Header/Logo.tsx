@@ -26,7 +26,7 @@ const Logo = () => {
                     <div className={"relative"}>
                         <div
                             className={cn(
-                                "pt-3 pb-1 rounded-xl items-center",
+                                "pt-1.5 pb-0.5 rounded-xl items-center",
                                 logoHover ? "bg-theme-500 text-white" : "bg-transparent text-theme-500 dark:text-white"
                             )}
                         >
@@ -35,13 +35,13 @@ const Logo = () => {
                     </div>
                     <div
                         className={cn(
-                            "pb-1 text-theme-500 dark:text-white",
+                            "pb-0.5 text-theme-500 dark:text-white",
                             logoHover && "animate-spin"
                         )}
                     >
                         {blogConfig.header_logo.text_middle}
                     </div>
-                    <div className={"pb-1 text-theme-500 dark:text-white"}>
+                    <div className={"pb-0.5 text-theme-500 dark:text-white"}>
                         {blogConfig.header_logo.text_end}
                     </div>
                 </div>

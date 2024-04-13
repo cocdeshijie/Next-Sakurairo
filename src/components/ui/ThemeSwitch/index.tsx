@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback } from "react";
 import { atom, useAtom } from "jotai";
 import { FaMoon, FaSun, FaDesktop } from "react-icons/fa";
 import { useTheme } from "next-themes";
+import { cn } from "@/utils/cn";
 
 type ThemeOption = "dark" | "light" | "system";
 
@@ -118,33 +119,40 @@ const ThemeSwitch = () => {
     }
 
     return (
-        <div className="relative">
+        <div className={"relative"}>
             <button
                 ref={buttonRef}
-                className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"
+                className={cn(
+                    "p-2 h-10 w-10 rounded-md",
+                    "bg-theme-200/25 dark:bg-theme-800/25 backdrop-blur-3xl"
+                )}
                 onMouseDown={handleMouseDown}
                 onClick={handleClick}
                 onMouseUp={(e) => handleMouseUp(e.nativeEvent)}
             >
                 {getButtonThemeIcon()}
             </button>
-            {isHolding && (
-                <div
-                    ref={stadiumRef}
-                    className={`absolute top-full left-1/2 transform -translate-x-1/2 w-40 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex justify-between items-center px-4`}
-                >
-                    {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
-                        <span
-                            key={option}
-                            className={`${
-                                highlightedOption === option ? "text-blue-500" : "text-gray-500 dark:text-gray-400"
-                            }`}
-                        >
-                            {getThemeIcon(option)}
-                        </span>
-                    ))}
-                </div>
-            )}
+            <div
+                ref={stadiumRef}
+                className={cn(
+                    "absolute top-full left-1/2 transform -translate-x-1/2",
+                    "w-40 h-12 rounded-full flex justify-between items-center px-4",
+                    "bg-theme-200/25 dark:bg-theme-800/25 backdrop-blur-3xl",
+                    "transition-opacity duration-300",
+                    isHolding ? "pointer-events-auto" : "hidden pointer-events-none"
+                )}
+            >
+                {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
+                    <span
+                        key={option}
+                        className={`${
+                            highlightedOption === option ? "text-blue-500" : ""
+                        }`}
+                    >
+                        {getThemeIcon(option)}
+                    </span>
+                ))}
+            </div>
         </div>
     );
 };
