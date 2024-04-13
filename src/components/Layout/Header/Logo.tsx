@@ -22,7 +22,7 @@ const Logo = () => {
             className={"relative z-10 flex justify-center w-full"}
         >
             <div className={"flex flex-col items-center font-medium"}>
-                <div className={"flex items-end space-x-3 md:text-xl"}>
+                <div className={"flex items-end space-x-1.5 md:text-xl"}>
                     <div className={"relative"}>
                         <div
                             className={cn(
