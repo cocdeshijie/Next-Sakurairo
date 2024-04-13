@@ -2,9 +2,9 @@
 
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
+import { FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
 
 const bgOpacityAtom = atom(0);
-
 
 const HomeHero = () => {
     const [bgOpacity, setBgOpacity] = useAtom(bgOpacityAtom);
@@ -30,8 +30,20 @@ const HomeHero = () => {
             <div
                 className={"absolute top-0 w-full h-screen bg-theme-50 dark:bg-theme-950"}
                 style={{opacity: bgOpacity}}/>
-            <div className={"text-center z-0"}>
-                <h1 className={"text-4xl font-bold"}>Screen Holder Text</h1>
+            <div className={"container mx-auto px-4 z-0"}>
+                <div className={"md:flex md:justify-between items-center"}>
+                    <div className={"md:w-1/2 flex flex-col items-center mb-8 md:mb-0"}>
+                        <img src="https://qwq.xyz/cocdeshijie.gif" alt="Profile" className={"w-40 h-40 rounded-full mb-4"} />
+                        <div className={"flex space-x-4"}>
+                            <FaTwitter size={24} />
+                            <FaGithub size={24} />
+                            <FaLinkedin size={24} />
+                        </div>
+                    </div>
+                    <div className={"md:w-1/2 text-center"}>
+                        <h1 className={"text-4xl font-bold"}>Giant Placeholder Text</h1>
+                    </div>
+                </div>
             </div>
             <div className={"absolute bottom-0 w-full h-[20vh] bg-gradient-to-b from-transparent to-theme-50 dark:to-theme-950 z-10"}/>
         </div>
