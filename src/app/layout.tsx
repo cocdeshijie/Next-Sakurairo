@@ -22,8 +22,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en"
-          style={{ colorScheme: 'light' }}
-          className={cn('light')}>
+          style={{ colorScheme: 'dark' }}
+          className={cn('dark')}>
       <body className={inter.className}>
       <JotaiProvider>
           <ThemeProvider>
