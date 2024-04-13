@@ -3,6 +3,7 @@
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
+import Image from "next/image";
 
 const bgOpacityAtom = atom(0);
 
@@ -33,7 +34,13 @@ const HomeHero = () => {
             <div className={"container mx-auto px-4 z-0"}>
                 <div className={"md:flex md:justify-between items-center"}>
                     <div className={"md:w-1/2 flex flex-col items-center mb-8 md:mb-0"}>
-                        <img src="https://qwq.xyz/cocdeshijie.gif" alt="Profile" className={"w-40 h-40 rounded-full mb-4"} />
+                        <Image
+                            src="https://qwq.xyz/cocdeshijie.gif"
+                            alt="Profile"
+                            width={160}
+                            height={160}
+                            className={"rounded-full mb-4"}
+                        />
                         <div className={"flex space-x-4"}>
                             <FaTwitter size={24} />
                             <FaGithub size={24} />
