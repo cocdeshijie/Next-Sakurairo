@@ -23,19 +23,17 @@ const HomeHero = () => {
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [setBgOpacity]);
 
     return (
         <div className={"min-h-screen flex items-center justify-center relative"}>
             <div
-                className={"absolute top-0 w-full h-screen bg-theme-50 z-[-1]"}
-                style={{opacity: bgOpacity}}
-            ></div>
-            <div className={"text-center"}>
+                className={"absolute top-0 w-full h-screen bg-theme-50 dark:bg-theme-950"}
+                style={{opacity: bgOpacity}}/>
+            <div className={"text-center z-0"}>
                 <h1 className={"text-4xl font-bold"}>Screen Holder Text</h1>
             </div>
-            <div
-                className={"absolute bottom-0 w-full h-[20vh] bg-gradient-to-b from-transparent to-theme-50 z-10"}></div>
+            <div className={"absolute bottom-0 w-full h-[20vh] bg-gradient-to-b from-transparent to-theme-50 dark:to-theme-950 z-10"}/>
         </div>
     )
 }

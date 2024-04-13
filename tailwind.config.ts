@@ -11,21 +11,24 @@ const config: Config = {
     extend: {
       "colors": {
         "theme": {
-          50: "#FFF0F6",
-          100: "#FFD6E1",
-          200: "#FF9EA8",
-          300: "#FF756B",
-          400: "#FF6333",
+          50: "#F1F3F4",
+          100: "#DEEDE9",
+          200: "#B4E4BB",
+          300: "#ACE382",
+          400: "#E9E649",
           500: "#FF6600",
-          600: "#CC3000",
-          700: "#940A00",
-          800: "#61000A",
-          900: "#29000B",
-          950: "#0F0007"
+          600: "#CCC919",
+          700: "#5DA725",
+          800: "#2E843B",
+          900: "#366357",
+          950: "#404A4F"
         }
+      },
+      clipPath: {
+        articleImage: "polygon(8% 0, 100% 0, 100% 100%, 0 100%)",
       }
     }
   },
-  plugins: [],
+  plugins: [require('tailwind-clip-path')],
 };
 export default config;
