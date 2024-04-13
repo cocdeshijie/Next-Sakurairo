@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import { atom, useAtom } from "jotai";
 import { FaMoon, FaSun, FaDesktop } from "react-icons/fa";
 import { useTheme } from "next-themes";
@@ -8,14 +8,12 @@ type ThemeOption = "dark" | "light" | "system";
 const themeAtom = atom<ThemeOption>("system");
 const isHoldingAtom = atom(false);
 const highlightedOptionAtom = atom<ThemeOption | null>(null);
-const positionAtom = atom<"top" | "bottom" | "left" | "right">("bottom");
 const resolveThemeAtom = atom(false);
 
 const ThemeSwitch = () => {
     const [switchTheme, setSwitchTheme] = useAtom(themeAtom);
     const [isHolding, setIsHolding] = useAtom(isHoldingAtom);
     const [highlightedOption, setHighlightedOption] = useAtom(highlightedOptionAtom);
-    const [position, setPosition] = useAtom(positionAtom);
     const [isThemeResolved, setIsThemeResolved] = useAtom(resolveThemeAtom);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
     const stadiumRef = useRef<HTMLDivElement | null>(null);
@@ -28,42 +26,9 @@ const ThemeSwitch = () => {
             setSwitchTheme(resolvedTheme as ThemeOption);
             setIsThemeResolved(true);
         }
-    }, [resolvedTheme]);
+    }, [resolvedTheme, setIsThemeResolved, setSwitchTheme]);
 
-    useEffect(() => {
-        const updatePosition = () => {
-            if (buttonRef.current && stadiumRef.current) {
-                const { bottom, top, right } = buttonRef.current.getBoundingClientRect();
-                const { height, width } = stadiumRef.current.getBoundingClientRect();
-                const { innerHeight, innerWidth } = window;
-
-                setPosition(
-                    bottom + height <= innerHeight
-                        ? "bottom"
-                        : top - height >= 0
-                            ? "top"
-                            : right + width <= innerWidth
-                                ? "right"
-                                : "left"
-                );
-            }
-        };
-
-        if (isHolding) {
-            updatePosition();
-            window.addEventListener("resize", updatePosition);
-            window.addEventListener("mousemove", handleMouseMove);
-            window.addEventListener("mouseup", handleMouseUp);
-        }
-
-        return () => {
-            window.removeEventListener("resize", updatePosition);
-            window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("mouseup", handleMouseUp);
-        };
-    }, [isHolding]);
-
-    const getSelectedOption = (mouseX: number, mouseY: number): ThemeOption | null => {
+    const getSelectedOption = useCallback((mouseX: number, mouseY: number): ThemeOption | null => {
         if (stadiumRef.current) {
             const { left, top, width, height } = stadiumRef.current.getBoundingClientRect();
             const centerX = left + width / 2;
@@ -78,7 +43,7 @@ const ThemeSwitch = () => {
             return distances.reduce((prev, curr) => (prev.distance < curr.distance ? prev : curr)).option as ThemeOption;
         }
         return null;
-    };
+    }, []);
 
     const handleMouseDown = () => {
         isClickedRef.current = true;
@@ -89,29 +54,38 @@ const ThemeSwitch = () => {
         }, 500);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = useCallback((e: MouseEvent) => {
         if (isHolding) {
             const selectedOption = getSelectedOption(e.clientX, e.clientY);
             setHighlightedOption(selectedOption);
         }
-    };
+    }, [isHolding, getSelectedOption, setHighlightedOption]);
 
-    const handleMouseUp = () => {
+    const handleMouseUp = useCallback((e: MouseEvent) => {
         if (holdTimeoutRef.current) {
             clearTimeout(holdTimeoutRef.current);
         }
         if (isHolding) {
-            const selectedOption = getSelectedOption(
-                (window.event as MouseEvent)?.clientX || 0,
-                (window.event as MouseEvent)?.clientY || 0
-            );
+            const selectedOption = getSelectedOption(e.clientX, e.clientY);
             const newTheme = selectedOption || switchTheme;
             setSwitchTheme(newTheme);
             setTheme(newTheme);
             setIsHolding(false);
         }
         isClickedRef.current = false;
-    };
+    }, [isHolding, getSelectedOption, switchTheme, setSwitchTheme, setTheme, setIsHolding]);
+
+    useEffect(() => {
+        if (isHolding) {
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+        }
+
+        return () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+    }, [isHolding, handleMouseMove, handleMouseUp]);
 
     const handleClick = () => {
         if (!isHolding) {
@@ -150,18 +124,14 @@ const ThemeSwitch = () => {
                 className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none"
                 onMouseDown={handleMouseDown}
                 onClick={handleClick}
-                onMouseUp={handleMouseUp}
+                onMouseUp={(e) => handleMouseUp(e.nativeEvent)}
             >
                 {getButtonThemeIcon()}
             </button>
             {isHolding && (
                 <div
                     ref={stadiumRef}
-                    className={`absolute ${
-                        position === "bottom" ? "top-full" : position === "top" ? "bottom-full" : ""
-                    } left-1/2 transform -translate-x-1/2 ${
-                        position === "right" ? "translate-x-full" : position === "left" ? "-translate-x-full" : ""
-                    } w-40 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex justify-between items-center px-4`}
+                    className={`absolute top-full left-1/2 transform -translate-x-1/2 w-40 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex justify-between items-center px-4`}
                 >
                     {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
                         <span
