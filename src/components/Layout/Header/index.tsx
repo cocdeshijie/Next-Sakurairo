@@ -75,8 +75,6 @@ const Header = () => {
             <div className={"ml-auto"}>
                 <ThemeSwitch/>
             </div>
-
-            <div className="glowing-gradient"/>
         </header>
     )
 }
