@@ -135,8 +135,8 @@ const ThemeSwitch = () => {
             <div
                 ref={stadiumRef}
                 className={cn(
-                    "absolute top-full left-1/2 transform -translate-x-1/2",
-                    "w-40 h-12 rounded-full flex justify-between items-center px-4",
+                    "absolute mt-2 top-full left-1/2 transform -translate-x-1/2",
+                    "rounded-md flex justify-between items-center p-1",
                     "bg-theme-200/25 dark:bg-theme-800/25 backdrop-blur-3xl",
                     "transition-opacity duration-300",
                     isHolding ? "pointer-events-auto" : "hidden pointer-events-none"
@@ -145,10 +145,10 @@ const ThemeSwitch = () => {
                 {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
                     <span
                         key={option}
-                        className={`${
-                            highlightedOption === option ? "text-blue-500" : ""
-                        }`}
-                    >
+                        className={cn(
+                            highlightedOption === option && "text-blue-500 bg-theme-300/25",
+                            "p-2 rounded-md"
+                        )}>
                         {getThemeIcon(option)}
                     </span>
                 ))}
