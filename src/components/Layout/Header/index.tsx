@@ -13,7 +13,8 @@ const Header = () => {
     return (
         <header className={cn(
             "fixed top-0 left-0 right-0 p-5 md:py-3 md:px-8 md:top-4 md:left-16 md:right-16 z-50",
-            "bg-theme-100/50 dark:bg-theme-900/50 backdrop-filter backdrop-blur-lg",
+            "bg-theme-100/50 dark:bg-theme-900/50 backdrop-blur-lg",
+            "shadow-sm border border-theme-600/15 shadow-theme-600/15 dark:border-theme-400/15 dark:shadow-theme-400/15",
             "rounded-none md:rounded-lg shadow-md flex justify-between items-center"
         )}>
             <HeaderDialog/>
