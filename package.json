@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "velite dev": "velite --watch",
     "build": "next build",
+    "velite build": "velite --clean",
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",

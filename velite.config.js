@@ -34,7 +34,7 @@ const posts = defineCollection({
     schema: s
         .object({
             title: s.string(),
-            slug: s.path(),
+            slug: s.slug("posts"),
             date: s.isodate(),
             cover: s.string(),
             tags: s.array(s.string()).default([]),
