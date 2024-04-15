@@ -3,7 +3,8 @@
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
-import { blogConfig } from "@/config";
+import { config } from "#site/content";
+import type { Config } from "#site/content";
 import { cn } from "@/utils/cn";
 
 const HeaderDialog = () => {
@@ -26,14 +27,14 @@ const HeaderDialog = () => {
                 )}>
                     <NavigationMenu.Root>
                         <NavigationMenu.List className={"flex flex-col space-y-4 pt-14"}>
-                            {blogConfig.header_navigation.map((item) => (
+                            {config.header_navigation.map((item: Config) => (
                                 <NavigationMenu.Item key={item.title} className={"flex-col"}>
                                     <NavigationMenu.Trigger className={"dark:text-white"}>
                                         {item.title}
                                     </NavigationMenu.Trigger>
                                     {item.children && (
                                         <div className={"grid grid-cols-2 gap-2 my-2"}>
-                                            {item.children.map((child) => (
+                                            {item.children.map((child: Config) => (
                                                 <NavigationMenu.Link key={child.title} href={child.href} className={"block px-2 py-1 dark:text-white"}>
                                                     {child.title}
                                                 </NavigationMenu.Link>

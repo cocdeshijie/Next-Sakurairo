@@ -3,7 +3,8 @@
 import { cn } from "@/utils/cn";
 import Logo from "@/components/Layout/Header/Logo";
 import HeaderDialog from "@/components/Layout/Header/HeaderDialog";
-import { blogConfig } from "@/config";
+import { config } from "#site/content";
+import type { Config } from "#site/content";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import ThemeSwitch from "@/components/ui/ThemeSwitch";
 
@@ -28,7 +29,7 @@ const Header = () => {
                 <nav className={"relative w-full"}>
                     <NavigationMenu.Root>
                         <NavigationMenu.List className={"flex justify-center items-center space-x-4"}>
-                            {blogConfig.header_navigation.map((item) => (
+                            {config.header_navigation.map((item: Config) => (
                                 <NavigationMenu.Item key={item.title}>
                                     {item.children ? (
                                         <div className={"relative"}>
@@ -43,7 +44,7 @@ const Header = () => {
                                                     "bg-theme-100/30 dark:bg-theme-900/30"
                                                 )}>
                                                 <ul className={"space-y-1"}>
-                                                    {item.children.map((child) => (
+                                                    {item.children.map((child: Config) => (
                                                         <li key={child.title} className={"text-center"}>
                                                             <NavigationMenu.Link
                                                                 href={child.href}

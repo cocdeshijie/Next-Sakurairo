@@ -1,25 +1,68 @@
-import { defineConfig, s } from "velite";
+import { defineCollection, defineConfig, s } from "velite";
+import { execSync } from "node:child_process";
+
+const config = defineCollection({
+    name: "Config",
+    pattern: "site/config.yml",
+    single: true,
+    schema: s.object({
+        header_logo: s.object({
+            text_front: s.string(),
+            text_middle: s.string(),
+            text_end: s.string(),
+            text_bottom: s.string(),
+        }),
+        header_navigation: s.array(
+            s.object({
+                title: s.string(),
+                href: s.string(),
+                children: s.array(
+                    s.object({
+                        title: s.string(),
+                        href: s.string()
+                    })
+                ).optional()
+            })
+        )
+    })
+})
+
+
+const posts = defineCollection({
+    name: "Posts",
+    pattern: "posts/**/*.@(md|mdx)",
+    schema: s
+        .object({
+            title: s.string(),
+            slug: s.path(),
+            date: s.isodate(),
+            cover: s.string(),
+            tags: s.array(s.string()).default([]),
+            metadata: s.metadata(),
+            excerpt: s.excerpt(), // TODO: use AI
+            content: s.markdown()
+        })
+        .transform(data => ({ ...data, permalink: `/blog/${data.slug}` }))
+        .transform(data => ({
+            ...data,
+            edited: (() => {
+                try {
+                    const filePath = `./content/${data.slug}.mdx`;
+                    const dateStr = execSync(`git log -1 --format="%ad" -- ${filePath}`, {
+                        encoding: 'utf-8'
+                    });
+                    return new Date(dateStr).toISOString();
+                } catch (e) {
+                    return new Date(data.date).toISOString();
+                }
+            })()
+        }))
+})
 
 export default defineConfig({
     root: "content",
     collections: {
-        posts: {
-            name: "Posts",
-            pattern: 'posts/**/*.@(md|mdx)',
-            schema: s
-                .object({
-                    title: s.string().max(99), // Zod primitive type
-                    // slug: s.slug('posts'), // validate format, unique in posts collection
-                    slug: s.path(), // auto generate slug from file path
-                    date: s.isodate(), // input Date-like string, output ISO Date string.
-                    cover: s.string(), // input image relative path, output image object with blurImage.
-                    tags: s.array(s.string()).default([]),
-                    metadata: s.metadata(), // extract markdown reading-time, word-count, etc.
-                    excerpt: s.excerpt(), // excerpt of markdown content
-                    content: s.markdown() // transform markdown to html
-                })
-                // more additional fields (computed fields)
-                .transform(data => ({ ...data, permalink: `/blog/${data.slug}` }))
-        }
+        config,
+        posts
     }
 })

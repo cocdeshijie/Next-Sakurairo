@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { cn } from "@/utils/cn";
-import { blogConfig } from "@/config";
+import { config } from "#site/content";
 
 const Logo = () => {
     const [logoHover, setLogoHover] = useState(false);
@@ -30,7 +30,7 @@ const Logo = () => {
                                 logoHover ? "bg-theme-500 text-white" : "bg-transparent text-theme-500 dark:text-white"
                             )}
                         >
-                            {blogConfig.header_logo.text_front}
+                            {config.header_logo.text_front}
                         </div>
                     </div>
                     <div
@@ -39,10 +39,10 @@ const Logo = () => {
                             logoHover && "animate-spin"
                         )}
                     >
-                        {blogConfig.header_logo.text_middle}
+                        {config.header_logo.text_middle}
                     </div>
                     <div className={"pb-0.5 text-theme-500 dark:text-white"}>
-                        {blogConfig.header_logo.text_end}
+                        {config.header_logo.text_end}
                     </div>
                 </div>
                 {logoHover && (
@@ -50,7 +50,7 @@ const Logo = () => {
                         "absolute -bottom-2.5 left-1/2 transform -translate-x-1/2 duration-500 transition-opacity",
                         "text-[10px] font-normal text-theme-500 dark:text-white whitespace-nowrap"
                     )}>
-                        {blogConfig.header_logo.text_bottom}
+                        {config.header_logo.text_bottom}
                     </div>
                 )}
             </div>
