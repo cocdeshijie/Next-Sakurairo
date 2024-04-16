@@ -40,7 +40,7 @@ const posts = defineCollection({
             tags: s.array(s.string()).default([]),
             metadata: s.metadata(),
             excerpt: s.excerpt(), // TODO: use AI
-            content: s.markdown()
+            content: s.mdx()
         })
         .transform(data => ({ ...data, permalink: `/blog/${data.slug}` }))
         .transform(data => ({

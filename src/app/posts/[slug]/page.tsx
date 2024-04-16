@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { posts } from "#site/content";
 import Image from "next/image";
-import {cn} from "@/utils/cn";
+import { cn } from "@/utils/cn";
+import { MDX } from "@/components/ui/MDX";
 
 interface PostProps {
     params: {
@@ -56,7 +57,7 @@ export default function PostPage({ params }: PostProps) {
                     "rounded-lg border border-theme-300/50 dark:border-theme-700/50 shadow-md shadow-theme-200/50 dark:shadow-theme-800/50",
                     "bg-theme-50/75 dark:bg-theme-950/75 backdrop-blur-sm"
                 )}>
-                    {post.content}
+                    <MDX code={post.content}/>
                 </div>
             </section>
         </article>

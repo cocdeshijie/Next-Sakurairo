@@ -5,7 +5,7 @@ import Header from "../components/Layout/Header";
 import { JotaiProvider } from "@/providers/jotai-provider";
 import Footer from "../components/Layout/Footer";
 import { ThemeProvider } from "@/providers/theme-provider";
-import {cn} from "@/utils/cn";
+import { cn } from "@/utils/cn";
 
 type RootLayoutProps = {
   children: React.ReactNode;
