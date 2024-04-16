@@ -30,13 +30,17 @@ const Header = () => {
                             <li key={item.title}>
                                 {item.children ? (
                                     <HoverCard.Root>
-                                        <HoverCard.Trigger className={"dark:text-white"}>{item.title}</HoverCard.Trigger>
+                                        <HoverCard.Trigger href={item.href}
+                                                           className={"dark:text-white cursor-pointer"}
+                                        >
+                                            {item.title}
+                                        </HoverCard.Trigger>
                                         <HoverCard.Portal>
                                             <HoverCard.Content
                                                 className={cn(
                                                     "min-w-max max-w-[calc(100vw-40px)]",
-                                                    "rounded-md shadow-md p-1 mt-8 backdrop-blur-lg",
-                                                    "bg-theme-100/30 dark:bg-theme-900/30"
+                                                    "rounded-md shadow-md p-1 mt-8",
+                                                    "bg-theme-100/75 dark:bg-theme-800/75 backdrop-blur-md"
                                                 )}
                                             >
                                                 <ul className={"space-y-1"}>

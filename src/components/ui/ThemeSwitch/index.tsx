@@ -3,6 +3,7 @@ import { atom, useAtom } from "jotai";
 import { FaMoon, FaSun, FaDesktop } from "react-icons/fa";
 import { useTheme } from "next-themes";
 import { cn } from "@/utils/cn";
+import * as Portal from "@radix-ui/react-portal";
 
 type ThemeOption = "dark" | "light" | "system";
 
@@ -132,27 +133,38 @@ const ThemeSwitch = () => {
             >
                 {getButtonThemeIcon()}
             </button>
-            <div
-                ref={stadiumRef}
-                className={cn(
-                    "absolute mt-2 top-full left-1/2 transform -translate-x-1/2",
-                    "rounded-md flex justify-between items-center p-1",
-                    "bg-theme-200/25 dark:bg-theme-800/25 backdrop-blur-3xl",
-                    "transition-opacity duration-300",
-                    isHolding ? "pointer-events-auto" : "hidden pointer-events-none"
-                )}
-            >
-                {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
-                    <span
-                        key={option}
-                        className={cn(
-                            highlightedOption === option && "text-blue-500 bg-theme-300/25",
-                            "p-2 rounded-md"
-                        )}>
+            <Portal.Root>
+                <div
+                    ref={stadiumRef}
+                    className={cn(
+                        "fixed mt-2",
+                        "rounded-md flex justify-between items-center p-1",
+                        "bg-theme-200/75 dark:bg-theme-800/75 backdrop-blur-3xl",
+                        "transition-opacity duration-300",
+                        isHolding ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+                    )}
+                    style={{
+                        top: buttonRef.current?.getBoundingClientRect().bottom ?? 0,
+                        left: buttonRef.current ?
+                            buttonRef.current.getBoundingClientRect().left +
+                            buttonRef.current.offsetWidth / 2 -
+                            (stadiumRef.current?.offsetWidth ?? 0) / 2
+                            : 0,
+                        transform: 'translateY(8px)',
+                    }}
+                >
+                    {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
+                        <span
+                            key={option}
+                            className={cn(
+                                highlightedOption === option && "text-blue-500 bg-theme-300/25",
+                                "p-2 rounded-md"
+                            )}>
                         {getThemeIcon(option)}
                     </span>
-                ))}
-            </div>
+                    ))}
+                </div>
+            </Portal.Root>
         </div>
     );
 };
