@@ -53,7 +53,7 @@ export default function PostPage({ params }: PostProps) {
             </div>
             <section className={"py-6 bg-gradient-to-br from-theme-50 to-theme-100 dark:from-theme-900 dark:to-theme-950"}>
                 <div className={cn(
-                    "mx-4 md:mx-auto px-4 py-12 md:w-1/2",
+                    "mx-4 md:mx-auto px-4 py-12 md:w-3/5 prose-base dark:prose-invert",
                     "rounded-lg border border-theme-300/50 dark:border-theme-700/50 shadow-md shadow-theme-200/50 dark:shadow-theme-800/50",
                     "bg-theme-50/75 dark:bg-theme-950/75 backdrop-blur-sm"
                 )}>

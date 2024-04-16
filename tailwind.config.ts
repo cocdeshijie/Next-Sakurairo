@@ -29,6 +29,9 @@ const config: Config = {
       }
     }
   },
-  plugins: [require('tailwind-clip-path')],
+  plugins: [
+      require('tailwind-clip-path'),
+      require('@tailwindcss/typography'),
+  ],
 };
 export default config;
