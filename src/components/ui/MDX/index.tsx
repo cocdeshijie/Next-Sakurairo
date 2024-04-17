@@ -1,7 +1,7 @@
 import * as runtime from "react/jsx-runtime";
 import { cn } from "@/utils/cn";
 
-const useMDXComponent = (code: string) => {
+const useMDXComponents = (code: string) => {
     const fn = new Function(code)
     return fn({ ...runtime }).default
 }
@@ -70,7 +70,7 @@ interface MDXProps {
 }
 
 export function MDX({ code }: MDXProps) {
-    const Component = useMDXComponent(code)
+    const Component = useMDXComponents(code);
 
     return (
         <Component components={components} />
