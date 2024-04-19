@@ -57,7 +57,7 @@ export default function TOC({ toc }: TOCProps) {
                     return (
                         <li key={index} className={"relative leading-none"} style={{ paddingLeft: `${depth * 0.25}rem` }}>
                             {item.url && (
-                                <span className={"absolute inset-y-1 left-0 w-1 rounded-sm bg-theme-500/10"}></span>
+                                <span className={"absolute inset-y-1 left-0 w-1 rounded-sm"}></span>
                             )}
                             <a
                                 href={item.url as string}
