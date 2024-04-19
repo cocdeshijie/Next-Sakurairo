@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { cn } from "@/utils/cn";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom } from "jotai";
 
 interface TOCProps {
     toc: any[];
