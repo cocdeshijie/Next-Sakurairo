@@ -1,5 +1,8 @@
 import { defineCollection, defineConfig, s } from "velite";
 import { execSync } from "node:child_process";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
 
 const config = defineCollection({
     name: "Config",
@@ -40,7 +43,8 @@ const posts = defineCollection({
             tags: s.array(s.string()).default([]),
             metadata: s.metadata(),
             excerpt: s.excerpt(), // TODO: use AI
-            content: s.mdx()
+            content: s.mdx(),
+            toc: s.toc()
         })
         .transform(data => ({ ...data, permalink: `/blog/${data.slug}` }))
         .transform(data => ({
@@ -64,5 +68,12 @@ export default defineConfig({
     collections: {
         config,
         posts
-    }
+    },
+    mdx: {
+        rehypePlugins: [
+            rehypeSlug,
+            rehypePrettyCode,
+            rehypeAutolinkHeadings
+        ]
+    },
 })
