@@ -15,38 +15,59 @@ export default function TOC({ toc }: TOCProps) {
     const [activeIds, setActiveIds] = useAtom(activeIdsAtom);
 
     useEffect(() => {
+        const headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+        const headerElements = Array.from(headers).map(header => ({
+            element: header,
+            id: header.id,
+            intersecting: false
+        }));
+
         const observer = new IntersectionObserver(
             entries => {
-                const newActiveIds: string[] = [...activeIds];
-
+                let atLeastOneIntersecting = false;
                 entries.forEach(entry => {
-                    const id = entry.target.id;
-
-                    if (entry.isIntersecting) {
-                        if (!newActiveIds.includes(id)) {
-                            newActiveIds.push(id);
-                        }
-                    } else {
-                        const index = newActiveIds.indexOf(id);
-                        if (index > -1) {
-                            newActiveIds.splice(index, 1);
+                    const header = headerElements.find(h => h.id === entry.target.id);
+                    if (header) {
+                        header.intersecting = entry.isIntersecting;
+                        if (entry.isIntersecting) {
+                            atLeastOneIntersecting = true;
+                            if (!activeIds.includes(header.id)) {
+                                setActiveIds(prev => [...prev, header.id]);
+                            }
+                        } else {
+                            setActiveIds(prev => prev.filter(id => id !== header.id));
                         }
                     }
                 });
 
-                setActiveIds(newActiveIds);
+                if (!atLeastOneIntersecting) {
+                    const nearestHeader = headerElements.reduce((nearest, header) => {
+                        const rect = header.element.getBoundingClientRect();
+                        const top = Math.abs(rect.top);
+                        if (nearest === null || top < nearest.top) {
+                            return { id: header.id, top: top };
+                        }
+                        return nearest;
+                    }, { id: '', top: Number.POSITIVE_INFINITY } as { id: string, top: number });
+
+                    if (nearestHeader && nearestHeader.id) {
+                        setActiveIds([nearestHeader.id]);
+                    }
+                }
             },
             { rootMargin: "0px", threshold: 0.1 }
         );
 
-        document.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(header => {
-            observer.observe(header);
+        headerElements.forEach(header => {
+            observer.observe(header.element);
         });
 
         return () => {
             observer.disconnect();
         };
     }, [activeIds, setActiveIds]);
+
+
 
     const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
         event.preventDefault();
