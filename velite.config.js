@@ -30,7 +30,6 @@ const config = defineCollection({
     })
 })
 
-
 const posts = defineCollection({
     name: "Posts",
     pattern: "posts/**/*.@(md|mdx)",

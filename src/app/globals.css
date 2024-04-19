@@ -2,3 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+.light {
+    --scrollbar: theme('colors.theme.500');
+    --scrollbar-bg: theme('colors.theme.200');
+}
+
+.dark {
+    --scrollbar: theme('colors.theme.500');
+    --scrollbar-bg: theme('colors.theme.800');
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar);
+    border-radius: 25px;
+}
+
+::-webkit-scrollbar-track, body.dark::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-bg);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+code {
+    word-break: break-all;
+}
+
