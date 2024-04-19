@@ -11,7 +11,6 @@ interface TOCProps {
 
 const activeIdsAtom = atom<string[]>([]);
 
-// TODO: right now active item would not auto scroll (its rare to have so many headings in post)
 export default function TOC({ toc }: TOCProps) {
     const [activeIds, setActiveIds] = useAtom(activeIdsAtom);
 
@@ -49,6 +48,23 @@ export default function TOC({ toc }: TOCProps) {
         };
     }, [activeIds, setActiveIds]);
 
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
+        event.preventDefault();
+        const targetId = url.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const topOffset = window.innerHeight * 0.15; // 15% from the top of the screen
+            const elementPosition = targetElement.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.scrollY - topOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    };
+
     const renderTOCItems = (items: any[], depth = 0) => {
         return (
             <ul>
@@ -61,6 +77,7 @@ export default function TOC({ toc }: TOCProps) {
                             )}
                             <a
                                 href={item.url as string}
+                                onClick={(e) => handleClick(e, item.url as string)}
                                 className={cn(
                                     "relative inline-block min-w-0 max-w-full",
                                     "truncate text-left leading-normal",
