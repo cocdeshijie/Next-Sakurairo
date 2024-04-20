@@ -45,7 +45,7 @@ const posts = defineCollection({
             content: s.mdx(),
             toc: s.toc()
         })
-        .transform(data => ({ ...data, permalink: `/blog/${data.slug}` }))
+        .transform(data => ({ ...data, permalink: `/posts/${data.slug}` }))
         .transform(data => ({
             ...data,
             edited: (() => {
