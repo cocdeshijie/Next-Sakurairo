@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { cn } from "@/utils/cn";
 import { config } from "#site/content";
+import { atom, useAtom } from 'jotai';
+
+const logoHoverAtom = atom(false);
 
 const Logo = () => {
-    const [logoHover, setLogoHover] = useState(false);
+    const [logoHover, setLogoHover] = useAtom(logoHoverAtom);
 
     const handleMouseEnter = () => {
         setLogoHover(true);
