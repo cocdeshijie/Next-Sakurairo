@@ -6,6 +6,7 @@ const useMDXComponents = (code: string) => {
     return fn({ ...runtime }).default
 }
 
+// TODO: add href
 const HeadingAnchor = ({href}: {href?: string}) => {
     return (
         <a
