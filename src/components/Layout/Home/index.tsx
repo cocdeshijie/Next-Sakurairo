@@ -1,6 +1,6 @@
 import HomeImage from "@/components/Layout/Home/HomeImage";
 import HomeHero from "@/components/Layout/Home/HomeHero";
-import HomeArticles from "@/components/Layout/Home/HomeArticles";
+import HomePosts from "@/components/Layout/Home/HomePosts";
 
 const Home = () => {
     return (
@@ -12,7 +12,7 @@ const Home = () => {
                 <HomeHero/>
                 {/*TEMPORARY LINE*/}
                 <div className={"border border-amber-400"}/>
-                <HomeArticles/>
+                <HomePosts/>
             </div>
         </>
     );
