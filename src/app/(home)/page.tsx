@@ -1,9 +1,9 @@
-import Hero from "../../components/Layout/Home";
+import Home from "../../components/Layout/Home";
 
-const Home = () => {
+const HomePage = () => {
     return (
-       <Hero/>
+       <Home/>
     );
 };
 
-export default Home;
+export default HomePage;
