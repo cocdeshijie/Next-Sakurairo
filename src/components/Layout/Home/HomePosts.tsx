@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { posts } from "#site/content";
 import { cn } from "@/utils/cn";
-import PostCard from "@/components/Layout/Home/PostCard";
+import HomePostCard from "@/components/Layout/Home/HomePostCard";
 
 
 const HomePosts = () => {
@@ -20,7 +20,7 @@ const HomePosts = () => {
                     <div className={"w-full md:w-2/3 md:max-w-xl min-h-[50vh]"}>
                         <div className={"space-y-4 md:space-y-6 mb-8 md:mb-12"}>
                             {displayedPosts.map((post, index) => (
-                                <PostCard key={index} post={post} index={index} />
+                                <HomePostCard key={index} post={post} index={index} />
                             ))}
                         </div>
                         <div className={"text-center"}>

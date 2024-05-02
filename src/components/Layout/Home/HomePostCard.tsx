@@ -17,7 +17,7 @@ interface PostCardProps {
     index: number;
 }
 
-const PostCard = ({ post, index }: PostCardProps) => {
+const HomePostCard = ({ post, index }: PostCardProps) => {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = () => {
@@ -63,7 +63,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     </div>
                 </div>
             </div>
-            <div className={"relative z-0 md:w-1/3 clip-path-articleImage hidden md:block overflow-hidden"}>
+            <div className={"relative z-0 md:w-1/3 clip-path-articleImageRight hidden md:block overflow-hidden"}>
                 <Image
                     src={post.cover}
                     alt={post.title}
@@ -80,4 +80,4 @@ const PostCard = ({ post, index }: PostCardProps) => {
     );
 };
 
-export default PostCard;
+export default HomePostCard;
