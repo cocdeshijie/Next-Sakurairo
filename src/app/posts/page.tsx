@@ -49,8 +49,14 @@ export default function PostsPage() {
 
     return (
         <div className="bg-theme-50 dark:bg-theme-950 py-8 min-h-screen">
-            <div className="container mt-40 mx-auto px-4 md:px-0 md:w-2/5">
-                <div className="w-full min-h-[50vh]">
+            {/* Top section */}
+            <div className="h-[30vh] flex items-center justify-center">
+                <h1 className="text-4xl font-bold text-center">All Posts</h1>
+            </div>
+
+            {/* Posts section */}
+            <div className="container mx-auto px-4 md:px-0 md:w-[40em]">
+                <div className="w-full">
                     <div className="space-y-4 md:space-y-6 mb-8 md:mb-12">
                         {posts.map((post, index) => (
                             <PostCard key={index} post={post} index={index} />
