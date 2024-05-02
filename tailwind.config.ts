@@ -25,7 +25,8 @@ const config: Config = {
         }
       },
       clipPath: {
-        articleImage: "polygon(10% 0, 100% 0, 100% 100%, 0 100%)",
+        articleImageRight: "polygon(5% 0, 100% 0, 100% 100%, 0 100%)",
+        articleImageLeft: "polygon(0 0, 95% 0, 100% 100%, 0 100%)",
       }
     }
   },

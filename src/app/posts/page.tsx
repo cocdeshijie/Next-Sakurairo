@@ -3,7 +3,7 @@
 import React from "react";
 import useSWR from "swr";
 import { atom, useAtom } from "jotai";
-import PostCard from "@/components/Layout/Home/PostCard";
+import PostCard from "@/components/ui/PostCard";
 
 const fetcher = (url: string | URL | Request) => fetch(url).then(res => res.json());
 
@@ -55,9 +55,9 @@ export default function PostsPage() {
             </div>
 
             {/* Posts section */}
-            <div className="container mx-auto px-4 md:px-0 md:w-[40em]">
+            <div className="container mx-auto px-4 md:px-0 md:w-[50em]">
                 <div className="w-full">
-                    <div className="space-y-4 md:space-y-6 mb-8 md:mb-12">
+                    <div className="space-y-4 md:space-y-8 mb-8 md:mb-12">
                         {posts.map((post, index) => (
                             <PostCard key={index} post={post} index={index} />
                         ))}
