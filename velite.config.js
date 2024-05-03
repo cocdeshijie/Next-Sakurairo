@@ -1,5 +1,5 @@
-import { defineCollection, defineConfig, s } from "velite";
-import { execSync } from "node:child_process";
+import {defineCollection, defineConfig, s} from "velite";
+import {execSync} from "node:child_process";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
@@ -62,11 +62,27 @@ const posts = defineCollection({
         }))
 })
 
+const tags = defineCollection({
+    name: "Tags",
+    pattern: "posts/**/*.@(md|mdx)",
+    schema: s
+        .object({
+            tags: s.array(s.string()).default([])
+        })
+        .transform(data => data.tags),
+    transform: (data) => {
+        const allTags = data.flat();
+        const uniqueTags = [...new Set(allTags)];
+        return uniqueTags.map(tag => ({ name: tag, slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, "-") }));
+    }
+})
+
 export default defineConfig({
     root: "content",
     collections: {
         config,
-        posts
+        posts,
+        tags
     },
     mdx: {
         rehypePlugins: [
