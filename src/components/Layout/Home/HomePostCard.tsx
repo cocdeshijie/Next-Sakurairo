@@ -59,8 +59,8 @@ const PostCard = ({ post, index }: PostCardProps) => {
                 isEvenIndex ? "md:order-2" : ""
             )}>
                 <div className={"p-4"}>
-                    <h3 className={"text-xl font-bold text-white mb-1"}>{post.title}</h3>
-                    <p className={"text-gray-300 text-sm mb-2"}>{new Date(post.date).toLocaleDateString()}</p>
+                    <h3 className={"text-lg font-bold text-white mb-1 line-clamp-3 md:line-clamp-2"}>{post.title}</h3>
+                    <p className={"text-gray-300 text-sm mb-1"}>{new Date(post.date).toLocaleDateString()}</p>
                     <div className="flex">
                         <div
                             className={cn(
