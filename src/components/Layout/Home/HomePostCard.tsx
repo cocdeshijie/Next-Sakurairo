@@ -4,7 +4,7 @@ import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
 import Tag from "@/components/ui/Tags";
-import { HiMiniTag } from "react-icons/hi2";
+import {HiMiniCalendarDays, HiMiniTag} from "react-icons/hi2";
 
 interface Post {
     title: string;
@@ -67,9 +67,18 @@ const PostCard = ({ post, index }: PostCardProps) => {
                         "text-lg font-bold text-theme-950 dark:text-theme-50",
                         "line-clamp-3 md:line-clamp-2 mb-1"
                     )}>{post.title}</h3>
-                    <p className={"text-theme-900 dark:text-theme-100 text-sm mb-1 cursor-auto"}>
-                        {new Date(post.date).toLocaleDateString()}
-                    </p>
+                    <div className="flex items-center mb-2 cursor-auto">
+                        <div
+                            className={cn(
+                                "text-white p-1 mr-2 rounded-full",
+                                "bg-theme-300 dark:bg-theme-700 border border-theme-400 dark:border-theme-800"
+                            )}>
+                            <HiMiniCalendarDays/>
+                        </div>
+                        <p className={"text-theme-900 dark:text-theme-100 text-sm"}>
+                            {new Date(post.date).toLocaleDateString()}
+                        </p>
+                    </div>
                     <div className="flex cursor-auto">
                         <div
                             className={cn(
