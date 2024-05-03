@@ -42,7 +42,11 @@ const PostCard = ({ post, index }: PostCardProps) => {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onClick={handleClick}
-            className={"relative h-52 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer"}
+            className={cn(
+                "relative h-52 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer",
+                "shadow-theme-500/50 duration-200",
+                isHovered ? "shadow-2xl" : "shadow-none"
+            )}
         >
             <div className={"absolute inset-0 z-0 overflow-hidden rounded-lg"}>
                 <Image
