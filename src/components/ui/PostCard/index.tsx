@@ -44,7 +44,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
             onClick={handleClick}
             className={"relative h-52 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer"}
         >
-            <div className={"absolute inset-0 z-0 overflow-hidden"}>
+            <div className={"absolute inset-0 z-0 overflow-hidden rounded-lg"}>
                 <Image
                     src={post.cover}
                     alt={post.title}
@@ -56,9 +56,14 @@ const PostCard = ({ post, index }: PostCardProps) => {
             </div>
             <div className={cn("relative z-10 md:w-2/3", isEvenIndex ? "md:order-2" : "")}>
                 <div className={"p-6"}>
-                    <h3 className={"text-xl font-bold text-white mb-2"}>{post.title}</h3>
-                    <p className={"text-gray-300 text-sm mb-4"}>{new Date(post.date).toLocaleDateString()}</p>
-                    <div className="flex">
+                    <h3 className={cn(
+                        "text-lg font-bold text-theme-950 dark:text-theme-50",
+                        "line-clamp-3 md:line-clamp-2 mb-2"
+                    )}>{post.title}</h3>
+                    <p className={"text-theme-900 dark:text-theme-100 text-sm mb-4 cursor-auto"}>
+                        {new Date(post.date).toLocaleDateString()}
+                    </p>
+                    <div className="flex cursor-auto">
                         <div
                             className={cn(
                                 "text-white p-1 mr-2 rounded-full",

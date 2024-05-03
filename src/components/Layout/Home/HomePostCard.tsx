@@ -51,7 +51,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     layout={"fill"}
                     objectFit={"cover"}
                     objectPosition={"center"}
-                    className={"blur-sm md:blur-lg brightness-95 dark:brightness-75"}
+                    className={"blur-sm md:blur-md brightness-95 dark:brightness-75"}
                 />
             </div>
             <div className={cn(
@@ -59,9 +59,14 @@ const PostCard = ({ post, index }: PostCardProps) => {
                 isEvenIndex ? "md:order-2" : ""
             )}>
                 <div className={"p-4"}>
-                    <h3 className={"text-lg font-bold text-white mb-1 line-clamp-3 md:line-clamp-2"}>{post.title}</h3>
-                    <p className={"text-gray-300 text-sm mb-1"}>{new Date(post.date).toLocaleDateString()}</p>
-                    <div className="flex">
+                    <h3 className={cn(
+                        "text-lg font-bold text-theme-950 dark:text-theme-50",
+                        "line-clamp-3 md:line-clamp-2 mb-1"
+                    )}>{post.title}</h3>
+                    <p className={"text-theme-900 dark:text-theme-100 text-sm mb-1 cursor-auto"}>
+                        {new Date(post.date).toLocaleDateString()}
+                    </p>
+                    <div className="flex cursor-auto">
                         <div
                             className={cn(
                                 "text-white p-1 mr-1 rounded-full",
