@@ -21,6 +21,9 @@ export async function GET(request: NextRequest) {
         );
     }
 
+    // Sort the filtered posts by date in descending order (newest first)
+    filteredPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
     // Calculate start and end indices for pagination
     const startIndex = pageQuery * postsPerPage;
     const endIndex = startIndex + postsPerPage;
