@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { atom, useAtom } from "jotai";
-import { FaMoon, FaSun, FaDesktop } from "react-icons/fa";
+import { HiSun , HiMoon, HiComputerDesktop, HiDevicePhoneMobile } from "react-icons/hi2";
 import { useTheme } from "next-themes";
 import { cn } from "@/utils/cn";
 import * as Portal from "@radix-ui/react-portal";
@@ -100,17 +100,22 @@ const ThemeSwitch = () => {
     const getThemeIcon = (theme: ThemeOption) => {
         switch (theme) {
             case "dark":
-                return <FaMoon size={24} />;
+                return <HiMoon size={24} />;
             case "light":
-                return <FaSun size={24} />;
+                return <HiSun size={24} />;
             case "system":
-                return <FaDesktop size={24} />;
+                return(
+                    <>
+                        <HiComputerDesktop size={24} className={"hidden md:block"}/>
+                        <HiDevicePhoneMobile size={24} className={"block md:hidden"}/>
+                    </>
+                );
         }
     };
 
     const getButtonThemeIcon = () => {
         if (switchTheme === "system") {
-            return resolvedTheme === "dark" ? <FaMoon size={24} /> : <FaSun size={24} />;
+            return resolvedTheme === "dark" ? <HiMoon size={24} /> : <HiSun size={24} />;
         }
         return getThemeIcon(switchTheme);
     };
