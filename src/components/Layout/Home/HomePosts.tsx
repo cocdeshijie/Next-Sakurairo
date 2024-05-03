@@ -9,7 +9,7 @@ const HomePosts = () => {
 
     return (
         <div className={"bg-theme-50 dark:bg-theme-950 py-8"}>
-            <div className={"container mx-auto px-4 md:px-20"}>
+            <div className={"container mx-auto px-4 md:px-10 lg:px-20"}>
                 <div className={"flex flex-col md:flex-row md:justify-between"}>
                     <div className={cn(
                         "md:w-1/3 md:flex md:items-center mb-8 md:mb-0 md:mr-16",
