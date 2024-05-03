@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
+import Tag from "@/components/ui/Tags";
 
 interface Post {
     title: string;
@@ -49,7 +50,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     layout={"fill"}
                     objectFit={"cover"}
                     objectPosition={"center"}
-                    className={"filter blur-sm md:blur-lg dark:brightness-75"}
+                    className={"blur-sm md:blur-lg brightness-90 dark:brightness-75"}
                 />
             </div>
             <div className={cn("relative z-10 md:w-2/3", isEvenIndex ? "md:order-2" : "")}>
@@ -58,15 +59,13 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     <p className={"text-gray-300 text-sm mb-4"}>{new Date(post.date).toLocaleDateString()}</p>
                     <div className={"flex space-x-2"}>
                         {Array.isArray(post.tags) && post.tags.map((tag: string, tagIndex: number) => (
-                            <span key={tagIndex} className={"bg-blue-500 text-white px-2 py-1 rounded-full text-xs"}>
-                                {tag}
-                            </span>
+                            <Tag key={tagIndex} tag={tag} />
                         ))}
                     </div>
                 </div>
             </div>
             <div className={cn(
-                "relative z-0 md:w-1/3 hidden md:block overflow-hidden",
+                "relative z-0 md:w-5/12 hidden md:block overflow-hidden",
                 isEvenIndex ? "clip-path-articleImageLeft" : "clip-path-articleImageRight"
             )}>
                 <Image

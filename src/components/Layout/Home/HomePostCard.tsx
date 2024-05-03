@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { useState } from "react";
+import Tag from "@/components/ui/Tags";
+
 
 interface Post {
     title: string;
@@ -56,9 +58,7 @@ const HomePostCard = ({ post, index }: PostCardProps) => {
                     <p className={"text-gray-300 text-sm mb-4"}>{new Date(post.date).toLocaleDateString()}</p>
                     <div className={"flex space-x-2"}>
                         {Array.isArray(post.tags) && post.tags.map((tag: string, tagIndex: number) => (
-                            <span key={tagIndex} className={"bg-blue-500 text-white px-2 py-1 rounded-full text-xs"}>
-                                {tag}
-                            </span>
+                            <Tag key={tagIndex} tag={tag} />
                         ))}
                     </div>
                 </div>
