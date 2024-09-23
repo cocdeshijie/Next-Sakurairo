@@ -1,8 +1,16 @@
-import {defineCollection, defineConfig, s} from "velite";
-import {execSync} from "node:child_process";
+import { defineCollection, defineConfig, s } from "velite";
+import { execSync } from "node:child_process";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
+import { remarkCodeHike } from "codehike/mdx"
+
+/** @type {import('codehike/mdx').CodeHikeConfig} */
+const chConfig = {
+    components: { code: "MDXCode" },
+    syntaxHighlighting: {
+      theme: "github-dark-dimmed"
+    }
+}
 
 const config = defineCollection({
     name: "Config",
@@ -87,8 +95,12 @@ export default defineConfig({
     mdx: {
         rehypePlugins: [
             rehypeSlug,
-            rehypePrettyCode,
             rehypeAutolinkHeadings
-        ]
+        ],
+        remarkPlugins: [
+            [
+                remarkCodeHike, chConfig
+            ],
+        ],
     },
 })

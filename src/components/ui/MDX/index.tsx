@@ -1,10 +1,16 @@
 import * as runtime from "react/jsx-runtime";
 import { cn } from "@/utils/cn";
+import { MDXCode } from "@/components/ui/MDX/MDXCode";
 
 const useMDXComponents = (code: string) => {
     const fn = new Function(code)
     return fn({ ...runtime }).default
 }
+
+const sharedComponents = {
+    MDXCode
+};
+
 
 // TODO: add href
 const HeadingAnchor = ({href}: {href?: string}) => {
@@ -63,17 +69,19 @@ const components = {
         <p className={cn("text-theme-900 dark:text-theme-100", className)} {...props}>
             {children}
         </p>
-    ),
+    )
 };
 
 interface MDXProps {
-    code: string
+    code: string;
+    components?: Record<string, React.ComponentType>;
+    [key: string]: any;
 }
 
-export function MDX({ code }: MDXProps) {
+export function MDX({ code, components, ...props }: MDXProps) {
     const Component = useMDXComponents(code);
 
     return (
-        <Component components={components} />
-    )
+        <Component components={{ ...sharedComponents, ...components }} {...props} />
+    );
 }
