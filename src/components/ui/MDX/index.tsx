@@ -2,6 +2,7 @@ import * as runtime from "react/jsx-runtime";
 import { cn } from "@/utils/cn";
 import { H1, H2, H3, H4, H5, H6 } from "@/components/ui/MDX/MDXHeading";
 import { MDXCode } from "@/components/ui/MDX/MDXCode";
+import { MDXLink } from "@/components/ui/MDX/MDXLink";
 
 const useMDXComponents = (code: string) => {
     const fn = new Function(code)
@@ -19,7 +20,8 @@ const components = {
         <p className={cn("text-theme-900 dark:text-theme-100", className)} {...props}>
             {children}
         </p>
-    )
+    ),
+    a: MDXLink
 };
 
 const sharedComponents = {
