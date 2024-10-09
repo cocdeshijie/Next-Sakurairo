@@ -7,10 +7,6 @@ const useMDXComponents = (code: string) => {
     return fn({ ...runtime }).default
 }
 
-const sharedComponents = {
-    MDXCode
-};
-
 
 // TODO: add href
 const HeadingAnchor = ({href}: {href?: string}) => {
@@ -72,6 +68,11 @@ const components = {
     )
 };
 
+const sharedComponents = {
+    MDXCode,
+    ...components
+};
+
 interface MDXProps {
     code: string;
     components?: Record<string, React.ComponentType>;
@@ -82,6 +83,6 @@ export function MDX({ code, components, ...props }: MDXProps) {
     const Component = useMDXComponents(code);
 
     return (
-        <Component components={{ ...sharedComponents, ...components }} {...props} />
+        <Component components={{ ...sharedComponents }} {...props} />
     );
 }
