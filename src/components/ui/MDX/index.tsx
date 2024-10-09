@@ -8,23 +8,6 @@ const useMDXComponents = (code: string) => {
     return fn({ ...runtime }).default
 }
 
-
-// TODO: add href
-const HeadingAnchor = ({href}: {href?: string}) => {
-    return (
-        <a
-            href={href}
-            className={cn(
-                "ml-2 hover:underline hover:cursor-pointer",
-                "opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-                "text-theme-400 dark:text-theme-600"
-            )}
-        >
-            #
-        </a>
-    )
-}
-
 const components = {
     h1: H1,
     h2: H2,
