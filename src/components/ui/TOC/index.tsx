@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
 import React, { useEffect } from "react";
 import { cn } from "@/utils/cn";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { atom, useAtom } from "jotai";
+import { useScroll } from "@/providers/scroll-provider";
 
 interface TOCProps {
     toc: any[];
@@ -13,29 +14,30 @@ const activeIdsAtom = atom<string[]>([]);
 
 export default function TOC({ toc }: TOCProps) {
     const [activeIds, setActiveIds] = useAtom(activeIdsAtom);
+    const { handleScrollTo } = useScroll(); // Get the handleScrollTo function from the scroll context
 
     useEffect(() => {
         const headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
         const headerElements = Array.from(headers).map(header => ({
             element: header,
             id: header.id,
-            intersecting: false
+            intersecting: false,
         }));
 
         const observer = new IntersectionObserver(
-            entries => {
+            (entries) => {
                 let atLeastOneIntersecting = false;
-                entries.forEach(entry => {
-                    const header = headerElements.find(h => h.id === entry.target.id);
+                entries.forEach((entry) => {
+                    const header = headerElements.find((h) => h.id === entry.target.id);
                     if (header) {
                         header.intersecting = entry.isIntersecting;
                         if (entry.isIntersecting) {
                             atLeastOneIntersecting = true;
                             if (!activeIds.includes(header.id)) {
-                                setActiveIds(prev => [...prev, header.id]);
+                                setActiveIds((prev) => [...prev, header.id]);
                             }
                         } else {
-                            setActiveIds(prev => prev.filter(id => id !== header.id));
+                            setActiveIds((prev) => prev.filter((id) => id !== header.id));
                         }
                     }
                 });
@@ -58,7 +60,7 @@ export default function TOC({ toc }: TOCProps) {
             { rootMargin: "0px", threshold: 0.1 }
         );
 
-        headerElements.forEach(header => {
+        headerElements.forEach((header) => {
             observer.observe(header.element);
         });
 
@@ -67,23 +69,9 @@ export default function TOC({ toc }: TOCProps) {
         };
     }, [activeIds, setActiveIds]);
 
-
-
     const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, url: string) => {
         event.preventDefault();
-        const targetId = url.substring(1);
-        const targetElement = document.getElementById(targetId);
-
-        if (targetElement) {
-            const topOffset = window.innerHeight * 0.15; // 15% from the top of the screen
-            const elementPosition = targetElement.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.scrollY - topOffset;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth"
-            });
-        }
+        handleScrollTo(url);
     };
 
     const renderTOCItems = (items: any[], depth = 0) => {
@@ -103,7 +91,7 @@ export default function TOC({ toc }: TOCProps) {
                                     "relative inline-block min-w-0 max-w-full",
                                     "truncate text-left leading-normal",
                                     "tabular-nums transition-all duration-500 hover:opacity-80",
-                                    isActive ? "text-theme-500 opacity-100 ml-2" : "opacity-50",
+                                    isActive ? "text-theme-500 opacity-100 ml-2" : "opacity-50"
                                 )}
                                 data-depth={item.depth}
                                 title={item.title}
@@ -130,9 +118,9 @@ export default function TOC({ toc }: TOCProps) {
                     <ScrollArea.Scrollbar orientation={"vertical"}
                                           className={"bg-theme-200/50 dark:bg-theme-800/50 rounded p-0.5"}
                     >
-                        <ScrollArea.Thumb className={"bg-theme-500/50 rounded p-0.5"}/>
+                        <ScrollArea.Thumb className={"bg-theme-500/50 rounded p-0.5"} />
                     </ScrollArea.Scrollbar>
-                    <ScrollArea.Corner/>
+                    <ScrollArea.Corner />
                 </ScrollArea.Root>
             </div>
         </aside>
