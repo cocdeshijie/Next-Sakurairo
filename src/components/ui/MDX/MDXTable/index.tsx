@@ -2,18 +2,20 @@ import { cn } from "@/utils/cn";
 
 export const tableComponents = {
     table: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
-        <div className={cn(
-            "inline-block w-full rounded-md my-2",
-            "border border-theme-100 dark:border-theme-800",
-            "shadow shadow-theme-800/15 dark:shadow-theme-200/15"
-        )}>
-            <table className={cn("table-auto w-full", className)} {...props}>
-                {children}
-            </table>
+        <div className="overflow-x-auto my-2">
+            <div className={cn(
+                "inline-block min-w-full rounded-md",
+                "border border-theme-100 dark:border-theme-800",
+                "shadow shadow-theme-800/15 dark:shadow-theme-200/15"
+            )}>
+                <table className={cn("table-auto w-full", className)} {...props}>
+                    {children}
+                </table>
+            </div>
         </div>
     ),
     thead: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
-        <thead className={cn("bg-theme-100/50 dark:bg-theme-800/50 mx-2 my-1", className)} {...props}>
+        <thead className={cn("bg-theme-100/50 dark:bg-theme-800/50", className)} {...props}>
         {children}
         </thead>
     ),
