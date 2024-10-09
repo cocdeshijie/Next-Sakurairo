@@ -3,6 +3,7 @@ import { cn } from "@/utils/cn";
 import { H1, H2, H3, H4, H5, H6 } from "@/components/ui/MDX/MDXHeading";
 import { MDXCode } from "@/components/ui/MDX/MDXCode";
 import { MDXLink } from "@/components/ui/MDX/MDXLink";
+import { tableComponents } from "@/components/ui/MDX/MDXTable";
 
 const useMDXComponents = (code: string) => {
     const fn = new Function(code)
@@ -21,7 +22,9 @@ const components = {
             {children}
         </p>
     ),
-    a: MDXLink
+    a: MDXLink,
+    ...tableComponents
+
 };
 
 const sharedComponents = {
