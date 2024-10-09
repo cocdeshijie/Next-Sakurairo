@@ -1,5 +1,6 @@
 import * as runtime from "react/jsx-runtime";
 import { cn } from "@/utils/cn";
+import { H1, H2, H3, H4, H5, H6 } from "@/components/ui/MDX/MDXHeading";
 import { MDXCode } from "@/components/ui/MDX/MDXCode";
 
 const useMDXComponents = (code: string) => {
@@ -25,42 +26,12 @@ const HeadingAnchor = ({href}: {href?: string}) => {
 }
 
 const components = {
-    h1: ({className, children, ...props}: { className?: string; children: React.ReactNode }) => (
-        <h1 className={cn("text-4xl font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h1>
-    ),
-    h2: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
-        <h2 className={cn("text-3xl font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h2>
-    ),
-    h3: ({className, children, ...props}: { className?: string; children: React.ReactNode }) => (
-        <h3 className={cn("text-2xl font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h3>
-    ),
-    h4: ({className, children, ...props}: { className?: string; children: React.ReactNode }) => (
-        <h4 className={cn("text-xl font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h4>
-    ),
-    h5: ({className, children, ...props}: { className?: string; children: React.ReactNode }) => (
-        <h5 className={cn("text-lg font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h5>
-    ),
-    h6: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
-        <h6 className={cn("text-base font-semibold group mt-10 mb-4", className)} {...props}>
-            <span>{children}</span>
-            <HeadingAnchor />
-        </h6>
-    ),
+    h1: H1,
+    h2: H2,
+    h3: H3,
+    h4: H4,
+    h5: H5,
+    h6: H6,
     p: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
         <p className={cn("text-theme-900 dark:text-theme-100", className)} {...props}>
             {children}
