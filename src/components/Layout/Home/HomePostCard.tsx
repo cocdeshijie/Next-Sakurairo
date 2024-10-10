@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { atom, useAtom } from 'jotai';
+import { atomFamily } from 'jotai/utils';
 import Tag from "@/components/ui/Tags";
-import {HiMiniCalendarDays, HiMiniTag} from "react-icons/hi2";
+import { HiMiniCalendarDays, HiMiniTag } from "react-icons/hi2";
 
 interface Post {
     title: string;
@@ -19,8 +20,11 @@ interface PostCardProps {
     index: number;
 }
 
+// Create atom family to manage hover state for each post card
+const isHoveredAtomFamily = atomFamily(() => atom<boolean>(false));
+
 const PostCard = ({ post, index }: PostCardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useAtom(isHoveredAtomFamily(index));
 
     const handleMouseEnter = () => {
         setIsHovered(true);
@@ -52,10 +56,8 @@ const PostCard = ({ post, index }: PostCardProps) => {
                 <Image
                     src={post.cover}
                     alt={post.title}
-                    layout={"fill"}
-                    objectFit={"cover"}
-                    objectPosition={"center"}
-                    className={"blur-sm md:blur-md brightness-95 dark:brightness-75"}
+                    fill
+                    className={"blur-sm md:blur-md brightness-95 dark:brightness-75 object-cover object-center"}
                 />
             </div>
             <div className={cn(
@@ -102,11 +104,9 @@ const PostCard = ({ post, index }: PostCardProps) => {
                 <Image
                     src={post.cover}
                     alt={post.title}
-                    layout={"fill"}
-                    objectFit={"cover"}
-                    objectPosition={"center"}
+                    fill
                     className={cn(
-                        "transition duration-300 ease-in-out",
+                        "transition duration-300 ease-in-out object-cover object-center",
                         isHovered ? "transform scale-125" : ""
                     )}
                 />
