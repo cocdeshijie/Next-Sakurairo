@@ -116,7 +116,7 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
                 <div
                     className={cn(
                         "p-1 rounded-md rounded-b-none",
-                        "text-center md:text-left md:pl-4 text-theme-800 dark:text-theme-200 text-sm font-light",
+                        "text-center md:text-left md:pl-8 text-theme-800 dark:text-theme-200 text-sm font-light",
                         "bg-theme-200 dark:bg-theme-800"
                     )}
                 >
@@ -125,7 +125,7 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
             )}
             {/* Wrapper for Pre and CopyButton */}
             <div className="relative group">
-                {/* CopyButton positioned at top-right, visible on hover */}
+            {/* CopyButton positioned at top-right, visible on hover */}
                 <CopyButton
                     text={highlightedCode.code}
                     className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
