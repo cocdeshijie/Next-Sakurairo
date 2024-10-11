@@ -21,31 +21,26 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ href, className, children, 
     React.useEffect(() => {
         let isMounted = true;
 
-        try {
-            const url = new URL(href);
-            // Attempt to fetch the favicon from the head element
-            fetch(url.origin)
-                .then((response) => response.text())
-                .then((html) => {
-                    if (isMounted) {
-                        const doc = new DOMParser().parseFromString(html, "text/html");
-                        const faviconLink = doc.querySelector("link[rel~='icon']")?.getAttribute("href");
-                        if (faviconLink) {
-                            const fullFaviconUrl = faviconLink.startsWith("http") ? faviconLink : `${url.origin}${faviconLink}`;
-                            setFaviconUrl(fullFaviconUrl);
-                        } else {
-                            setFaviconUrl(`${url.origin}/favicon.ico`);
-                        }
+        const fetchFavicon = async () => {
+            try {
+                const response = await fetch(`/api/fetch-favicon?href=${encodeURIComponent(href)}`);
+                const data = await response.json();
+                if (isMounted) {
+                    if (data.faviconUrl) {
+                        setFaviconUrl(data.faviconUrl);
+                    } else {
+                        setFaviconUrl(null);
                     }
-                })
-                .catch(() => {
-                    if (isMounted) {
-                        setFaviconUrl(`${url.origin}/favicon.ico`);
-                    }
-                });
-        } catch (error) {
-            console.error("Invalid URL", error);
-        }
+                }
+            } catch (error) {
+                console.error("Error fetching favicon:", error);
+                if (isMounted) {
+                    setFaviconUrl(null);
+                }
+            }
+        };
+
+        fetchFavicon();
 
         return () => {
             isMounted = false;
