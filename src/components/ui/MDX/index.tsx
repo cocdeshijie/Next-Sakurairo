@@ -18,7 +18,7 @@ const components = {
     h5: H5,
     h6: H6,
     p: ({ className, children, ...props }: { className?: string; children: React.ReactNode }) => (
-        <p className={cn("text-theme-900 dark:text-theme-100", className)} {...props}>
+        <p className={cn("text-theme-950 dark:text-theme-50", className)} {...props}>
             {children}
         </p>
     ),
