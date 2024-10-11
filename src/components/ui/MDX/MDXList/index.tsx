@@ -61,13 +61,14 @@ const Li = forwardRef<HTMLLIElement, ListItemProps>(
             // Determine if the checkbox is checked
             const isChecked = firstChild.props.checked;
 
-            // Clone the existing checkbox to apply custom classes and set disabled
+            // Clone the existing checkbox to apply custom classes and set disabled/readOnly
             const clonedCheckbox = React.cloneElement(firstChild, {
                 className: cn(
                     "mt-1 accent-theme-500 opacity-75 dark:opacity-85", // Tailwind accent-* utility
                     firstChild.props.className
                 ),
-                disabled: !isChecked, // Disable if not checked
+                disabled: !isChecked,
+                readOnly: true
             });
 
             // Extract the rest of the children (task description)
