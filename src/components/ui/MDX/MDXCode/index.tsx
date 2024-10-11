@@ -87,10 +87,14 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
 
     return (
         <div className={"relative space-y-0 mt-8"}>
-            <div className={cn(
-                "text-center text-zinc-400 text-sm pt-2 rounded-md rounded-b-none",
-                backgroundColor
-            )}>
+            <div
+                className={cn(
+                    "p-1 rounded-md rounded-b-none",
+                    "text-center md:text-left md:pl-4 text-theme-800 dark:text-theme-200 text-sm font-light",
+                    backgroundColor,
+                    highlightedCode.meta ? "bg-theme-200 dark:bg-theme-800" : ""
+                )}
+            >
                 {highlightedCode.meta}
             </div>
             <CopyButton text={highlightedCode.code} />
