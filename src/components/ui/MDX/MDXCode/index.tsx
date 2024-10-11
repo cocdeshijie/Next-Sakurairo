@@ -14,15 +14,21 @@ interface MDXCodeProps {
 }
 
 // Create atom families to manage state for each codeblock
-const highlightedCodeAtomFamily = atomFamily((codeblock: RawCode) => atom<HighlightedCode | null>(null));
-const isLoadingAtomFamily = atomFamily((codeblock: RawCode) => atom<boolean>(true));
+const highlightedCodeAtomFamily = atomFamily((codeblock: RawCode) =>
+    atom<HighlightedCode | null>(null)
+);
+const isLoadingAtomFamily = atomFamily((codeblock: RawCode) =>
+    atom<boolean>(true)
+);
 
 export function MDXCode({ codeblock }: MDXCodeProps) {
     const { theme, resolvedTheme } = useTheme();
     const currentTheme = theme === "system" ? resolvedTheme : theme;
 
     // Use Jotai atoms from families
-    const [highlightedCode, setHighlightedCode] = useAtom(highlightedCodeAtomFamily(codeblock));
+    const [highlightedCode, setHighlightedCode] = useAtom(
+        highlightedCodeAtomFamily(codeblock)
+    );
     const [isLoading, setIsLoading] = useAtom(isLoadingAtomFamily(codeblock));
 
     useEffect(() => {
@@ -31,8 +37,12 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
         const fetchHighlightedCode = async () => {
             setIsLoading(true);
             try {
-                const selectedTheme = currentTheme === "dark" ? "github-dark" : "slack-ochin";
-                const highlighted: HighlightedCode = await highlight(codeblock, selectedTheme);
+                const selectedTheme =
+                    currentTheme === "dark" ? "github-dark" : "slack-ochin";
+                const highlighted: HighlightedCode = await highlight(
+                    codeblock,
+                    selectedTheme
+                );
 
                 if (isMounted) {
                     setHighlightedCode(highlighted);
@@ -56,56 +66,81 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
         };
     }, [codeblock, currentTheme, setHighlightedCode, setIsLoading]);
 
-    const getBackgroundColor = (): string => {
-        switch (currentTheme) {
-            case "dark":
-                return "bg-theme-800/25";
-            case "light":
-                return "bg-theme-200/25";
-            default:
-                return "bg-theme-800/25";
-        }
-    };
-
-    const backgroundColor = getBackgroundColor();
+    const commonClasses = cn(
+        "overflow-auto bg-theme-200/25 dark:bg-theme-800/25",
+        codeblock.meta ? "rounded-t-none rounded-b-md mt-0" : "rounded-md",
+        "p-4",
+        "font-mono text-sm",
+        "text-theme-800 dark:text-theme-200",
+        "whitespace-pre-wrap",
+    );
 
     if (isLoading) {
         return (
-            <div className={cn("overflow-auto", backgroundColor)}>
-                Loading...
+            <div className={"space-y-0 mt-8"}>
+                {codeblock.meta && (
+                    <div
+                        className={cn(
+                            "p-1 rounded-md rounded-b-none",
+                            "text-center md:text-left md:pl-4 text-theme-800 dark:text-theme-200 text-sm font-light",
+                            "bg-theme-200 dark:bg-theme-800"
+                        )}
+                    >
+                        {codeblock.meta}
+                    </div>
+                )}
+                <div className="relative group">
+                    <div className={commonClasses}>
+                        Loading...
+                    </div>
+                </div>
             </div>
         );
     }
 
     if (!highlightedCode) {
         return (
-            <div className={cn("overflow-auto", backgroundColor)}>
-                Failed to load code.
+            <div className={"space-y-0 mt-8"}>
+                <div className="relative group">
+                    <div className={commonClasses}>
+                        Failed to load code.
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className={"relative space-y-0 mt-8"}>
-            <div
-                className={cn(
-                    "p-1 rounded-md rounded-b-none",
-                    "text-center md:text-left md:pl-4 text-theme-800 dark:text-theme-200 text-sm font-light",
-                    backgroundColor,
-                    highlightedCode.meta ? "bg-theme-200 dark:bg-theme-800" : ""
-                )}
-            >
-                {highlightedCode.meta}
+        <div className={"space-y-0 mt-8"}>
+            {highlightedCode.meta && (
+                <div
+                    className={cn(
+                        "p-1 rounded-md rounded-b-none",
+                        "text-center md:text-left md:pl-4 text-theme-800 dark:text-theme-200 text-sm font-light",
+                        "bg-theme-200 dark:bg-theme-800"
+                    )}
+                >
+                    {highlightedCode.meta}
+                </div>
+            )}
+            {/* Wrapper for Pre and CopyButton */}
+            <div className="relative group">
+                {/* CopyButton positioned at top-right, visible on hover */}
+                <CopyButton
+                    text={highlightedCode.code}
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                />
+                <Pre
+                    className={cn(
+                        "overflow-auto bg-theme-200/25 dark:bg-theme-800/25",
+                        highlightedCode.meta
+                            ? "rounded-t-none rounded-b-md mt-0"
+                            : "rounded-md"
+                    )}
+                    code={highlightedCode}
+                    handlers={[lineNumbers]}
+                />
             </div>
-            <CopyButton text={highlightedCode.code} />
-            <Pre
-                className={cn(
-                    "overflow-auto rounded-md rounded-t-none",
-                    backgroundColor
-                )}
-                code={highlightedCode}
-                handlers={[lineNumbers]}
-            />
         </div>
     );
 }
