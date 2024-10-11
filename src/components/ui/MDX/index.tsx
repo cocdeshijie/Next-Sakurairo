@@ -1,7 +1,7 @@
 import * as runtime from "react/jsx-runtime";
 import { cn } from "@/utils/cn";
 import { H1, H2, H3, H4, H5, H6 } from "@/components/ui/MDX/MDXHeading";
-import { MDXCode } from "@/components/ui/MDX/MDXCode";
+import { MDXCode, MDXInlineCode } from "@/components/ui/MDX/MDXCode";
 import { MDXLink } from "@/components/ui/MDX/MDXLink";
 import { tableComponents } from "@/components/ui/MDX/MDXTable";
 import { listComponents } from "@/components/ui/MDX/MDXList";
@@ -57,6 +57,7 @@ const components = {
 
 const sharedComponents = {
     MDXCode,
+    MDXInlineCode,
     ...components,
 };
 

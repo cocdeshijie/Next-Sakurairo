@@ -6,9 +6,9 @@ import { remarkCodeHike } from "codehike/mdx"
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
-    components: { code: "MDXCode" },
-    syntaxHighlighting: {
-      theme: "github-dark-dimmed"
+    components: {
+        code: "MDXCode",
+        inlineCode: "MDXInlineCode"
     }
 }
 

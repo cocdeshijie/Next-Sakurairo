@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
-import { Pre, RawCode, highlight, HighlightedCode } from "codehike/code";
+import { Pre, RawCode, Inline, highlight, HighlightedCode } from "codehike/code";
 import { lineNumbers } from "@/components/ui/MDX/MDXCode/line-number";
 import { CopyButton } from "@/components/ui/MDX/MDXCode/copy";
 import { atom, useAtom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { cn } from "@/utils/cn";
 
-interface MDXCodeProps {
+interface MDXCodeblockProps {
     codeblock: RawCode;
 }
 
@@ -21,7 +21,7 @@ const isLoadingAtomFamily = atomFamily((codeblock: RawCode) =>
     atom<boolean>(true)
 );
 
-export function MDXCode({ codeblock }: MDXCodeProps) {
+const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
     const { theme, resolvedTheme } = useTheme();
     const currentTheme = theme === "system" ? resolvedTheme : theme;
 
@@ -144,3 +144,87 @@ export function MDXCode({ codeblock }: MDXCodeProps) {
         </div>
     );
 }
+
+interface InlineCodeProps {
+    codeblock: RawCode;
+}
+
+// Create atom families to manage state for each codeblock
+const highlightedInlineCodeAtomFamily = atomFamily((codeblock: RawCode) =>
+    atom<HighlightedCode | null>(null)
+);
+const isLoadingInlineCodeAtomFamily = atomFamily((codeblock: RawCode) =>
+    atom<boolean>(true)
+);
+
+// Async inline code component
+const MDXInlineCode = ({ codeblock }: InlineCodeProps) => {
+    const { theme, resolvedTheme } = useTheme();
+    const currentTheme = theme === "system" ? resolvedTheme : theme;
+
+    // Use Jotai atoms from families
+    const [highlightedCode, setHighlightedCode] = useAtom(
+        highlightedInlineCodeAtomFamily(codeblock)
+    );
+    const [isLoading, setIsLoading] = useAtom(isLoadingInlineCodeAtomFamily(codeblock));
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const fetchHighlightedCode = async () => {
+            setIsLoading(true);
+            try {
+                const selectedTheme = currentTheme === "dark" ? "github-dark" : "slack-ochin";
+                const highlighted = await highlight(codeblock, selectedTheme);
+
+                if (isMounted) {
+                    setHighlightedCode(highlighted);
+                }
+            } catch (error) {
+                console.error("Error during inline code highlighting:", error);
+                if (isMounted) {
+                    setHighlightedCode(null);
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        fetchHighlightedCode();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [codeblock, currentTheme, setHighlightedCode, setIsLoading]);
+
+    const defaultHighlightedCode: HighlightedCode = {
+        code: "Loading...",
+        value: "Loading...",
+        lang: "text",
+        annotations: [],
+        tokens: [],
+        meta: "",
+        themeName: currentTheme || "light",
+        style: {}
+    };
+
+    const commonClasses = cn(
+        "bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200",
+        "px-2 py-1 rounded text-sm"
+    );
+
+    if (isLoading) {
+        return <Inline code={{ ...defaultHighlightedCode }} className={commonClasses} />;
+    }
+
+    if (!highlightedCode) {
+        return <Inline code={{ ...defaultHighlightedCode, code: "Failed to load code.", value: "Failed to load code." }} className={commonClasses} />;
+    }
+
+    return <Inline code={{ ...highlightedCode }} className={commonClasses} />;
+};
+
+
+export { MDXCode, MDXInlineCode };
