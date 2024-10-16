@@ -16,7 +16,7 @@ type PostListProps = {
 
 // Jotai atom family
 const postAtomFamily = atomFamily(
-    (tag: string) => atom({
+    (path: string) => atom({
         offset: 2,
         posts: [] as Posts[],
         isLastPage: false,
@@ -25,13 +25,13 @@ const postAtomFamily = atomFamily(
 );
 
 export default function PostList({ initialPosts, lastPage, tag }: PostListProps) {
-    const uniqueId = usePathname();
+    const path = usePathname();
 
     useHydrateAtoms([
-        [postAtomFamily(uniqueId), { offset: 2, posts: initialPosts, isLastPage: lastPage }],
+        [postAtomFamily(path), { offset: 2, posts: initialPosts, isLastPage: lastPage }],
     ] as const);
 
-    const [postState, setPostState] = useAtom(postAtomFamily(uniqueId));
+    const [postState, setPostState] = useAtom(postAtomFamily(path));
 
     const loadMorePosts = async () => {
         const result = await getPosts(postState.offset, 2, tag);
