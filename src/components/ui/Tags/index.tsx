@@ -3,7 +3,8 @@
 import React, { useId } from "react";
 import { atom, useAtom } from "jotai";
 import { cn } from "@/utils/cn";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 interface TagProps {
     tag: string;
@@ -25,6 +26,7 @@ const sizeClassMap: Record<number, { textSize: string; padding: string }> = {
 const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
     const [hoveredTag, setHoveredTag] = useAtom(hoveredTagAtom); // Global atom for the hovered tag's unique ID
     const uniqueTagId = useId(); // Generate a unique ID for each tag instance
+    const router = useRouter();
 
     const handleMouseEnter = () => {
         setHoveredTag(uniqueTagId); // Set the hovered tag to the current uniqueTagId
@@ -34,7 +36,8 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
     };
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.stopPropagation(); // Prevent the card click event from firing
+        event.preventDefault() // Prevent the click event from reaching the outer Link
+        router.push(`/tags/${tag}`);  // Navigate to the tag page
     };
 
     const { textSize, padding } = sizeClassMap[sizeLevel];
@@ -42,25 +45,23 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
 
     return (
         <div className="relative inline-block w-[max-content]">
-            <Link href={`/tags/${tag}`}>
-                <div
-                    className={cn(
-                        "inline-flex items-end cursor-pointer",
-                        "text-white rounded-md transition-all duration-200",
-                        "border border-theme-400 dark:border-theme-600",
-                        "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
-                        "transform origin-bottom",
-                        isHovered ? "scale-110 ml-0.5 mr-0.5" : "scale-100",
-                        textSize,
-                        padding
-                    )}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    onClick={handleClick}
-                >
-                    {tag}
-                </div>
-            </Link>
+            <div
+                className={cn(
+                    "inline-flex items-end cursor-pointer",
+                    "text-white rounded-md transition-all duration-200",
+                    "border border-theme-400 dark:border-theme-600",
+                    "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
+                    "transform origin-bottom",
+                    isHovered ? "scale-110 ml-0.5 mr-0.5" : "scale-100",
+                    textSize,
+                    padding
+                )}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleClick}
+            >
+                {tag}
+            </div>
         </div>
     );
 };

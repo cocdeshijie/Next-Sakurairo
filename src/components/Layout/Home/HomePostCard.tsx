@@ -6,6 +6,7 @@ import { atom, useAtom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import Tag from "@/components/ui/Tags";
 import { HiMiniCalendarDays, HiMiniTag } from "react-icons/hi2";
+import Link from "next/link";
 
 interface Post {
     title: string;
@@ -34,18 +35,14 @@ const PostCard = ({ post, index }: PostCardProps) => {
         setIsHovered(false);
     };
 
-    const handleClick = () => {
-        window.location.href = post.permalink;
-    };
-
     const isEvenIndex = index % 2 === 0;
 
     return (
-        <div
+        <Link
             key={index}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={handleClick}
+            href={post.permalink}
             className={cn(
                 "relative h-44 md:h-36 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer",
                 "shadow-theme-500/50 dark:shadow-theme-500/25 duration-200",
@@ -111,7 +108,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     )}
                 />
             </div>
-        </div>
+        </Link>
     );
 };
 

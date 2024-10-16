@@ -6,6 +6,7 @@ import { atom, useAtom } from "jotai";
 import Tag from "@/components/ui/Tags";
 import { HiMiniTag, HiMiniCalendarDays } from "react-icons/hi2";
 import { useId } from "react";
+import Link from "next/link";
 
 interface Post {
     title: string;
@@ -35,19 +36,15 @@ const PostCard = ({ post, index }: PostCardProps) => {
         setHoveredCard(null); // Clear the hovered card when the mouse leaves
     };
 
-    const handleClick = () => {
-        window.location.href = post.permalink;
-    };
-
     const isEvenIndex = index % 2 === 0;
     const isHovered = hoveredCard === uniqueCardId; // Check if this card is the one being hovered
 
     return (
-        <div
+        <Link
             key={index}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            onClick={handleClick}
+            href={post.permalink}
             className={cn(
                 "relative h-52 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer",
                 "shadow-theme-500/50 duration-200",
@@ -114,7 +111,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                     )}
                 />
             </div>
-        </div>
+        </Link>
     );
 };
 
