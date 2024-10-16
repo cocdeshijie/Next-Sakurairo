@@ -63,15 +63,15 @@ const ExternalLink: React.FC<ExternalLinkProps> = ({ href, className, children, 
             {faviconUrl ? (
                 <img
                     src={faviconUrl}
-                    className="w-5 h-5 mr-1 inline-block align-middle opacity-75 m-0"
+                    className={"w-5 h-5 mr-1 inline-block align-middle opacity-75 m-0"}
                     onError={() => setFaviconUrl(null)}
                     alt="favicon"
                 />
             ) : (
-                <TbWorld className="w-5 h-5 mr-1 inline-block align-middle opacity-75" />
+                <TbWorld className={"w-5 h-5 mr-1 inline-block align-middle opacity-75"} />
             )}
-            <span className="align-middle">{children}</span>
-            <GoArrowUpRight className="ml-0 inline-block align-text-top text-sm" />
+            <span className={"align-middle"}>{children}</span>
+            <GoArrowUpRight className={"ml-0 inline-block align-text-top text-sm"} />
         </a>
     );
 };

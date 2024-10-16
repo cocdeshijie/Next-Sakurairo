@@ -42,16 +42,16 @@ export default function TagsPage() {
     const shuffledTags = shuffleArray(uniqueTags);
 
     return (
-        <div className="bg-theme-50 dark:bg-theme-950 py-8 min-h-screen">
+        <div className={"bg-theme-50 dark:bg-theme-950 py-8 min-h-screen"}>
             {/* Top section */}
-            <div className="h-[30vh] flex items-center justify-center">
-                <h1 className="text-4xl font-bold text-center">All Tags</h1>
+            <div className={"h-[30vh] flex items-center justify-center"}>
+                <h1 className={"text-4xl font-bold text-center"}>All Tags</h1>
             </div>
 
             {/* Tags section */}
-            <div className="container mx-auto px-16 md:w-[50em]">
-                <div className="w-full">
-                    <div className="flex flex-wrap gap-4 justify-center items-center">
+            <div className={"container mx-auto px-16 md:w-[50em]"}>
+                <div className={"w-full"}>
+                    <div className={"flex flex-wrap gap-4 justify-center items-center"}>
                         {shuffledTags.map(({ tag, count }) => (
                             <Tag
                                 tag={tag}

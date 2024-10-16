@@ -41,23 +41,23 @@ export default function PostsPage() {
     if (error) return <div>Error: {error.message}</div>;
     if (isLoading && page === 0) {
         return (
-            <div className="bg-theme-50 dark:bg-theme-950 py-8 min-h-screen">
+            <div className={"bg-theme-50 dark:bg-theme-950 py-8 min-h-screen"}>
                 {/* TODO: loading skeleton */}
             </div>
         );
     }
 
     return (
-        <div className="bg-theme-50 dark:bg-theme-950 py-8 min-h-screen">
+        <div className={"bg-theme-50 dark:bg-theme-950 py-8 min-h-screen"}>
             {/* Top section */}
-            <div className="h-[30vh] flex items-center justify-center">
-                <h1 className="text-4xl font-bold text-center">All Posts</h1>
+            <div className={"h-[30vh] flex items-center justify-center"}>
+                <h1 className={"text-4xl font-bold text-center"}>All Posts</h1>
             </div>
 
             {/* Posts section */}
-            <div className="container mx-auto px-4 md:px-0 md:w-[50em]">
-                <div className="w-full">
-                    <div className="space-y-6 md:space-y-8 mb-8 md:mb-12">
+            <div className={"container mx-auto px-4 md:px-0 md:w-[50em]"}>
+                <div className={"w-full"}>
+                    <div className={"space-y-6 md:space-y-8 mb-8 md:mb-12"}>
                         {posts.map((post, index) => (
                             <PostCard key={index} post={post} index={index} />
                         ))}
@@ -66,10 +66,10 @@ export default function PostsPage() {
 
                 {/* Load More Button */}
                 {!isLoading && data && !data.last_page && (
-                    <div className="text-center mt-8">
+                    <div className={"text-center mt-8"}>
                         <button
                             onClick={() => setPage(prevPage => prevPage + 1)}
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                            className={"bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"}
                         >
                             Load More
                         </button>
@@ -77,7 +77,7 @@ export default function PostsPage() {
                 )}
 
                 {/* Loading indicator */}
-                {isLoading && page > 0 && <div className="text-center mt-8">Loading...</div>}
+                {isLoading && page > 0 && <div className={"text-center mt-8"}>Loading...</div>}
             </div>
         </div>
     );

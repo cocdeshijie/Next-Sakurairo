@@ -76,7 +76,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                             {new Date(post.date).toLocaleDateString()}
                         </p>
                     </div>
-                    <div className="flex cursor-auto ">
+                    <div className={"flex cursor-auto "}>
                         <div
                             className={cn(
                                 "text-white p-1 mr-2 rounded-full text-sm h-fit",

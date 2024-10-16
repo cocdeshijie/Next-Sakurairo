@@ -76,10 +76,10 @@ const Li = forwardRef<HTMLLIElement, ListItemProps>(
 
             return (
                 <li className={cn("mb-1 flex items-start", className)} {...props} ref={ref}>
-                    <span className="mr-2 flex-shrink-0">
+                    <span className={"mr-2 flex-shrink-0"}>
                         {clonedCheckbox}
                     </span>
-                    <span className="flex-1">
+                    <span className={"flex-1"}>
                         {restChildren}
                     </span>
                 </li>

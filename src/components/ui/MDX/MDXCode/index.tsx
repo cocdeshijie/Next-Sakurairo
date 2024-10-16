@@ -89,7 +89,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
                         {codeblock.meta}
                     </div>
                 )}
-                <div className="relative group">
+                <div className={"relative group"}>
                     <div className={commonClasses}>
                         Loading...
                     </div>
@@ -101,7 +101,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
     if (!highlightedCode) {
         return (
             <div className={"space-y-0 mt-8"}>
-                <div className="relative group">
+                <div className={"relative group"}>
                     <div className={commonClasses}>
                         Failed to load code.
                     </div>
@@ -124,7 +124,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
                 </div>
             )}
             {/* Wrapper for Pre and CopyButton */}
-            <div className="relative group">
+            <div className={"relative group"}>
             {/* CopyButton positioned at top-right, visible on hover */}
                 <CopyButton
                     text={highlightedCode.code}

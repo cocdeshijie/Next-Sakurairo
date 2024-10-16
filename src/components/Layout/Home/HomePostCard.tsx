@@ -69,7 +69,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                         "text-lg font-bold text-theme-950 dark:text-theme-50",
                         "line-clamp-3 md:line-clamp-2 mb-1"
                     )}>{post.title}</h3>
-                    <div className="flex items-center mb-2 cursor-auto">
+                    <div className={"flex items-center mb-2 cursor-auto"}>
                         <div
                             className={cn(
                                 "text-white p-1 mr-2 rounded-full",
@@ -81,7 +81,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                             {new Date(post.date).toLocaleDateString()}
                         </p>
                     </div>
-                    <div className="flex cursor-auto items-center">
+                    <div className={"flex cursor-auto items-center"}>
                         <div
                             className={cn(
                                 "text-white p-1 mr-1 rounded-full text-xs h-fit",

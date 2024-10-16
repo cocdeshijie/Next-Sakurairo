@@ -46,19 +46,30 @@ export default function PostPage({ params }: PostProps) {
                     className={"w-full h-full"}
                 />
                 <div
-                    className={"absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white"}>
+                    className={cn(
+                        "absolute inset-0 flex flex-col items-center justify-center",
+                        "bg-black bg-opacity-50 text-white"
+                    )}>
                     <h1 className={"text-xl md:text-4xl px-6 md:px-60 font-bold mb-4"}>{post.title}</h1>
                     <div className={"text-lg md:text-xl"}>
                         <span>{post.date}</span> | <span>{post.wordCount} words</span> | <span>{post.tags.join(', ')}</span>
                     </div>
                 </div>
             </div>
-            <section className={"py-6 bg-gradient-to-br from-theme-50 to-theme-100 dark:from-theme-900 dark:to-theme-950 md:grid md:grid-cols-4"}>
-                <div className="hidden md:block md:col-span-1"></div>
-                <div className="mx-4 px-4 py-12 prose-base dark:prose-invert rounded-lg border border-theme-300/50 dark:border-theme-700/50 shadow-md shadow-theme-200/50 dark:shadow-theme-800/50 bg-theme-50/75 dark:bg-theme-950/75 backdrop-blur-sm md:col-span-2">
+            <section className={cn(
+                "py-6 md:grid md:grid-cols-4",
+                "bg-gradient-to-br from-theme-50 to-theme-100 dark:from-theme-900 dark:to-theme-950"
+            )}>
+                <div className={"hidden md:block md:col-span-1"}></div>
+                <div className={cn(
+                    "mx-4 px-4 py-12 prose-base dark:prose-invert rounded-lg md:col-span-2",
+                    "border border-theme-300/50 dark:border-theme-700/50",
+                    "shadow-md shadow-theme-200/50 dark:shadow-theme-800/50",
+                    "bg-theme-50/75 dark:bg-theme-950/75 backdrop-blur-sm"
+                )}>
                     <MDX code={post.content}/>
                 </div>
-                <div className="sticky top-20 hidden md:block md:col-start-4">
+                <div className={"sticky top-20 hidden md:block md:col-start-4"}>
                     <TOC toc={post.toc}/>
                 </div>
             </section>
