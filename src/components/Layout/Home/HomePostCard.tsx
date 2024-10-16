@@ -81,19 +81,19 @@ const PostCard = ({ post, index }: PostCardProps) => {
                             {new Date(post.date).toLocaleDateString()}
                         </p>
                     </div>
-                    <div className="flex cursor-auto">
+                    <div className="flex cursor-auto items-center">
                         <div
                             className={cn(
-                                "text-white p-1 mr-1 rounded-full",
+                                "text-white p-1 mr-1 rounded-full text-xs h-fit",
                                 "bg-theme-400 dark:bg-theme-600 border border-theme-300 dark:border-theme-700"
                             )}>
                             <HiMiniTag/>
                         </div>
-                        <ul className={"list-none"}>
+                        <div className={"flex flex-wrap overflow-hidden max-h-7 gap-1"}>
                             {Array.isArray(post.tags) && post.tags.map((tag: string, index: number) => (
-                                <Tag key={index} tag={tag}/>
+                                <Tag key={index} tag={tag} sizeLevel={1}/>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>

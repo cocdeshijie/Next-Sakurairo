@@ -32,23 +32,26 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
     const { textSize, padding } = sizeClassMap[sizeLevel];
 
     return (
-        <Link href={`/tags/${tagSlug(tag)}`}>
-            <li
-                className={cn(
-                    "inline-flex items-end cursor-pointer",
-                    "text-white rounded-md mr-1 transition-all duration-200",
-                    "border border-theme-400 dark:border-theme-600",
-                    "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
-                    isHovered ? "transform scale-125 origin-bottom ml-1 mr-2" : "",
-                    textSize,
-                    padding
-                )}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                {tag}
-            </li>
-        </Link>
+        <div className="relative inline-block w-[max-content]">
+            <Link href={`/tags/${tagSlug(tag)}`}>
+                <div
+                    className={cn(
+                        "inline-flex items-end cursor-pointer",
+                        "text-white rounded-md transition-all duration-200",
+                        "border border-theme-400 dark:border-theme-600",
+                        "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
+                        "transform origin-bottom",
+                        isHovered ? "scale-110 ml-0.5 mr-0.5" : "scale-100",
+                        textSize,
+                        padding
+                    )}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    {tag}
+                </div>
+            </Link>
+        </div>
     );
 };
 
