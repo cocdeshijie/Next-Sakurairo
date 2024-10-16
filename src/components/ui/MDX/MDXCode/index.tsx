@@ -13,29 +13,26 @@ interface MDXCodeblockProps {
     codeblock: RawCode;
 }
 
-// Create atom families to manage state for each codeblock
-const highlightedCodeAtomFamily = atomFamily((codeblock: RawCode) =>
-    atom<HighlightedCode | null>(null)
-);
-const isLoadingAtomFamily = atomFamily((codeblock: RawCode) =>
-    atom<boolean>(true)
+// Create atom family to manage state for each codeblock
+const codeblockAtomFamily = atomFamily((codeblock: RawCode) =>
+    atom({
+        highlightedCode: null as HighlightedCode | null,
+        isLoading: true,
+    })
 );
 
 const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
     const { theme, resolvedTheme } = useTheme();
     const currentTheme = theme === "system" ? resolvedTheme : theme;
 
-    // Use Jotai atoms from families
-    const [highlightedCode, setHighlightedCode] = useAtom(
-        highlightedCodeAtomFamily(codeblock)
-    );
-    const [isLoading, setIsLoading] = useAtom(isLoadingAtomFamily(codeblock));
+    // Use Jotai atoms from family
+    const [codeblockState, setCodeblockState] = useAtom(codeblockAtomFamily(codeblock));
 
     useEffect(() => {
         let isMounted = true;
 
         const fetchHighlightedCode = async () => {
-            setIsLoading(true);
+            setCodeblockState((prev) => ({ ...prev, isLoading: true }));
             try {
                 const selectedTheme =
                     currentTheme === "dark" ? "github-dark" : "slack-ochin";
@@ -45,16 +42,16 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
                 );
 
                 if (isMounted) {
-                    setHighlightedCode(highlighted);
+                    setCodeblockState((prev) => ({ ...prev, highlightedCode: highlighted }));
                 }
             } catch (error) {
                 console.error("Error during code highlighting:", error);
                 if (isMounted) {
-                    setHighlightedCode(null);
+                    setCodeblockState((prev) => ({ ...prev, highlightedCode: null }));
                 }
             } finally {
                 if (isMounted) {
-                    setIsLoading(false);
+                    setCodeblockState((prev) => ({ ...prev, isLoading: false }));
                 }
             }
         };
@@ -64,7 +61,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
         return () => {
             isMounted = false;
         };
-    }, [codeblock, currentTheme, setHighlightedCode, setIsLoading]);
+    }, [codeblock, currentTheme, setCodeblockState]);
 
     const commonClasses = cn(
         "overflow-auto bg-theme-200/25 dark:bg-theme-800/25",
@@ -75,7 +72,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
         "whitespace-pre-wrap",
     );
 
-    if (isLoading) {
+    if (codeblockState.isLoading) {
         return (
             <div className={"space-y-0 mt-8"}>
                 {codeblock.meta && (
@@ -98,7 +95,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
         );
     }
 
-    if (!highlightedCode) {
+    if (!codeblockState.highlightedCode) {
         return (
             <div className={"space-y-0 mt-8"}>
                 <div className={"relative group"}>
@@ -112,7 +109,7 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
 
     return (
         <div className={"space-y-0 mt-8"}>
-            {highlightedCode.meta && (
+            {codeblockState.highlightedCode.meta && (
                 <div
                     className={cn(
                         "p-1 rounded-md rounded-b-none",
@@ -120,74 +117,63 @@ const MDXCode = ({ codeblock }: MDXCodeblockProps) => {
                         "bg-theme-200 dark:bg-theme-800"
                     )}
                 >
-                    {highlightedCode.meta}
+                    {codeblockState.highlightedCode.meta}
                 </div>
             )}
             {/* Wrapper for Pre and CopyButton */}
             <div className={"relative group"}>
-            {/* CopyButton positioned at top-right, visible on hover */}
+                {/* CopyButton positioned at top-right, visible on hover */}
                 <CopyButton
-                    text={highlightedCode.code}
+                    text={codeblockState.highlightedCode.code}
                     className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
                 />
                 <Pre
                     className={cn(
                         "overflow-auto bg-theme-200/25 dark:bg-theme-800/25",
-                        highlightedCode.meta
+                        codeblockState.highlightedCode.meta
                             ? "rounded-t-none rounded-b-md mt-0"
                             : "rounded-md"
                     )}
-                    code={highlightedCode}
+                    code={codeblockState.highlightedCode}
                     handlers={[lineNumbers]}
                 />
             </div>
         </div>
     );
-}
+};
 
 interface InlineCodeProps {
     codeblock: RawCode;
 }
-
-// Create atom families to manage state for each codeblock
-const highlightedInlineCodeAtomFamily = atomFamily((codeblock: RawCode) =>
-    atom<HighlightedCode | null>(null)
-);
-const isLoadingInlineCodeAtomFamily = atomFamily((codeblock: RawCode) =>
-    atom<boolean>(true)
-);
 
 // Async inline code component
 const MDXInlineCode = ({ codeblock }: InlineCodeProps) => {
     const { theme, resolvedTheme } = useTheme();
     const currentTheme = theme === "system" ? resolvedTheme : theme;
 
-    // Use Jotai atoms from families
-    const [highlightedCode, setHighlightedCode] = useAtom(
-        highlightedInlineCodeAtomFamily(codeblock)
-    );
-    const [isLoading, setIsLoading] = useAtom(isLoadingInlineCodeAtomFamily(codeblock));
+    // Use Jotai atom from family
+    const [codeblockState, setCodeblockState] = useAtom(codeblockAtomFamily(codeblock));
 
     useEffect(() => {
         let isMounted = true;
 
         const fetchHighlightedCode = async () => {
-            setIsLoading(true);
+            setCodeblockState((prev) => ({ ...prev, isLoading: true }));
             try {
                 const selectedTheme = currentTheme === "dark" ? "github-dark" : "slack-ochin";
                 const highlighted = await highlight(codeblock, selectedTheme);
 
                 if (isMounted) {
-                    setHighlightedCode(highlighted);
+                    setCodeblockState((prev) => ({ ...prev, highlightedCode: highlighted }));
                 }
             } catch (error) {
                 console.error("Error during inline code highlighting:", error);
                 if (isMounted) {
-                    setHighlightedCode(null);
+                    setCodeblockState((prev) => ({ ...prev, highlightedCode: null }));
                 }
             } finally {
                 if (isMounted) {
-                    setIsLoading(false);
+                    setCodeblockState((prev) => ({ ...prev, isLoading: false }));
                 }
             }
         };
@@ -197,7 +183,7 @@ const MDXInlineCode = ({ codeblock }: InlineCodeProps) => {
         return () => {
             isMounted = false;
         };
-    }, [codeblock, currentTheme, setHighlightedCode, setIsLoading]);
+    }, [codeblock, currentTheme, setCodeblockState]);
 
     const defaultHighlightedCode: HighlightedCode = {
         code: "Loading...",
@@ -215,16 +201,15 @@ const MDXInlineCode = ({ codeblock }: InlineCodeProps) => {
         "px-2 py-1 rounded text-sm"
     );
 
-    if (isLoading) {
+    if (codeblockState.isLoading) {
         return <Inline code={{ ...defaultHighlightedCode }} className={commonClasses} />;
     }
 
-    if (!highlightedCode) {
+    if (!codeblockState.highlightedCode) {
         return <Inline code={{ ...defaultHighlightedCode, code: "Failed to load code.", value: "Failed to load code." }} className={commonClasses} />;
     }
 
-    return <Inline code={{ ...highlightedCode }} className={commonClasses} />;
+    return <Inline code={{ ...codeblockState.highlightedCode }} className={commonClasses} />;
 };
-
 
 export { MDXCode, MDXInlineCode };
