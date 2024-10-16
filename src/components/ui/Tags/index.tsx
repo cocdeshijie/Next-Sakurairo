@@ -33,6 +33,10 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
         setHoveredTag(null); // Clear the hovered tag when the mouse leaves
     };
 
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        event.stopPropagation(); // Prevent the card click event from firing
+    };
+
     const { textSize, padding } = sizeClassMap[sizeLevel];
     const isHovered = hoveredTag === uniqueTagId; // Check if this tag is the one being hovered
 
@@ -52,6 +56,7 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
                     )}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
+                    onClick={handleClick}
                 >
                     {tag}
                 </div>
