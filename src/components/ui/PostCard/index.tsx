@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { cn } from "@/utils/cn";
-import { useState } from "react";
+import { atom, useAtom } from "jotai";
 import Tag from "@/components/ui/Tags";
 import { HiMiniTag, HiMiniCalendarDays } from "react-icons/hi2";
+import { useId } from "react";
 
 interface Post {
     title: string;
@@ -19,15 +20,19 @@ interface PostCardProps {
     index: number;
 }
 
+// Define a global atom to store the currently hovered card's unique ID
+const hoveredCardAtom = atom<string | null>(null);
+
 const PostCard = ({ post, index }: PostCardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
+    const uniqueCardId = useId(); // Generate a unique ID for each card instance
+    const [hoveredCard, setHoveredCard] = useAtom(hoveredCardAtom); // Global atom for the hovered card's unique ID
 
     const handleMouseEnter = () => {
-        setIsHovered(true);
+        setHoveredCard(uniqueCardId); // Set the hovered card to the current uniqueCardId
     };
 
     const handleMouseLeave = () => {
-        setIsHovered(false);
+        setHoveredCard(null); // Clear the hovered card when the mouse leaves
     };
 
     const handleClick = () => {
@@ -35,6 +40,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
     };
 
     const isEvenIndex = index % 2 === 0;
+    const isHovered = hoveredCard === uniqueCardId; // Check if this card is the one being hovered
 
     return (
         <div
@@ -70,7 +76,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                                 "text-white p-1 mr-2 rounded-full",
                                 "bg-theme-300 dark:bg-theme-700 border border-theme-400 dark:border-theme-800"
                             )}>
-                            <HiMiniCalendarDays/>
+                            <HiMiniCalendarDays />
                         </div>
                         <p className={"text-theme-900 dark:text-theme-100 text-sm"}>
                             {new Date(post.date).toLocaleDateString()}
@@ -82,11 +88,11 @@ const PostCard = ({ post, index }: PostCardProps) => {
                                 "text-white p-1 mr-2 rounded-full text-sm h-fit",
                                 "bg-theme-400 dark:bg-theme-600 border border-theme-300 dark:border-theme-700"
                             )}>
-                            <HiMiniTag/>
+                            <HiMiniTag />
                         </div>
                         <div className={"flex flex-wrap gap-1"}>
                             {Array.isArray(post.tags) && post.tags.map((tag: string, index: number) => (
-                                <Tag key={index} tag={tag}/>
+                                <Tag key={index} tag={tag} />
                             ))}
                         </div>
                     </div>
