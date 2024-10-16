@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
-import { tagSlug } from "@/utils/tagSlug";
 
 interface TagProps {
     tag: string;
@@ -33,7 +32,7 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
 
     return (
         <div className="relative inline-block w-[max-content]">
-            <Link href={`/tags/${tagSlug(tag)}`}>
+            <Link href={`/tags/${tag}`}>
                 <div
                     className={cn(
                         "inline-flex items-end cursor-pointer",

@@ -1,8 +1,8 @@
-import {defineCollection, defineConfig, s} from "velite";
-import {execSync} from "node:child_process";
+import { defineCollection, defineConfig, s } from "velite";
+import { execSync } from "node:child_process";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import {remarkCodeHike} from "codehike/mdx"
+import { remarkCodeHike } from "codehike/mdx";
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
