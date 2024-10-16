@@ -1,48 +1,54 @@
 "use client";
 
-import { Posts } from "#site/content";
+import {Posts} from "#site/content";
 import PostCard from "@/components/ui/Posts/index";
-import { atom, useAtom } from 'jotai';
-import { getPosts } from "@/app/actions/getPosts";
-import { useEffect } from "react";
+import {atom, useAtom} from 'jotai';
+import {atomFamily, useHydrateAtoms} from 'jotai/utils';
+import {getPosts} from "@/app/actions/getPosts";
+import {usePathname} from 'next/navigation';
 
+// Type for PostList Props
 type PostListProps = {
     initialPosts: Posts[];
     lastPage: boolean;
     tag?: string;
 }
 
-const NUMBER_OF_USERS_TO_FETCH = 2;
-
-// Jotai atoms
-const offsetAtom = atom(NUMBER_OF_USERS_TO_FETCH);
-const postsAtom = atom<Posts[]>([]);
-const isLastPageAtom = atom(false);
+// Jotai atom family
+const postAtomFamily = atomFamily(
+    (tag: string) => atom({
+        offset: 2,
+        posts: [] as Posts[],
+        isLastPage: false,
+    }),
+    (a, b) => a === b
+);
 
 export default function PostList({ initialPosts, lastPage, tag }: PostListProps) {
-    const [offset, setOffset] = useAtom(offsetAtom);
-    const [posts, setPosts] = useAtom(postsAtom);
-    const [isLastPage, setIsLastPage] = useAtom(isLastPageAtom);
+    const uniqueId = usePathname();
 
-    // Initialize state
-    useEffect(() => {
-        setPosts(initialPosts);
-        setIsLastPage(lastPage);
-    }, [initialPosts, lastPage, setPosts, setIsLastPage]);
+    useHydrateAtoms([
+        [postAtomFamily(uniqueId), { offset: 2, posts: initialPosts, isLastPage: lastPage }],
+    ] as const);
+
+    const [postState, setPostState] = useAtom(postAtomFamily(uniqueId));
 
     const loadMorePosts = async () => {
-        const result = await getPosts(offset, NUMBER_OF_USERS_TO_FETCH, tag);
-        setPosts(posts => [...posts, ...result.posts]);
-        setOffset(offset + NUMBER_OF_USERS_TO_FETCH);
-        setIsLastPage(result.lastPage);
-    }
+        const result = await getPosts(postState.offset, 2, tag);
+        setPostState((prev) => ({
+            ...prev,
+            posts: [...prev.posts, ...result.posts],
+            offset: prev.offset + 2,
+            isLastPage: result.lastPage,
+        }));
+    };
 
     return (
         <div className={"space-y-6 md:space-y-8 mb-8 md:mb-12"}>
-            {posts.map((post, index) => (
-                <PostCard key={index} post={post} index={index}/>
+            {postState.posts.map((post, index) => (
+                <PostCard key={index} post={post} index={index} />
             ))}
-            {!isLastPage && (
+            {!postState.isLastPage && (
                 <div className={"text-center mt-8"}>
                     <button
                         onClick={loadMorePosts}
