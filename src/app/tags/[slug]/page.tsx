@@ -11,7 +11,6 @@ interface TagProps {
 
 export function generateStaticParams(): TagProps['params'][] {
     const uniqueTags = Array.from(new Set(tags)); // Remove duplicates
-    console.log(uniqueTags)
     return uniqueTags.map(tag => ({
         slug: tag
     }));

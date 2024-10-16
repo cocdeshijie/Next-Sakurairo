@@ -2,8 +2,9 @@
 
 import { Posts } from "#site/content";
 import PostCard from "@/components/ui/Posts/index";
-import { useState } from 'react';
+import { atom, useAtom } from 'jotai';
 import { getPosts } from "@/app/actions/getPosts";
+import { useEffect } from "react";
 
 type PostListProps = {
     initialPosts: Posts[];
@@ -13,15 +14,26 @@ type PostListProps = {
 
 const NUMBER_OF_USERS_TO_FETCH = 2;
 
+// Jotai atoms
+const offsetAtom = atom(NUMBER_OF_USERS_TO_FETCH);
+const postsAtom = atom<Posts[]>([]);
+const isLastPageAtom = atom(false);
+
 export default function PostList({ initialPosts, lastPage, tag }: PostListProps) {
-    const [offset, setOffset] = useState(NUMBER_OF_USERS_TO_FETCH);
-    const [posts, setPosts] = useState<Posts[]>(initialPosts);
-    const [isLastPage, setIsLastPage] = useState(lastPage);
+    const [offset, setOffset] = useAtom(offsetAtom);
+    const [posts, setPosts] = useAtom(postsAtom);
+    const [isLastPage, setIsLastPage] = useAtom(isLastPageAtom);
+
+    // Initialize state
+    useEffect(() => {
+        setPosts(initialPosts);
+        setIsLastPage(lastPage);
+    }, [initialPosts, lastPage, setPosts, setIsLastPage]);
 
     const loadMorePosts = async () => {
         const result = await getPosts(offset, NUMBER_OF_USERS_TO_FETCH, tag);
         setPosts(posts => [...posts, ...result.posts]);
-        setOffset(offset => offset + NUMBER_OF_USERS_TO_FETCH);
+        setOffset(offset + NUMBER_OF_USERS_TO_FETCH);
         setIsLastPage(result.lastPage);
     }
 
