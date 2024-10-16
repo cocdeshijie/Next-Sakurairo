@@ -79,15 +79,17 @@ const tags = defineCollection({
         .object({
             tags: s.array(s.string()).default([])
         })
-        .transform(data => {
-            return data.tags.filter(tag => {
-                if (!globalTagSet.has(tag)) {
-                    globalTagSet.add(tag);
-                    return true; // Add tag if it's not globally duplicated
-                }
-                return false; // Skip tag if it's already in the global set
-            });
-        })
+        .transform(data => data.tags),
+        // no repeats
+        // .transform(data => {
+        //     return data.tags.filter(tag => {
+        //         if (!globalTagSet.has(tag)) {
+        //             globalTagSet.add(tag);
+        //             return true; // Add tag if it's not globally duplicated
+        //         }
+        //         return false; // Skip tag if it's already in the global set
+        //     });
+        // })
 });
 
 export default defineConfig({
