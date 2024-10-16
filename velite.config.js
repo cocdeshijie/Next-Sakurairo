@@ -1,8 +1,8 @@
-import { defineCollection, defineConfig, s } from "velite";
-import { execSync } from "node:child_process";
+import {defineCollection, defineConfig, s} from "velite";
+import {execSync} from "node:child_process";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import { remarkCodeHike } from "codehike/mdx"
+import {remarkCodeHike} from "codehike/mdx"
 
 /** @type {import('codehike/mdx').CodeHikeConfig} */
 const chConfig = {
@@ -70,6 +70,8 @@ const posts = defineCollection({
         }))
 })
 
+const globalTagSet = new Set();
+
 const tags = defineCollection({
     name: "Tags",
     pattern: "posts/**/*.@(md|mdx)",
@@ -77,13 +79,16 @@ const tags = defineCollection({
         .object({
             tags: s.array(s.string()).default([])
         })
-        .transform(data => data.tags),
-    transform: (data) => {
-        const allTags = data.flat();
-        const uniqueTags = [...new Set(allTags)];
-        return uniqueTags.map(tag => ({ name: tag, slug: tag.toLowerCase().replace(/[^a-z0-9]+/g, "-") }));
-    }
-})
+        .transform(data => {
+            return data.tags.filter(tag => {
+                if (!globalTagSet.has(tag)) {
+                    globalTagSet.add(tag);
+                    return true; // Add tag if it's not globally duplicated
+                }
+                return false; // Skip tag if it's already in the global set
+            });
+        })
+});
 
 export default defineConfig({
     root: "content",
