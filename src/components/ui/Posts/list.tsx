@@ -1,11 +1,11 @@
 "use client";
 
-import {Posts} from "#site/content";
+import { Posts } from "#site/content";
 import PostCard from "@/components/ui/Posts/index";
-import {atom, useAtom} from 'jotai';
-import {atomFamily, useHydrateAtoms} from 'jotai/utils';
-import {getPosts} from "@/app/actions/getPosts";
-import {usePathname} from 'next/navigation';
+import { atom, useAtom } from 'jotai';
+import { atomFamily, useHydrateAtoms } from 'jotai/utils';
+import { getPosts } from "@/app/actions/getPosts";
+import { usePathname } from 'next/navigation';
 
 // Type for PostList Props
 type PostListProps = {
