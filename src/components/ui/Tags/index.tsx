@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId } from "react";
+import { atom, useAtom } from "jotai";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 
@@ -8,6 +9,9 @@ interface TagProps {
     tag: string;
     sizeLevel?: number;
 }
+
+// Define a global atom to store the currently hovered tag's unique ID
+const hoveredTagAtom = atom<string | null>(null);
 
 const sizeClassMap: Record<number, { textSize: string; padding: string }> = {
     1: { textSize: "text-xs", padding: "px-1 py-0.5" },
@@ -19,16 +23,18 @@ const sizeClassMap: Record<number, { textSize: string; padding: string }> = {
 };
 
 const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
-    const [isHovered, setIsHovered] = useState(false);
+    const [hoveredTag, setHoveredTag] = useAtom(hoveredTagAtom); // Global atom for the hovered tag's unique ID
+    const uniqueTagId = useId(); // Generate a unique ID for each tag instance
 
     const handleMouseEnter = () => {
-        setIsHovered(true);
+        setHoveredTag(uniqueTagId); // Set the hovered tag to the current uniqueTagId
     };
     const handleMouseLeave = () => {
-        setIsHovered(false);
+        setHoveredTag(null); // Clear the hovered tag when the mouse leaves
     };
 
     const { textSize, padding } = sizeClassMap[sizeLevel];
+    const isHovered = hoveredTag === uniqueTagId; // Check if this tag is the one being hovered
 
     return (
         <div className="relative inline-block w-[max-content]">
