@@ -44,15 +44,15 @@ export default function PostList({ initialPosts, lastPage, tag }: PostListProps)
     };
 
     return (
-        <div className={"space-y-6 md:space-y-8 mb-8 md:mb-12"}>
+        <div className="flex flex-col">
             {postState.posts.map((post, index) => (
-                <PostCard key={index} post={post} index={index} />
+                <PostCard key={index} post={post} index={index}/>
             ))}
             {!postState.isLastPage && (
-                <div className={"text-center mt-8"}>
+                <div className="text-center mt-8">
                     <button
                         onClick={loadMorePosts}
-                        className={"bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
                     >
                         Load More
                     </button>

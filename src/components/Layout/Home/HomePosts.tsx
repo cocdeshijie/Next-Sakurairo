@@ -18,7 +18,7 @@ const HomePosts = () => {
                         <h2 className={"text-3xl font-bold"}>Recent Posts</h2>
                     </div>
                     <div className={"w-full md:w-2/3 md:max-w-xl min-h-[50vh]"}>
-                        <div className={"space-y-4 md:space-y-6 mb-8 md:mb-12"}>
+                        <div className={"flex flex-col"}>
                             {displayedPosts.map((post, index) => (
                                 <HomePostCard key={index} post={post} index={index} />
                             ))}

@@ -44,7 +44,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
             onMouseLeave={handleMouseLeave}
             href={post.permalink}
             className={cn(
-                "relative h-44 md:h-36 rounded-lg shadow-lg overflow-hidden md:flex cursor-pointer",
+                "relative h-44 md:h-36 rounded-lg shadow-lg overflow-hidden mb-4 md:mb-6 md:flex cursor-pointer",
                 "shadow-theme-500/50 dark:shadow-theme-500/25 duration-200",
                 isHovered ? "shadow-xl" : "shadow-none"
             )}
