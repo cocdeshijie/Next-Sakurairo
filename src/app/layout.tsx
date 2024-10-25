@@ -7,7 +7,7 @@ import Footer from "../components/Layout/Footer";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ScrollProvider } from "@/providers/scroll-provider";
 import { cn } from "@/utils/cn";
-import { ToTop } from "@/components/ui/Buttons";
+import { UtilityButtons } from "@/components/Layout/UtilityButtons";
 
 type RootLayoutProps = {
     children: React.ReactNode;
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     <Header />
                     {children}
                     <Footer />
-                    <ToTop/>
+                    <UtilityButtons />
                 </ScrollProvider>
             </ThemeProvider>
         </JotaiProvider>

@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from "react";
 import { atom, useAtom } from "jotai";
-import { HiSun , HiMoon, HiComputerDesktop, HiDevicePhoneMobile } from "react-icons/hi2";
+import { BiSun , BiMoon, BiDesktop, BiMobile } from "react-icons/bi";
 import { useTheme } from "next-themes";
 import { cn } from "@/utils/cn";
 import * as Portal from "@radix-ui/react-portal";
@@ -100,14 +100,14 @@ const ThemeSwitch = () => {
     const getThemeIcon = (theme: ThemeOption) => {
         switch (theme) {
             case "dark":
-                return <HiMoon size={24} />;
+                return <BiMoon className={"w-8 h-8 text-theme-500"}/>;
             case "light":
-                return <HiSun size={24} />;
+                return <BiSun className={"w-8 h-8 text-theme-500"}/>;
             case "system":
                 return(
                     <>
-                        <HiComputerDesktop size={24} className={"hidden md:block"}/>
-                        <HiDevicePhoneMobile size={24} className={"block md:hidden"}/>
+                        <BiDesktop className={"w-8 h-8 text-theme-500 hidden md:block"}/>
+                        <BiMobile className={"w-8 h-8 text-theme-500 block md:hidden"}/>
                     </>
                 );
         }
@@ -115,7 +115,9 @@ const ThemeSwitch = () => {
 
     const getButtonThemeIcon = () => {
         if (switchTheme === "system") {
-            return resolvedTheme === "dark" ? <HiMoon size={24} /> : <HiSun size={24} />;
+            return resolvedTheme === "dark"
+                ? <BiMoon className={"w-8 h-8 text-theme-500"} />
+                : <BiSun className={"w-8 h-8 text-theme-500"} />;
         }
         return getThemeIcon(switchTheme);
     };
@@ -125,15 +127,12 @@ const ThemeSwitch = () => {
     }
 
     return (
-        <div className={"relative"}>
+        <>
             <button
                 ref={buttonRef}
-                className={cn(
-                    "p-2 h-10 w-10 rounded-md",
-                    "bg-theme-200/25 dark:bg-theme-800/25 backdrop-blur-3xl"
-                )}
                 onMouseDown={handleMouseDown}
                 onClick={handleClick}
+                className={"flex items-center justify-center p-1.5"}
                 onMouseUp={(e) => handleMouseUp(e.nativeEvent)}
             >
                 {getButtonThemeIcon()}
@@ -142,8 +141,8 @@ const ThemeSwitch = () => {
                 <div
                     ref={stadiumRef}
                     className={cn(
-                        "fixed mt-2",
-                        "rounded-md flex justify-between items-center p-1",
+                        "fixed mt-2 z-50",
+                        "rounded-md flex justify-between items-center p-1.5",
                         "bg-theme-200/75 dark:bg-theme-800/75 backdrop-blur-3xl",
                         "transition-opacity duration-300",
                         isHolding ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
@@ -170,7 +169,7 @@ const ThemeSwitch = () => {
                     ))}
                 </div>
             </Portal.Root>
-        </div>
+        </>
     );
 };
 

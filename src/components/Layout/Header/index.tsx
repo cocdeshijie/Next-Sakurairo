@@ -6,16 +6,38 @@ import HeaderDialog from "@/components/Layout/Header/HeaderDialog";
 import { config } from "#site/content";
 import type { Config } from "#site/content";
 import * as HoverCard from "@radix-ui/react-hover-card";
-import ThemeSwitch from "@/components/ui/ThemeSwitch";
+import { atom, useAtom } from "jotai";
+import { useEffect } from "react";
+
+const hoverAtom = atom(false);
+const scrollAtom = atom(false);
 
 const Header = () => {
+    const [isHovered, setIsHovered] = useAtom(hoverAtom);
+    const [isScrolled, setIsScrolled] = useAtom(scrollAtom);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        handleScroll();
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, [setIsScrolled]);
+
     return (
         <header
             className={cn(
                 "fixed top-0 left-0 right-0 p-5 md:py-3 md:px-8 md:top-4 md:left-16 md:right-16 z-50",
-                "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg",
-                "rounded-none md:rounded-lg shadow-md flex justify-between items-center"
+                "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg duration-500",
+                "rounded-none md:rounded-xl shadow-md flex justify-between items-center",
+                {"md:backdrop-blur-none md:bg-transparent md:dark:bg-transparent md:shadow-none": !(isHovered || isScrolled)}
             )}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <HeaderDialog />
 
@@ -64,10 +86,6 @@ const Header = () => {
                         ))}
                     </ul>
                 </nav>
-            </div>
-
-            <div className={"ml-auto"}>
-                <ThemeSwitch />
             </div>
         </header>
     );

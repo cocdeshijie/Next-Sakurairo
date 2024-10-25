@@ -31,8 +31,9 @@ const Logo = () => {
                         <div className={"relative"}>
                             <div
                                 className={cn(
-                                    "pt-1.5 pb-0.5 rounded-xl items-center",
-                                    logoHover ? "bg-theme-500 text-white" : "bg-transparent text-theme-500 dark:text-white"
+                                    "pt-3 pb-0.5 rounded-xl items-center",
+                                    "bg-theme-100/25 text-theme-500 dark:text-theme-500",
+                                    logoHover ? "bg-theme-500 text-white dark:text-white" : "text-theme-500"
                                 )}
                             >
                                 {config.header_logo.text_front}
