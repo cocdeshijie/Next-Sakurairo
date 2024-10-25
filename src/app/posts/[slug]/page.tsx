@@ -44,14 +44,14 @@ export default function PostPage({ params }: PostProps) {
                     alt={post.title}
                     layout={"fill"}
                     objectFit={"cover"}
-                    className={"w-full h-full"}
+                    className={"w-full h-full blur-sm"}
                 />
                 <div
                     className={cn(
                         "absolute inset-0 flex flex-col items-center justify-center",
                         "bg-black bg-opacity-50 text-white"
                     )}>
-                    <h1 className={"text-xl md:text-4xl px-6 my-10 md:px-60 font-bold mb-4"}>{post.title}</h1>
+                    <h1 className={"text-xl md:text-4xl px-6 my-10 md:px-60 font-bold mb-4 drop-shadow-lg"}>{post.title}</h1>
                     <div className={"flex flex-col items-center gap-3 px-4 text-center"}>
                         <time className={"text-lg md:text-xl font-medium"} dateTime={post.date}>
                             {new Date(post.date).toLocaleDateString('en-US', {

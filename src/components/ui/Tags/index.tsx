@@ -50,7 +50,7 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
                     "inline-flex items-end cursor-pointer",
                     "text-white rounded-md transition-all duration-200",
                     "border border-theme-400 dark:border-theme-600",
-                    "bg-theme-400/75 dark:bg-theme-600/75 hover:bg-theme-400 hover:dark:bg-theme-600",
+                    "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
                     "transform origin-bottom",
                     isHovered ? "scale-110 ml-0.5 mr-0.5" : "scale-100",
                     textSize,
