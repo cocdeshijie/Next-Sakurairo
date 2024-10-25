@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useEffect, useCallback } from "react";
 import { atom, useAtom } from "jotai";
 import { BiSun , BiMoon, BiDesktop, BiMobile } from "react-icons/bi";
@@ -141,20 +143,19 @@ const ThemeSwitch = () => {
                 <div
                     ref={stadiumRef}
                     className={cn(
-                        "fixed mt-2 z-50",
-                        "rounded-md flex justify-between items-center p-1.5",
+                        "fixed z-50",
+                        "rounded-md flex justify-between items-center p-0.5",
                         "bg-theme-200/75 dark:bg-theme-800/75 backdrop-blur-3xl",
                         "transition-opacity duration-300",
                         isHolding ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
                     )}
                     style={{
-                        top: buttonRef.current?.getBoundingClientRect().bottom ?? 0,
-                        left: buttonRef.current ?
-                            buttonRef.current.getBoundingClientRect().left +
-                            buttonRef.current.offsetWidth / 2 -
-                            (stadiumRef.current?.offsetWidth ?? 0) / 2
+                        top: buttonRef.current?.getBoundingClientRect().top ?? 0, // Align with the top of the button
+                        left: buttonRef.current
+                            ? buttonRef.current.getBoundingClientRect().left -
+                            (stadiumRef.current?.offsetWidth ?? 0) - 6 // Position left of the button with some space
                             : 0,
-                        transform: 'translateY(8px)',
+                        transform: 'translateX()', // Horizontal translation to adjust positioning
                     }}
                 >
                     {(["dark", "system", "light"] as ThemeOption[]).map((option) => (
@@ -162,7 +163,7 @@ const ThemeSwitch = () => {
                             key={option}
                             className={cn(
                                 highlightedOption === option && "text-blue-500 bg-theme-300/25",
-                                "p-2 rounded-md"
+                                "p-1.5 rounded-md"
                             )}>
                         {getThemeIcon(option)}
                     </span>

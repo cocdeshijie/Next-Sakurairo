@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ReactNode, useCallback, useEffect, useId } from "react";
 import { cn } from "@/utils/cn";
@@ -10,11 +10,12 @@ import ThemeSwitch from "./ThemeSwitch";
 interface ButtonWrapperProps {
     children: ReactNode;
     className?: string;
+    useVisibility?: boolean; // Optional prop to control visibility logic
 }
 
 const isVisibleAtomFamily = atomFamily((id: string) => atom(false));
 
-const ButtonWrapper = ({ children, className }: ButtonWrapperProps) => {
+const ButtonWrapper = ({ children, className, useVisibility = false }: ButtonWrapperProps) => {
     const id = useId();
     const [isVisible, setIsVisible] = useAtom(isVisibleAtomFamily(id));
 
@@ -26,20 +27,23 @@ const ButtonWrapper = ({ children, className }: ButtonWrapperProps) => {
         }
     }, [setIsVisible]);
 
+    // Only run visibility logic if useVisibility is true
     useEffect(() => {
-        toggleVisibility();
-        window.addEventListener("scroll", toggleVisibility);
-        return () => {
-            window.removeEventListener("scroll", toggleVisibility);
-        };
-    }, [toggleVisibility]);
+        if (useVisibility) {
+            toggleVisibility();
+            window.addEventListener("scroll", toggleVisibility);
+            return () => {
+                window.removeEventListener("scroll", toggleVisibility);
+            };
+        }
+    }, [toggleVisibility, useVisibility]);
 
     return (
         <div
             className={cn(
                 className, // External layout control (like margin) can be passed here
                 "transition-opacity duration-300",
-                isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+                useVisibility ? (isVisible ? "opacity-100" : "opacity-0 pointer-events-none") : "opacity-100" // Always show if useVisibility is false
             )}
         >
             <div
@@ -56,15 +60,16 @@ const ButtonWrapper = ({ children, className }: ButtonWrapperProps) => {
     );
 };
 
+
 export const UtilityButtons = () => {
     return (
         <>
-            <ButtonWrapper className={"fixed z-30 bottom-8 right-0 mr-2 lg:mr-8"}>
-                <ToTop />
+            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 lg:mr-8">
+                <ThemeSwitch />
             </ButtonWrapper>
 
-            <ButtonWrapper className={"fixed z-30 bottom-8 right-0 mr-2 lg:mr-8 mb-14"}>
-                <ThemeSwitch />
+            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 lg:mr-8 mb-14" useVisibility>
+                <ToTop />
             </ButtonWrapper>
         </>
     );
