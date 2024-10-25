@@ -87,9 +87,9 @@ const PostCard = ({ post, index }: PostCardProps) => {
                             )}>
                             <HiMiniTag />
                         </div>
-                        <div className={"flex flex-wrap gap-1"}>
+                        <div className={"flex flex-wrap overflow-hidden max-h-7 gap-1"}>
                             {Array.isArray(post.tags) && post.tags.map((tag: string, index: number) => (
-                                <Tag key={index} tag={tag} />
+                                <Tag key={index} tag={tag}/>
                             ))}
                         </div>
                     </div>
