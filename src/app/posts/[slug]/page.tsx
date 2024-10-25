@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
 import TOC from "@/components/ui/TOC";
+import Tag from "@/components/ui/Tags";
 
 interface PostProps {
     params: {
@@ -50,9 +51,20 @@ export default function PostPage({ params }: PostProps) {
                         "absolute inset-0 flex flex-col items-center justify-center",
                         "bg-black bg-opacity-50 text-white"
                     )}>
-                    <h1 className={"text-xl md:text-4xl px-6 md:px-60 font-bold mb-4"}>{post.title}</h1>
-                    <div className={"text-lg md:text-xl"}>
-                        <span>{post.date}</span> | <span>{post.wordCount} words</span> | <span>{post.tags.join(', ')}</span>
+                    <h1 className={"text-xl md:text-4xl px-6 my-10 md:px-60 font-bold mb-4"}>{post.title}</h1>
+                    <div className={"flex flex-col items-center gap-3 px-4 text-center"}>
+                        <time className={"text-lg md:text-xl font-medium"} dateTime={post.date}>
+                            {new Date(post.date).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric',
+                            })}
+                        </time>
+                        <div className={"flex flex-wrap justify-center gap-2"}>
+                            {Array.isArray(post.tags) && post.tags.map((tag: string, index: number) => (
+                                <Tag key={index} tag={tag} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
