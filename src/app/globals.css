@@ -12,20 +12,29 @@
     --scrollbar-bg: theme('colors.theme.800');
 }
 
-::-webkit-scrollbar {
+/* Hide native scrollbar only on desktop */
+@media (min-width: 768px) {
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* For Firefox */
+    * {
+        scrollbar-width: none;
+    }
+}
+
+/* Custom scrollbar container */
+.custom-scrollbar {
+    @apply hidden md:block fixed right-0 top-0;
     width: 6px;
-    height: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: var(--scrollbar);
-    border-radius: 25px;
-}
-
-::-webkit-scrollbar-track, body.dark::-webkit-scrollbar-thumb {
+    height: 100vh;
     background-color: var(--scrollbar-bg);
+    z-index: 50;
+    pointer-events: none;
 }
 
+/* Hide scrollbar for elements with .no-scrollbar class */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
@@ -38,4 +47,3 @@
 code {
     word-break: break-all;
 }
-
