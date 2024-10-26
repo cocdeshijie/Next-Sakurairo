@@ -21,23 +21,23 @@ header_navigation:
 
 home_social:
   - name: GitHub
-    src: "/static/icons/github.svg"
+    src: "/static/social-icons/github.svg"
     href: "https://github.com/cocdeshijie"
   - name: X
-    src: "/static/icons/x.svg"
+    src: "/static/social-icons/x.svg"
     href: "https://twitter.com/cocdeshijie"
   - name: BiliBili
-    src: "/static/icons/bilibili.svg"
+    src: "/static/social-icons/bilibili.svg"
     href: "https://space.bilibili.com/60559166"
   - name: Telegram
-    src: "/static/icons/telegram.svg"
+    src: "/static/social-icons/telegram.svg"
     href: "https://telegram.me/cocdeshijie"
   - name: Discord
-    src: "/static/icons/discord.svg"
+    src: "/static/social-icons/discord.svg"
     href: "https://discordapp.com/channels/@me/390338482951815178/"
   - name: QQ
-    src: "/static/icons/qq.svg"
+    src: "/static/social-icons/qq.svg"
     href: "tencent://message/?uin=2049302246"
   - name: Steam
-    src: "/static/icons/steam.svg"
+    src: "/static/social-icons/steam.svg"
     href: "https://steamcommunity.com/id/cocdeshijie"
