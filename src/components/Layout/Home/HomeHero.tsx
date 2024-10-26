@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
-import { FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
-import Image from "next/image";
+import { HomeIcon } from "@/components/ui/Icons";
+import {Config, config} from "#site/content";
 
 const bgOpacityAtom = atom(0);
 
@@ -39,12 +40,12 @@ const HomeHero = () => {
                             alt="Profile"
                             width={160}
                             height={160}
-                            className={"rounded-full mb-4"}
+                            className={"rounded-full mb-4 transition-transform duration-500 hover:rotate-[360deg] transform-gpu"}
                         />
-                        <div className={"flex space-x-4"}>
-                            <FaTwitter size={24} />
-                            <FaGithub size={24} />
-                            <FaLinkedin size={24} />
+                        <div className={"flex space-x-3"}>
+                            {config.home_social.map((item: Config) => (
+                                <HomeIcon src={item.src} link={item.href} key={item.name} alt={item.name} />
+                            ))}
                         </div>
                     </div>
                     <div className={"md:w-1/2 text-center"}>
