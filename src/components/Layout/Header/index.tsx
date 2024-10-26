@@ -9,13 +9,16 @@ import type { Config } from "#site/content";
 import * as HoverCard from "@radix-ui/react-hover-card";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
+import { easings, useTransition, animated } from "@react-spring/web";
 
 const hoverAtom = atom(false);
 const scrollAtom = atom(false);
+const hoverCardAtom = atom(false);
 
 const Header = () => {
     const [isHovered, setIsHovered] = useAtom(hoverAtom);
     const [isScrolled, setIsScrolled] = useAtom(scrollAtom);
+    const [hoverCardIsHovered, setHoverCardIsHovered] = useAtom(hoverCardAtom);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -28,6 +31,16 @@ const Header = () => {
             window.removeEventListener("scroll", handleScroll);
         };
     }, [setIsScrolled]);
+
+    const transitions = useTransition(hoverCardIsHovered, {
+        from: { opacity: 0, y: -20 }, // Start from a slightly higher position (above)
+        enter: { opacity: 1, y: 0 },  // Drop down to the default position
+        leave: { opacity: 0, y: -20 }, // Move back up on exit
+        config: {
+            duration: 100,
+            easing: easings.easeInOutCubic
+        },
+    });
 
     return (
         <header
@@ -55,7 +68,10 @@ const Header = () => {
                         {config.header_navigation.map((item: Config) => (
                             <li key={item.title} className={"relative group"}>
                                 {item.children ? (
-                                    <HoverCard.Root openDelay={300} closeDelay={100}>
+                                    <HoverCard.Root openDelay={200}
+                                                    closeDelay={100}
+                                                    open={hoverCardIsHovered}
+                                                    onOpenChange={setHoverCardIsHovered}>
                                         <span className={"hover:underline group-hover:no-underline"}>
                                             {item.href.startsWith('/') ? (
                                                 <Link href={item.href} passHref legacyBehavior>
@@ -76,26 +92,49 @@ const Header = () => {
                                         <div className={cn(
                                             "absolute bottom-0 left-0 w-0 h-0.5 bg-theme-500 rounded-r",
                                             "transition-all duration-300 group-hover:w-full")}/>
-                                        <HoverCard.Portal>
-                                            <HoverCard.Content
-                                                className={cn(
-                                                    "min-w-max max-w-[calc(100vw-40px)]",
-                                                    "rounded-md shadow-md p-1 mt-8 z-50",
-                                                    "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg"
-                                                )} forceMount asChild>
-                                                <ul className={"space-y-1"}>
-                                                    {item.children.map((child: Config) => (
-                                                        <li key={child.title} className={"text-center"}>
-                                                            <a href={child.href}
-                                                               className={cn("block px-3 py-1 list-none", "dark:text-white"
-                                                               )}>
-                                                                {child.title}
-                                                            </a>
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </HoverCard.Content>
-                                        </HoverCard.Portal>
+                                        {transitions((styles, transitionsItem) =>
+                                            transitionsItem ? (
+                                                <HoverCard.Portal forceMount>
+                                                    <HoverCard.Content forceMount asChild>
+                                                        <animated.div
+                                                            style={styles}
+                                                            className={cn(
+                                                            "min-w-max max-w-[calc(100vw-40px)]",
+                                                            "rounded-md shadow-md p-1 mt-8 z-50",
+                                                            "ring-1 ring-theme-700/15 dark:ring-theme-300/15",
+                                                            "border border-transparent",
+                                                            "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg"
+                                                        )}>
+                                                            <ul className={"space-y-1"}>
+                                                                {item.children.map((child: Config) => (
+                                                                    <li key={child.title} className={"text-center"}>
+                                                                        {item.href.startsWith('/') ? (
+                                                                            <Link href={child.href}
+                                                                               className={cn(
+                                                                                   "block px-3 py-1 list-none",
+                                                                                   "text-theme-500 dark:text-white rounded",
+                                                                                   "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
+                                                                               )}>
+                                                                                {child.title}
+                                                                            </Link>
+                                                                            ) : (
+                                                                            <a href={child.href}
+                                                                               className={cn(
+                                                                                   "block px-3 py-1 list-none",
+                                                                                   "text-theme-500 dark:text-white rounded",
+                                                                                   "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
+                                                                               )}>
+                                                                                {child.title}
+                                                                            </a>
+                                                                        )}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </animated.div>
+                                                    </HoverCard.Content>
+                                                </HoverCard.Portal>
+                                            ) : null,
+                                        )}
                                     </HoverCard.Root>
                                 ) : (
                                     <>
