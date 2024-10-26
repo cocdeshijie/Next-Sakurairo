@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { posts } from "#site/content";
 import { cn } from "@/utils/cn";
 import HomePostCard from "@/components/Layout/Home/HomePostCard";
+import { LinkButton } from "@/components/ui/Buttons";
 
 
 const HomePosts = () => {
@@ -24,10 +24,9 @@ const HomePosts = () => {
                             ))}
                         </div>
                         <div className={"text-center"}>
-                            <Link href={"/posts"}
-                                  className={"bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"}>
-                                Read More Placeholder
-                            </Link>
+                            <LinkButton href={"/posts"}>
+                                Read More
+                            </LinkButton>
                         </div>
                     </div>
                 </div>
