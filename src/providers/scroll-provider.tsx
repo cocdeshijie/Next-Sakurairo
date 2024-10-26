@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, { createContext, useContext, useEffect, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
 
 interface ScrollContextProps {
@@ -13,46 +13,28 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     const scrollbarThumbRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number>();
-    const lastUpdate = useRef<{ height: number; scroll: number }>({ height: 0, scroll: 0 });
-    const observerRef = useRef<MutationObserver>();
 
-    const updateScrollbarThumb = () => {
-        if (!scrollbarThumbRef.current) return;
+    const updateScrollbarThumb = useCallback(() => {
+        if (!scrollbarThumbRef.current || typeof window === 'undefined') return;
 
-        const currentScroll = window.scrollY;
-        const currentHeight = document.documentElement.scrollHeight;
         const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        const scrolled = window.scrollY;
 
-        // Skip update if values haven't changed significantly
-        if (Math.abs(currentScroll - lastUpdate.current.scroll) < 5 &&
-            currentHeight === lastUpdate.current.height) {
-            return;
-        }
+        // Calculate dimensions
+        const thumbHeight = Math.max((windowHeight / documentHeight) * windowHeight, 40);
+        const scrollRange = documentHeight - windowHeight;
+        const thumbPosition = scrollRange > 0 ? (scrolled / scrollRange) * (windowHeight - thumbHeight) : 0;
 
-        lastUpdate.current = { height: currentHeight, scroll: currentScroll };
-
-        const thumbHeight = Math.max(
-            (windowHeight / currentHeight) * windowHeight,
-            40
-        );
-
-        // Calculate thumb position
-        const scrollRange = currentHeight - windowHeight;
-        const scrollRatio = scrollRange > 0 ? currentScroll / scrollRange : 0;
-        const maxThumbTravel = windowHeight - thumbHeight;
-        const thumbPosition = scrollRatio * maxThumbTravel;
-
+        // Apply changes
         const thumb = scrollbarThumbRef.current.style;
         thumb.height = `${thumbHeight}px`;
         thumb.transform = `translateY(${thumbPosition}px)`;
-    };
+    }, []);
 
+    // Setup scroll and resize handlers
     useEffect(() => {
-        // Reset scroll position when pathname changes
-        window.scrollTo(0, 0);
-
-        // Throttled scroll handler
-        const handleScroll = () => {
+        const onScroll = () => {
             if (rafRef.current) return;
             rafRef.current = requestAnimationFrame(() => {
                 updateScrollbarThumb();
@@ -60,58 +42,41 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
             });
         };
 
-        // Debounced resize handler
-        let resizeTimeout: NodeJS.Timeout;
-        const handleResize = () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(updateScrollbarThumb, 100);
-        };
-
-        // Set up mutation observer
-        observerRef.current = new MutationObserver((mutations) => {
-            const hasSizeChange = mutations.some(mutation =>
-                mutation.type === 'childList' ||
-                mutation.type === 'attributes' ||
-                mutation.target instanceof HTMLImageElement
-            );
-
-            if (hasSizeChange) {
-                if (rafRef.current) return;
-                rafRef.current = requestAnimationFrame(() => {
-                    updateScrollbarThumb();
-                    rafRef.current = undefined;
-                });
-            }
+        const resizeObserver = new ResizeObserver(() => {
+            if (rafRef.current) return;
+            rafRef.current = requestAnimationFrame(() => {
+                updateScrollbarThumb();
+                rafRef.current = undefined;
+            });
         });
 
-        // Start observing
-        observerRef.current.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            characterData: true
-        });
-
-        // Add event listeners
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        window.addEventListener('resize', handleResize, { passive: true });
+        // Add listeners
+        window.addEventListener('scroll', onScroll, { passive: true });
+        resizeObserver.observe(document.body);
 
         // Initial update
-        const initialTimeout = setTimeout(updateScrollbarThumb, 100);
+        const initTimeout = setTimeout(updateScrollbarThumb, 100);
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleResize);
-            clearTimeout(initialTimeout);
-            clearTimeout(resizeTimeout);
-            if (rafRef.current) {
-                cancelAnimationFrame(rafRef.current);
-            }
-            if (observerRef.current) {
-                observerRef.current.disconnect();
-            }
+            window.removeEventListener('scroll', onScroll);
+            resizeObserver.disconnect();
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            clearTimeout(initTimeout);
         };
-    }, [pathname]);
+    }, [updateScrollbarThumb]);
+
+    // Handle page changes
+    useEffect(() => {
+        // Reset scroll position
+        window.scrollTo(0, 0);
+
+        // Update scrollbar after a short delay to ensure content is rendered
+        const timeout = setTimeout(() => {
+            updateScrollbarThumb();
+        }, 100);
+
+        return () => clearTimeout(timeout);
+    }, [pathname, updateScrollbarThumb]);
 
     const handleScrollTo = (url: string) => {
         const targetId = url.substring(1);

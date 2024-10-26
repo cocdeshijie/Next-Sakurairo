@@ -65,11 +65,11 @@ const ButtonWrapper = ({ children, className, useVisibility = false }: ButtonWra
 export const UtilityButtons = () => {
     return (
         <>
-            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 lg:mr-8">
+            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 md:mr-8">
                 <ThemeSwitch />
             </ButtonWrapper>
 
-            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 lg:mr-8 mb-14" useVisibility>
+            <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 md:mr-8 mb-14" useVisibility>
                 <ToTop />
             </ButtonWrapper>
         </>
