@@ -42,8 +42,13 @@ const ButtonWrapper = ({ children, className, useVisibility = false }: ButtonWra
         <div
             className={cn(
                 className,
-                "transition-opacity duration-300",
-                useVisibility ? (isVisible ? "opacity-100" : "opacity-0 pointer-events-none") : "opacity-100"
+                "transition-all duration-300",
+                useVisibility ? (
+                        isVisible ?
+                            "transform scale-100 opacity-100 translate-y-0" :
+                            "transform scale-50 opacity-0 translate-y-4 pointer-events-none"
+                    ) :
+                    "transform scale-100 translate-y-0"
             )}
         >
             <div
@@ -66,11 +71,11 @@ export const UtilityButtons = () => {
     return (
         <>
             <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 md:mr-8">
-                <ThemeSwitch />
+                <ThemeSwitch/>
             </ButtonWrapper>
 
             <ButtonWrapper className="fixed z-30 bottom-8 right-0 mr-2 md:mr-8 mb-14" useVisibility>
-                <ToTop />
+                <ToTop/>
             </ButtonWrapper>
         </>
     );
