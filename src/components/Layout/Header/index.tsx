@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import { cn } from "@/utils/cn";
 import Logo from "@/components/Layout/Header/Logo";
 import HeaderDialog from "@/components/Layout/Header/HeaderDialog";
@@ -45,30 +46,49 @@ const Header = () => {
                 <Logo />
             </div>
 
-            <div className={cn("hidden md:flex w-full absolute items-center", "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2")}>
+            <div className={cn(
+                "hidden md:flex w-full absolute items-center",
+                "top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            )}>
                 <nav className={"relative w-full"}>
                     <ul className={"flex justify-center items-center space-x-4"}>
                         {config.header_navigation.map((item: Config) => (
-                            <li key={item.title}>
+                            <li key={item.title} className={"relative group"}>
                                 {item.children ? (
-                                    <HoverCard.Root>
-                                        <HoverCard.Trigger href={item.href}
-                                                           className={"dark:text-white cursor-pointer"}
-                                        >
-                                            {item.title}
-                                        </HoverCard.Trigger>
+                                    <HoverCard.Root openDelay={300} closeDelay={100}>
+                                        <span className={"hover:underline group-hover:no-underline"}>
+                                            {item.href.startsWith('/') ? (
+                                                <Link href={item.href} passHref legacyBehavior>
+                                                    <HoverCard.Trigger
+                                                        className={"font-semibold text-theme-500 dark:text-white"}>
+                                                        {item.title}
+                                                    </HoverCard.Trigger>
+                                                </Link>
+                                            ) : (
+                                                <HoverCard.Trigger
+                                                    href={item.href}
+                                                    className={"font-semibold text-theme-500 dark:text-white"}
+                                                    target={"_blank"}>
+                                                    {item.title}
+                                                </HoverCard.Trigger>
+                                            )}
+                                        </span>
+                                        <div className={cn(
+                                            "absolute bottom-0 left-0 w-0 h-0.5 bg-theme-500 rounded-r",
+                                            "transition-all duration-300 group-hover:w-full")}/>
                                         <HoverCard.Portal>
                                             <HoverCard.Content
                                                 className={cn(
                                                     "min-w-max max-w-[calc(100vw-40px)]",
-                                                    "rounded-md shadow-md p-1 mt-8",
-                                                    "bg-theme-100/75 dark:bg-theme-800/75 backdrop-blur-md"
-                                                )}
-                                            >
+                                                    "rounded-md shadow-md p-1 mt-8 z-50",
+                                                    "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg"
+                                                )} forceMount asChild>
                                                 <ul className={"space-y-1"}>
                                                     {item.children.map((child: Config) => (
                                                         <li key={child.title} className={"text-center"}>
-                                                            <a href={child.href} className={cn("block px-3 py-1 list-none", "dark:text-white")}>
+                                                            <a href={child.href}
+                                                               className={cn("block px-3 py-1 list-none", "dark:text-white"
+                                                               )}>
                                                                 {child.title}
                                                             </a>
                                                         </li>
@@ -78,9 +98,27 @@ const Header = () => {
                                         </HoverCard.Portal>
                                     </HoverCard.Root>
                                 ) : (
-                                    <a href={item.href} className={"dark:text-white"}>
-                                        {item.title}
-                                    </a>
+                                    <>
+                                        <span className={"hover:underline group-hover:no-underline"}>
+                                             {item.href.startsWith('/') ? (
+                                                 <Link href={item.href}
+                                                       className={"font-semibold text-theme-500 dark:text-white"}>
+                                                     {item.title}
+                                                 </Link>
+                                             ) : (
+                                                 <a href={item.href}
+                                                    className={"font-semibold text-theme-500 dark:text-white"}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                 >
+                                                     {item.title}
+                                                 </a>
+                                             )}
+                                        </span>
+                                        <div className={cn(
+                                            "absolute bottom-0 left-0 w-0 h-0.5 bg-theme-500 rounded-r",
+                                            "transition-all duration-300 group-hover:w-full")}/>
+                                    </>
                                 )}
                             </li>
                         ))}

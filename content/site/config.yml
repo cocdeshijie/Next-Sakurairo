@@ -6,18 +6,18 @@ header_logo:
 
 header_navigation:
   - title: Home
-    href: ""
+    href: "/"
   - title: Placeholder
-    href: ""
+    href: "/"
   - title: Posts
-    href: ""
+    href: "/"
   - title: About
-    href: ""
+    href: "/"
     children:
       - title: me
-        href: ""
+        href: "/"
       - title: this site
-        href: ""
+        href: "/"
 
 home_social:
   - name: GitHub
