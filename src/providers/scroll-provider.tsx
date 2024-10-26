@@ -7,12 +7,19 @@ interface ScrollContextProps {
     handleScrollTo: (url: string) => void;
 }
 
+interface ScrollHistoryState {
+    scrollPosition: number;
+    pathname: string;
+}
+
 export const ScrollContext = createContext<ScrollContextProps | undefined>(undefined);
 
 export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     const scrollbarThumbRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number>();
+    const isRestoringScroll = useRef(false);
+    const isHistoryNavigation = useRef(false);
 
     const updateScrollbarThumb = useCallback(() => {
         if (!scrollbarThumbRef.current || typeof window === 'undefined') return;
@@ -31,6 +38,100 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
         thumb.height = `${thumbHeight}px`;
         thumb.transform = `translateY(${thumbPosition}px)`;
     }, []);
+
+    // Save scroll position to history state
+    const saveScrollPosition = useCallback(() => {
+        if (isHistoryNavigation.current) return;
+
+        const currentState = history.state || {};
+        const newState: ScrollHistoryState = {
+            ...currentState,
+            scrollPosition: window.scrollY,
+            pathname
+        };
+
+        // Replace the current history entry with updated scroll position
+        history.replaceState(newState, '');
+
+        // Also save to localStorage as backup
+        localStorage.setItem(`scrollPosition-${pathname}`, window.scrollY.toString());
+    }, [pathname]);
+
+    // Handle popstate (back/forward navigation)
+    useEffect(() => {
+        const handlePopState = (event: PopStateEvent) => {
+            isHistoryNavigation.current = true;
+            const state = event.state as ScrollHistoryState;
+
+            if (state?.scrollPosition !== undefined && state.pathname === pathname) {
+                isRestoringScroll.current = true;
+                window.scrollTo(0, state.scrollPosition);
+                updateScrollbarThumb();
+                setTimeout(() => {
+                    isRestoringScroll.current = false;
+                    isHistoryNavigation.current = false;
+                }, 100);
+            } else {
+                // Fallback to localStorage if history state is missing
+                const savedPosition = localStorage.getItem(`scrollPosition-${pathname}`);
+                if (savedPosition !== null) {
+                    window.scrollTo(0, parseInt(savedPosition));
+                    updateScrollbarThumb();
+                }
+                setTimeout(() => {
+                    isHistoryNavigation.current = false;
+                }, 100);
+            }
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, [pathname, updateScrollbarThumb]);
+
+    // Save scroll position before unload
+    useEffect(() => {
+        window.addEventListener('beforeunload', saveScrollPosition);
+        return () => window.removeEventListener('beforeunload', saveScrollPosition);
+    }, [saveScrollPosition]);
+
+    // Save scroll position periodically and on pathname change
+    useEffect(() => {
+        if (isRestoringScroll.current || isHistoryNavigation.current) return;
+
+        const scrollTimeout = setInterval(saveScrollPosition, 1000);
+
+        return () => {
+            clearInterval(scrollTimeout);
+            saveScrollPosition();
+        };
+    }, [pathname, saveScrollPosition]);
+
+    // Restore scroll position on initial load
+    useEffect(() => {
+        if (isRestoringScroll.current || isHistoryNavigation.current) return;
+
+        const restoreScrollPosition = () => {
+            // Try to get position from history state first
+            const state = history.state as ScrollHistoryState;
+            if (state?.scrollPosition !== undefined && state.pathname === pathname) {
+                window.scrollTo(0, state.scrollPosition);
+                updateScrollbarThumb();
+                return;
+            }
+
+            // Fallback to localStorage
+            const savedPosition = localStorage.getItem(`scrollPosition-${pathname}`);
+            if (savedPosition !== null) {
+                window.scrollTo(0, parseInt(savedPosition));
+                updateScrollbarThumb();
+                localStorage.removeItem(`scrollPosition-${pathname}`);
+            }
+        };
+
+        // Wait for content to be rendered
+        const timeout = setTimeout(restoreScrollPosition, 100);
+        return () => clearTimeout(timeout);
+    }, [pathname, updateScrollbarThumb]);
 
     // Setup scroll and resize handlers
     useEffect(() => {
@@ -64,19 +165,6 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
             clearTimeout(initTimeout);
         };
     }, [updateScrollbarThumb]);
-
-    // Handle page changes
-    useEffect(() => {
-        // Reset scroll position
-        window.scrollTo(0, 0);
-
-        // Update scrollbar after a short delay to ensure content is rendered
-        const timeout = setTimeout(() => {
-            updateScrollbarThumb();
-        }, 100);
-
-        return () => clearTimeout(timeout);
-    }, [pathname, updateScrollbarThumb]);
 
     const handleScrollTo = (url: string) => {
         const targetId = url.substring(1);
