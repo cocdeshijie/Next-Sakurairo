@@ -112,7 +112,7 @@ const Header = () => {
                                                                             <Link href={child.href}
                                                                                className={cn(
                                                                                    "block px-3 py-1 list-none",
-                                                                                   "text-theme-500 dark:text-white rounded",
+                                                                                   "text-theme-500 dark:text-white rounded duration-200",
                                                                                    "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
                                                                                )}>
                                                                                 {child.title}
@@ -121,7 +121,7 @@ const Header = () => {
                                                                             <a href={child.href}
                                                                                className={cn(
                                                                                    "block px-3 py-1 list-none",
-                                                                                   "text-theme-500 dark:text-white rounded",
+                                                                                   "text-theme-500 dark:text-white rounded duration-200",
                                                                                    "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
                                                                                )}>
                                                                                 {child.title}
