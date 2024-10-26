@@ -41,17 +41,18 @@ const ButtonWrapper = ({ children, className, useVisibility = false }: ButtonWra
     return (
         <div
             className={cn(
-                className, // External layout control (like margin) can be passed here
+                className,
                 "transition-opacity duration-300",
-                useVisibility ? (isVisible ? "opacity-100" : "opacity-0 pointer-events-none") : "opacity-100" // Always show if useVisibility is false
+                useVisibility ? (isVisible ? "opacity-100" : "opacity-0 pointer-events-none") : "opacity-100"
             )}
         >
             <div
                 className={cn(
-                    "inline-flex items-center justify-center cursor-pointer rounded-md", // Flex centering and cursor styles are still provided
-                    "backdrop-blur drop-shadow-lg", // Visual styles remain here
-                    "bg-theme-200/50 dark:bg-theme-800/50",
-                    "hover:scale-110 hover:shadow-md hover:shadow-theme-500/25 duration-200" // Hover effect and transitions
+                    "inline-flex items-center justify-center cursor-pointer rounded-md",
+                    "backdrop-blur drop-shadow-lg shadow-lg",
+                    "border border-transparent bg-theme-200/25 dark:bg-theme-800/25",
+                    "ring-1 ring-theme-700/15 dark:ring-theme-300/15",
+                    "hover:scale-110 hover:shadow-md hover:shadow-theme-500/25 duration-200"
                 )}
             >
                 {children}
