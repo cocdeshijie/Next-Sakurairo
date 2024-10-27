@@ -44,15 +44,17 @@ const Tag: React.FC<TagProps> = ({ tag, sizeLevel = 2 }) => {
     const isHovered = hoveredTag === uniqueTagId; // Check if this tag is the one being hovered
 
     return (
-        <div className="relative inline-block w-[max-content]">
+        <div className="relative inline-block w-[max-content] flex-shrink-0">
             <div
                 className={cn(
-                    "inline-flex items-end cursor-pointer",
-                    "text-white rounded-md transition-all duration-200",
-                    "border border-theme-400 dark:border-theme-600",
-                    "bg-theme-400/50 dark:bg-theme-600/50 hover:bg-theme-400 hover:dark:bg-theme-600",
+                    "inline-flex items-end cursor-pointer ",
+                    "text-theme-600 dark:text-theme-300 rounded-lg transition-all duration-300",
+                    "bg-theme-100/75 dark:bg-theme-800/75 backdrop-blur-sm",
+                    "shadow-sm hover:shadow-md",
+                    "border border-theme-200/25 dark:border-theme-700/25",
+                    "hover:border-theme-500/25 hover:text-theme-500 dark:hover:text-theme-500",
                     "transform origin-bottom",
-                    isHovered ? "scale-110 ml-0.5 mr-0.5" : "scale-100",
+                    isHovered ? "scale-110 translate-y-[-1px] mx-0.5 bg-theme-100/90 dark:bg-theme-800/90" : "scale-100",
                     textSize,
                     padding
                 )}
