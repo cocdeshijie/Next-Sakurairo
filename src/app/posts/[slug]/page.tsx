@@ -123,8 +123,6 @@ export default function PostPage({ params }: PostProps) {
                     "bg-gradient-to-b from-theme-200 dark:from-theme-800 to-transparent",
                     "opacity-10"
                 )}/>
-
-
                 <div className={"hidden md:block absolute inset-0 backdrop-blur-3xl"}/>
 
                 <div className={cn(
