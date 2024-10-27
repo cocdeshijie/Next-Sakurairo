@@ -1,25 +1,37 @@
+import { cn } from "@/utils/cn";
+
 const Footer = () => {
     return (
-        <footer className={"bg-theme-300 dark:bg-theme-700 dark:text-white"}>
-            <div className={"dark:backdrop-brightness-[40%] py-8"}>
+        <footer className={"bg-theme-100 dark:bg-theme-900 dark:text-white"}>
+            <div className={cn(
+                "py-8",
+                "bg-gradient-to-b from-theme-50 dark:from-theme-950 to-theme-100/50 dark:to-theme-900/50"
+            )}>
                 <div className={"container mx-auto px-4"}>
                     <div className={"md:flex md:justify-between md:items-center md:px-40"}>
                         <div>
                             <div className={"mb-4"}>
-                                <span className={"text-lg"}>item1 | item2 | item3 | item4</span>
+                        <span className={"text-lg font-medium text-theme-700 dark:text-theme-200"}>
+                            item1 | item2 | item3 | item4
+                        </span>
                             </div>
                             <div>
-                                <h3 className={"text-xl font-bold"}>Footer Placeholder</h3>
-                                <p className={"mt-2"}>Some additional text goes here.</p>
+                                <h3 className={"text-xl font-bold text-theme-800 dark:text-theme-100"}>
+                                    Footer Placeholder
+                                </h3>
+                                <p className={"mt-2 text-theme-600 dark:text-theme-300"}>
+                                    Some additional text goes here.
+                                </p>
                             </div>
                         </div>
                         <div className={"mt-4 md:mt-0 md:flex md:items-center"}>
-                            <p>&copy; {new Date().getFullYear()} cocdeshijie</p>
+                            <p className={"text-theme-700 dark:text-theme-200"}>
+                                &copy; {new Date().getFullYear()} cocdeshijie
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </footer>
     );
 };
