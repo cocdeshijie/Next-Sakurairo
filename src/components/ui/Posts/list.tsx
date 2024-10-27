@@ -17,7 +17,7 @@ type PostListProps = {
 
 // Jotai atom family
 const postAtomFamily = atomFamily(
-    (path: string) => atom({
+    () => atom({
         offset: 2,
         posts: [] as Posts[],
         isLastPage: false,
