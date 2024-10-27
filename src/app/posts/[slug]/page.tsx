@@ -55,7 +55,7 @@ export default function PostPage({ params }: PostProps) {
                 <div className={"relative pt-20 pb-6 md:pt-24 md:pb-8"}>
                     <div className={"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"}>
                         <div className={cn(
-                            "relative rounded-xl overflow-hidden backdrop-blur-sm",
+                            "relative rounded-xl overflow-hidden min-h-[33vh] content-center backdrop-blur-sm",
                             "border border-theme-200/25 dark:border-theme-700/25",
                             "shadow-lg shadow-theme-500/10"
                         )}>
