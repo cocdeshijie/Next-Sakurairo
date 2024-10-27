@@ -117,11 +117,14 @@ export default function PostPage({ params }: PostProps) {
                     </div>
                 </div>
             </div>
-            <section className="relative">
+            <section className="relative bg-theme-50 dark:bg-theme-950">
                 <div className={cn(
-                    "hidden md:block absolute inset-0 bg-gradient-to-r opacity-25",
-                    "from-transparent via-theme-200 dark:via-theme-800 to-transparent"
+                    "hidden md:block absolute inset-0",
+                    "bg-gradient-to-b from-theme-200 dark:from-theme-800 to-transparent",
+                    "opacity-10"
                 )}/>
+
+
                 <div className={"hidden md:block absolute inset-0 backdrop-blur-3xl"}/>
 
                 <div className={cn(
