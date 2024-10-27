@@ -19,13 +19,14 @@ interface LinkButtonProps extends BaseButtonProps {
 }
 
 const baseStyles = cn(
-    "inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium",
-    "bg-theme-500 text-white hover:bg-theme-600",
-    "dark:bg-theme-400 dark:hover:bg-theme-500",
-    "disabled:opacity-50 disabled:cursor-not-allowed",
-    "transform hover:-translate-y-0.5 transition duration-300 ease-in-out",
-    "focus:outline-none focus:ring-2 focus:ring-theme-500 focus:ring-offset-2",
-    "dark:focus:ring-theme-400 dark:focus:ring-offset-gray-900"
+    "inline-flex items-center justify-center px-4 py-2 rounded-lg",
+    "bg-white/5 dark:bg-theme-900/5 backdrop-blur-md",
+    "hover:bg-white/15 dark:hover:bg-theme-900/15",
+    "ring-2 ring-theme-800/25 dark:ring-theme-300/25",
+    "hover:ring-theme-500/50 dark:hover:ring-theme-500/50",
+    "text-theme-800 dark:text-theme-100",
+    "shadow-md hover:shadow-lg shadow-theme-500/10",
+    "transform hover:-translate-y-0.5 transition-all duration-200"
 );
 
 const Button: React.FC<ButtonProps> = ({
@@ -70,7 +71,6 @@ const LinkButton: React.FC<LinkButtonProps> = ({
     ) : (
         <Link
             href={href}
-            scroll = {false}
             className={cn(baseStyles,
                 disabled ? "pointer-events-none opacity-50" : "",
                 className

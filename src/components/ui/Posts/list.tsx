@@ -6,6 +6,7 @@ import { atom, useAtom } from 'jotai';
 import { atomFamily, useHydrateAtoms } from 'jotai/utils';
 import { getPosts } from "@/app/actions/getPosts";
 import { usePathname } from 'next/navigation';
+import { Button } from "@/components/ui/Buttons";
 
 // Type for PostList Props
 type PostListProps = {
@@ -49,13 +50,13 @@ export default function PostList({ initialPosts, lastPage, tag }: PostListProps)
                 <PostCard key={index} post={post} index={index}/>
             ))}
             {!postState.isLastPage && (
-                <div className="text-center mt-8">
-                    <button
+                <div className="text-center">
+                    <Button
                         onClick={loadMorePosts}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                        className="mt-8"
                     >
-                        Load More
-                    </button>
+                        Read More
+                    </Button>
                 </div>
             )}
         </div>
