@@ -1,3 +1,9 @@
+site_info:
+  author: cocdeshijie
+
+posts_config:
+  posts_per_page: 4
+
 header_logo:
   text_front: cocdeshijie
   text_middle: の
@@ -7,17 +13,17 @@ header_logo:
 header_navigation:
   - title: Home
     href: "/"
-  - title: Placeholder
-    href: "/"
+  - title: Tags
+    href: "/tags"
   - title: Posts
-    href: "/"
-  - title: About
+    href: "/posts"
+  - title: Dropdown
     href: "/"
     children:
-      - title: me
-        href: "/"
-      - title: this site
-        href: "/"
+      - title: Example
+        href: "https://example.com"
+      - title: Example 2
+        href: "https://example.com"
 
 home_social:
   - name: GitHub
@@ -41,3 +47,16 @@ home_social:
   - name: Steam
     src: "/static/social-icons/steam.svg"
     href: "https://steamcommunity.com/id/cocdeshijie"
+
+footer:
+  line_1:
+    - text: Placeholder
+      href: "/"
+    - text: Placeholder
+      href: "/"
+    - text: Placeholder
+      href: "/"
+    - text: Placeholder
+      href: "/"
+  line_2: Placeholder text
+  line_3: Additional text

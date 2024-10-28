@@ -17,6 +17,12 @@ const config = defineCollection({
     pattern: "site/config.yml",
     single: true,
     schema: s.object({
+        site_info: s.object({
+            author: s.string()
+        }),
+        posts_config: s.object({
+            posts_per_page: s.number()
+        }),
         header_logo: s.object({
             text_front: s.string(),
             text_middle: s.string(),
@@ -41,7 +47,17 @@ const config = defineCollection({
                 src: s.string(),
                 href: s.string()
             })
-        )
+        ),
+        footer: s.object({
+            line_1: s.array(
+                s.object({
+                    text: s.string(),
+                    href: s.string().optional()
+                })
+            ).optional(),
+            line_2: s.string().optional(),
+            line_3: s.string().optional(),
+        })
     })
 })
 
