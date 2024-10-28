@@ -5,7 +5,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { atom, useAtom } from "jotai";
 import { useTransition, animated, easings } from "@react-spring/web";
 import { config } from "#site/content";
-import { BiMenu } from "react-icons/bi";
+import { BiMenu, BiChevronDown } from "react-icons/bi";
 import type { Config } from "#site/content";
 import { cn } from "@/utils/cn";
 
@@ -38,26 +38,38 @@ const HeaderDialog = () => {
                                 className={"fixed inset-0 bg-theme-950/25 dark:bg-theme-50/25 z-10"}
                             />
                         </Dialog.Overlay>
+
                         <Dialog.Content forceMount asChild>
                             <animated.div
                                 style={styles}
                                 className={cn(
-                                    "fixed bottom-0 left-0 right-0 rounded-t-lg p-4 h-5/6 z-50",
+                                    "fixed bottom-0 left-0 right-0 rounded-t-xl p-4 h-5/6 z-50",
                                     "bg-theme-100/75 dark:bg-theme-900/75 backdrop-blur-xl"
                                 )}>
-                                <Dialog.Title />
-                                <Dialog.Description />
+                                <Dialog.Title/>
+                                <BiChevronDown onClick={() => setIsOpen(false)}
+                                               className={"w-12 h-12 cursor-pointer mx-auto text-theme-50 dark:text-theme-950"}/>
                                 <NavigationMenu.Root>
-                                    <NavigationMenu.List className={"flex flex-col space-y-4 pt-14"}>
+                                    <NavigationMenu.List className={"flex flex-col space-y-3"}>
                                         {config.header_navigation.map((item: Config) => (
-                                            <NavigationMenu.Item key={item.title} className={"flex-col"}>
-                                                <NavigationMenu.Trigger className={"dark:text-white"}>
+                                            <NavigationMenu.Item key={item.title} className="flex-col">
+                                                <NavigationMenu.Trigger className={cn(
+                                                    "flex justify-between items-center w-full p-3 rounded-lg",
+                                                    "text-theme-900 dark:text-theme-100",
+                                                    "hover:bg-theme-200/50 dark:hover:bg-theme-800/50"
+                                                )}>
                                                     {item.title}
                                                 </NavigationMenu.Trigger>
                                                 {item.children && (
-                                                    <div className={"grid grid-cols-2 gap-2 my-2"}>
+                                                    <div className={"grid grid-cols-2 gap-2 mt-1 mx-6"}>
                                                         {item.children.map((child: Config) => (
-                                                            <NavigationMenu.Link key={child.title} href={child.href} className={"block px-2 py-1 dark:text-white"}>
+                                                            <NavigationMenu.Link
+                                                                key={child.title}
+                                                                href={child.href}
+                                                                className={cn(
+                                                                    "p-2 rounded-lg text-theme-800 dark:text-theme-200",
+                                                                    "hover:bg-theme-200/25 dark:hover:bg-theme-800/25"
+                                                                )}>
                                                                 {child.title}
                                                             </NavigationMenu.Link>
                                                         ))}
@@ -69,6 +81,7 @@ const HeaderDialog = () => {
                                 </NavigationMenu.Root>
                             </animated.div>
                         </Dialog.Content>
+
                     </Dialog.Portal>
                 ) : null,
             )}
