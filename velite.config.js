@@ -65,7 +65,7 @@ const posts = defineCollection({
             ...data,
             edited: (() => {
                 try {
-                    const filePath = `./content/${data.slug}.mdx`;
+                    const filePath = `./content/posts/${data.slug}.mdx`;
                     const dateStr = execSync(`git log -1 --format="%ad" -- ${filePath}`, {
                         encoding: 'utf-8'
                     });
@@ -75,6 +75,20 @@ const posts = defineCollection({
                 }
             })()
         }))
+})
+
+const pages = defineCollection({
+    name: "Pages",
+    pattern: "pages/**/*.@(md|mdx)",
+    schema: s
+        .object({
+            title: s.string(),
+            description: s.string().optional(),
+            slug: s.slug(),
+            cover: s.string().optional(),
+            content: s.mdx()
+        })
+        .transform(data => ({ ...data, permalink: `/${data.slug}` }))
 })
 
 const tags = defineCollection({
@@ -92,6 +106,7 @@ export default defineConfig({
     collections: {
         config,
         posts,
+        pages,
         tags
     },
     mdx: {
