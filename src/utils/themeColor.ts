@@ -56,17 +56,17 @@ export function HSLToHex(h: number, s: number, l: number): string {
 type ColorScale = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950;
 
 const LIGHTNESS_VALUES: Record<ColorScale, number> = {
-    50: 90,    // maxLightness
-    100: 82,
-    200: 74,
-    300: 62,
-    400: 55,
-    500: 50,   // Original color goes here
+    50: 95,
+    100: 86,
+    200: 77,
+    300: 64,
+    400: 56,
+    500: 51,
     600: 42,
-    700: 35,
-    800: 26,
-    900: 19,
-    950: 10    // minLightness
+    700: 34,
+    800: 24,
+    900: 16,
+    950: 10
 };
 
 const symmetricPairs: Record<ColorScale, { distance: number }> = {
