@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import { generateColorPalette } from "./src/utils/themeColor";
+import site_config from "./.velite/site_config.json"
 
 const config: Config = {
   content: [
@@ -10,19 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       "colors": {
-        "theme": {
-          50: "#F1F1F4",
-          100: "#DBDEEB",
-          200: "#B0C4E3",
-          300: "#79B4E2",
-          400: "#3CB9E7",
-          500: "#FF6600",
-          600: "#1688B1",
-          700: "#1D5986",
-          800: "#213A5E",
-          900: "#1E2438",
-          950: "#202127"
-        }
+        "theme": generateColorPalette(site_config.site_info.theme_color, site_config.site_info.theme_color_hue_shift)
       },
       clipPath: {
         articleImageRight: "polygon(5% 0, 100% 0, 100% 100%, 0 100%)",

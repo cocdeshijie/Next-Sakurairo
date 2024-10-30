@@ -18,7 +18,9 @@ const config = defineCollection({
     single: true,
     schema: s.object({
         site_info: s.object({
-            author: s.string()
+            author: s.string(),
+            theme_color: s.string(),
+            theme_color_hue_shift: s.number(),
         }),
         posts_config: s.object({
             posts_per_page: s.number()

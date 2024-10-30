@@ -1,5 +1,7 @@
 site_info:
   author: cocdeshijie
+  theme_color: "FFBBB7"
+  theme_color_hue_shift: 30
 
 posts_config:
   posts_per_page: 4
