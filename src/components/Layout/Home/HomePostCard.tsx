@@ -7,17 +7,10 @@ import { atomFamily } from 'jotai/utils';
 import Tag from "@/components/ui/Tags";
 import { HiMiniCalendarDays, HiMiniTag } from "react-icons/hi2";
 import Link from "next/link";
-
-interface Post {
-    title: string;
-    cover: string;
-    date: string;
-    tags: string[];
-    permalink: string;
-}
+import { type Posts } from "#site/content";
 
 interface PostCardProps {
-    post: Post;
+    post: Posts;
     index: number;
 }
 
@@ -130,7 +123,7 @@ const PostCard = ({ post, index }: PostCardProps) => {
                         </div>
                         <div className={"overflow-hidden py-0.5"}>
                             <div className={"flex items-center gap-1 w-full"}>
-                                {Array.isArray(post.tags) && post.tags.map((tag, index) => (
+                                {Array.isArray(post.tags) && post.tags.map((tag: string, index: number) => (
                                     <Tag
                                         key={index}
                                         tag={tag}

@@ -1,6 +1,5 @@
 import { cn } from "@/utils/cn";
-import { config } from "#site/content";
-import { Config } from "#site/content";
+import { config, type Config } from "#site/content";
 
 const Footer = () => {
     return (
@@ -13,7 +12,7 @@ const Footer = () => {
                     <div className={"md:flex md:justify-between md:items-center md:px-40 text-center md:text-left"}>
                         <div><div className={"mb-4"}>
                         <span className={"text-lg font-medium text-theme-700 dark:text-theme-200"}>
-                            {config.footer.line_1.map((item: Config, index: number) => (
+                            {config.footer.line_1.map((item: Config["footer"]["line_1"], index: number) => (
                                 <>
                                     <a
                                         key={index}

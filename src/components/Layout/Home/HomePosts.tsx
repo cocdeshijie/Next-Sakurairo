@@ -1,11 +1,13 @@
-import { posts } from "#site/content";
+import { posts, type Posts } from "#site/content";
 import { cn } from "@/utils/cn";
 import HomePostCard from "@/components/Layout/Home/HomePostCard";
 import { LinkButton } from "@/components/ui/Buttons";
 
 
 const HomePosts = () => {
-    const displayedPosts = posts.slice(0, 4);
+    const latestPosts: Posts = posts
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 4); // Get the latest 4 posts
 
     return (
         <div className={"bg-theme-50 dark:bg-theme-950 py-8"}>
@@ -19,7 +21,7 @@ const HomePosts = () => {
                     </div>
                     <div className={"w-full md:w-2/3 md:max-w-xl min-h-[50vh]"}>
                         <div className={"flex flex-col"}>
-                            {displayedPosts.map((post, index) => (
+                            {latestPosts.map((post: Posts, index: number) => (
                                 <HomePostCard key={index} post={post} index={index} />
                             ))}
                         </div>

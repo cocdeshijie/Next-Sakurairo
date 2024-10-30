@@ -4,7 +4,7 @@ import Image from "next/image";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { HomeIcon } from "@/components/ui/Icons";
-import { Config, config } from "#site/content";
+import { type Config, config } from "#site/content";
 
 const bgOpacityAtom = atom(0);
 
@@ -43,7 +43,7 @@ const HomeHero = () => {
                             className={"rounded-full mb-4 transition-transform duration-500 hover:rotate-[360deg] transform-gpu"}
                         />
                         <div className={"flex space-x-3"}>
-                            {config.home_social.map((item: Config, index: number) => (
+                            {config.home_social.map((item: Config["home_social"], index: number) => (
                                 <HomeIcon src={item.src} link={item.href} key={index} alt={item.name} />
                             ))}
                         </div>
