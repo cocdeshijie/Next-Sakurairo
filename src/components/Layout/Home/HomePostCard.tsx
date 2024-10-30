@@ -46,17 +46,11 @@ const PostCard = ({ post, index }: PostCardProps) => {
             className={cn(
                 "relative h-44 md:h-36 rounded-lg overflow-hidden mb-4 md:mb-6 md:flex cursor-pointer",
                 "transition-all duration-200 ease-out",
-                "border-l-4 border-theme-500/50",
-                "border border-t border-r border-b border-theme-200/50 dark:border-theme-800/50",
-                "before:absolute before:inset-[3px] before:rounded-md before:border",
-                "before:border-theme-200/50 dark:before:border-theme-800/50",
-                "before:border-l-2 before:border-l-theme-500/30",
-                "before:transition-colors before:duration-300",
-                "hover:before:border-theme-500/50 dark:hover:before:border-theme-500/50",
-                "hover:border-theme-500/50 dark:hover:border-theme-500/50",
-                isHovered
-                    ? "shadow-xl shadow-theme-500/15 border-l-6"
-                    : "shadow-md shadow-theme-950/5"
+                "ring-1 ring-transparent",
+                isHovered ? [
+                    "ring-theme-500/50",
+                    "shadow-xl shadow-theme-500/15"
+                ] : "shadow-md shadow-theme-950/5"
             )}
         >
             <div className={"absolute inset-0 z-0 overflow-hidden rounded-lg"}>
