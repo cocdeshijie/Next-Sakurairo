@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 import { generateColorPalette } from "./src/utils/themeColor";
-import site_config from "./.velite/site_config.json"
+import site_config from "./.velite/config.json"
 
 const config: Config = {
   content: [

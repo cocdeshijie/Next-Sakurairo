@@ -4,7 +4,7 @@ import Image from "next/image";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { HomeIcon } from "@/components/ui/Icons";
-import {Config, config} from "#site/content";
+import { Config, config } from "#site/content";
 
 const bgOpacityAtom = atom(0);
 
@@ -36,15 +36,15 @@ const HomeHero = () => {
                 <div className={"md:flex md:justify-between items-center"}>
                     <div className={"md:w-1/2 flex flex-col items-center mb-8 md:mb-0"}>
                         <Image
-                            src="https://qwq.xyz/cocdeshijie.gif"
-                            alt="Profile"
+                            src={config.site_info.profile_image}
+                            alt={config.site_info.author}
                             width={160}
                             height={160}
                             className={"rounded-full mb-4 transition-transform duration-500 hover:rotate-[360deg] transform-gpu"}
                         />
                         <div className={"flex space-x-3"}>
-                            {config.home_social.map((item: Config) => (
-                                <HomeIcon src={item.src} link={item.href} key={item.name} alt={item.name} />
+                            {config.home_social.map((item: Config, index: number) => (
+                                <HomeIcon src={item.src} link={item.href} key={index} alt={item.name} />
                             ))}
                         </div>
                     </div>

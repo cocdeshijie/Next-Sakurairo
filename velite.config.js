@@ -19,6 +19,7 @@ const config = defineCollection({
     schema: s.object({
         site_info: s.object({
             author: s.string(),
+            profile_image: s.string(),
             theme_color: s.string(),
             theme_color_hue_shift: s.number(),
         }),
