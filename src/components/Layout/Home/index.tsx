@@ -10,8 +10,6 @@ const Home = () => {
             </div>
             <div className={"flex flex-col"}>
                 <HomeHero/>
-                {/*TEMPORARY LINE*/}
-                <div className={"border border-amber-400"}/>
                 <HomePosts/>
             </div>
         </>

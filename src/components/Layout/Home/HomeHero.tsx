@@ -5,6 +5,7 @@ import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { HomeIcon } from "@/components/ui/Icons";
 import { type Config, config } from "#site/content";
+import { cn } from "@/utils/cn";
 
 const bgOpacityAtom = atom(0);
 
@@ -53,7 +54,10 @@ const HomeHero = () => {
                     </div>
                 </div>
             </div>
-            <div className={"absolute bottom-0 w-full h-[20vh] bg-gradient-to-b from-transparent to-theme-50 dark:to-theme-950 z-10"}/>
+            <div className={cn(
+                "absolute bottom-0 w-full h-[20vh] z-10",
+                "bg-gradient-to-b from-transparent to-theme-50 dark:to-theme-950"
+            )}/>
         </div>
     )
 }
