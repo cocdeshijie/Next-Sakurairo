@@ -88,7 +88,6 @@ export default function Page({ params }: PageProps) {
                     "bg-theme-100 dark:bg-theme-900",
                     "opacity-20"
                 )}/>
-                <div className={"hidden md:block absolute inset-0 backdrop-blur-xl"}/>
 
                 <div className={cn(
                     "relative py-6 md:grid md:grid-cols-10",
