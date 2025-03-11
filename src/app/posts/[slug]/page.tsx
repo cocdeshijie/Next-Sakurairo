@@ -70,9 +70,7 @@ export default function PostPage({ params }: PostProps) {
                                 />
                                 <div className={cn(
                                     "absolute inset-0 backdrop-blur-md",
-                                    "bg-gradient-to-br",
-                                    "from-theme-200/50 via-theme-200/75 to-theme-100/50",
-                                    "dark:from-theme-800/50 dark:via-theme-800/75 dark:to-theme-900/50"
+                                    "bg-theme-200/50 dark:bg-theme-800/50"
                                 )}/>
                             </div>
 
@@ -120,19 +118,19 @@ export default function PostPage({ params }: PostProps) {
             <section className="relative bg-theme-50 dark:bg-theme-950">
                 <div className={cn(
                     "hidden md:block absolute inset-0",
-                    "bg-gradient-to-b from-theme-200 dark:from-theme-800 to-transparent",
-                    "opacity-10"
+                    "bg-theme-100 dark:bg-theme-900",
+                    "opacity-20"
                 )}/>
-                <div className={"hidden md:block absolute inset-0 backdrop-blur-3xl"}/>
+                <div className={"hidden md:block absolute inset-0 backdrop-blur-xl"}/>
 
                 <div className={cn(
-                    "relative py-6 md:grid md:grid-cols-7",
+                    "relative py-6 md:grid md:grid-cols-9",
                     "max-w-full mx-auto px-2"
                 )}>
                     <div className="hidden md:block md:col-span-2"/>
 
                     <div className={cn(
-                        "mx-0.5 md:mx-0 md:col-span-3",
+                        "mx-0.5 md:mx-0 md:col-span-5",
                         "rounded-xl overflow-hidden",
                         "ring-2 ring-theme-200/25 dark:ring-theme-800/25",
                         "bg-theme-50 dark:bg-theme-950"
@@ -142,7 +140,7 @@ export default function PostPage({ params }: PostProps) {
                         </div>
                     </div>
 
-                    <div className="hidden md:block md:col-start-6">
+                    <div className="hidden md:block md:col-start-8 md:col-span-2">
                         <div className="sticky top-10 pl-6">
                             <div className={cn(
                                 "text-theme-800 dark:text-theme-200",

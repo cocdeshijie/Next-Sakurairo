@@ -59,16 +59,15 @@ export default function Page({ params }: PageProps) {
                                 />
                                 <div className={cn(
                                     "absolute inset-0 backdrop-blur-md",
-                                    "bg-gradient-to-br",
-                                    "from-theme-200/50 via-theme-200/75 to-theme-100/50",
-                                    "dark:from-theme-800/50 dark:via-theme-800/75 dark:to-theme-900/50"
+                                    "bg-theme-200/50 dark:bg-theme-800/50"
                                 )}/>
                             </div>
                             ) : (
                             <div className={cn(
-                                "absolute inset-0 bg-gradient-to-br -z-20",
-                                "from-theme-500/25 via-theme-100/50 to-theme-300/25",
-                                "dark:from-theme-500/25 dark:via-theme-900/50 dark:to-theme-700/25"
+                                "absolute inset-0 backdrop-blur-md -z-20",
+                                "bg-gradient-to-br opacity-15",
+                                "from-theme-500 via-theme-100 to-theme-300",
+                                "dark:from-theme-500 dark:via-theme-900 dark:to-theme-700"
                             )}/>
                         )}
                             <div className={"pt-6 max-w-3xl mx-4 md:mx-auto"}>
@@ -86,19 +85,19 @@ export default function Page({ params }: PageProps) {
             <section className="relative bg-theme-50 dark:bg-theme-950">
                 <div className={cn(
                     "hidden md:block absolute inset-0",
-                    "bg-gradient-to-b from-theme-200 dark:from-theme-800 to-transparent",
-                    "opacity-10"
+                    "bg-theme-100 dark:bg-theme-900",
+                    "opacity-20"
                 )}/>
-                <div className={"hidden md:block absolute inset-0 backdrop-blur-3xl"}/>
+                <div className={"hidden md:block absolute inset-0 backdrop-blur-xl"}/>
 
                 <div className={cn(
-                    "relative py-6 md:grid md:grid-cols-8",
+                    "relative py-6 md:grid md:grid-cols-10",
                     "max-w-full mx-auto px-2"
                 )}>
                     <div className="hidden md:block md:col-span-2"/>
 
                     <div className={cn(
-                        "mx-0.5 md:mx-0 md:col-span-4",
+                        "mx-0.5 md:mx-0 md:col-span-6",
                         "rounded-xl overflow-hidden",
                         "ring-2 ring-theme-200/25 dark:ring-theme-800/25",
                         "bg-theme-50 dark:bg-theme-950"
