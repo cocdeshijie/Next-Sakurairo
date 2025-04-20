@@ -28,6 +28,14 @@ header_navigation:
       - title: Example 2
         href: "https://example.com"
 
+home_working_on:
+  - Python
+  - TypeScript
+  - C++
+  - React
+  - FastAPI
+  - Next.js
+
 home_social:
   - name: GitHub
     src: "/static/social-icons/github.svg"

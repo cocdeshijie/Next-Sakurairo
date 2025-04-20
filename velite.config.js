@@ -44,6 +44,7 @@ const config = defineCollection({
                 ).optional()
             })
         ),
+        home_working_on: s.array(s.string()),
         home_social: s.array(
             s.object({
                 name: s.string(),
