@@ -84,12 +84,14 @@ const HomeHero = () => {
                                     {showWord && (
                                         <TypeAnimation
                                             key="tech"
-                                            sequence={(
-                                                config.home_working_on
-                                                    .slice()
-                                                    .sort(() => Math.random() - 0.5)
-                                                    .flatMap<string | number>((item: string) => [item, 1000])
-                                            )}
+                                            sequence={(() => {
+                                                const items = [...config.home_working_on];
+                                                for (let i = items.length - 1; i > 0; i--) {
+                                                    const j = Math.floor(Math.random() * (i + 1));
+                                                    [items[i], items[j]] = [items[j], items[i]];
+                                                }
+                                                return items.flatMap<string | number>((item: string) => [item, 1000]);
+                                            })()}
                                             speed={25}
                                             wrapper="span"
                                             className={"inline-block text-theme-500"}
