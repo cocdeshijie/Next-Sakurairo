@@ -34,3 +34,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Notes
+### Fork
+```bash
+git clone https://github.com/cocdeshijie/Next-Sakurairo new-blog
+cd new-blog
+git remote add upstream https://github.com/cocdeshijie/Next-Sakurairo
+
+```
+### Never merge from content
+```bash
+printf "content/** merge=ours\n" > .gitattributes
+git config merge.ours.driver true
+```
+### Update from upstream
+```bash
+git checkout main                     # make sure the main branch of new-blog
+git fetch upstream                    # grab new work
+git merge --ff-only upstream/main 
+git push origin main                  # publish the updated fork
+```
+
