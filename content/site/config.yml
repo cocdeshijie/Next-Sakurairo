@@ -8,10 +8,10 @@ posts_config:
   posts_per_page: 4
 
 header_logo:
-  text_front: cocdeshijie
+  text_front: Next Sakurairo
   text_middle: の
-  text_end: Blog
-  text_bottom: qwq~
+  text_end: Site
+  text_bottom: work in progress~
 
 header_navigation:
   - title: Home
@@ -20,54 +20,54 @@ header_navigation:
     href: "/tags"
   - title: Posts
     href: "/posts"
-  - title: Dropdown
+  - title: Preview
     href: "/"
     children:
-      - title: Example
-        href: "https://example.com"
-      - title: Example 2
-        href: "https://example.com"
+      - title: Post Preview
+        href: "/posts/markdown-preview"
+      - title: Page Preview
+        href: "/page-preview"
 
 home_working_on:
-  - Python
-  - TypeScript
-  - C++
-  - React
-  - FastAPI
   - Next.js
+  - Tailwind CSS
+  - TypeScript
+  - Jotai
+  - Radix UI
+  - Velite
 
 home_social:
   - name: GitHub
     src: "/static/social-icons/github.svg"
-    href: "https://github.com/cocdeshijie"
+    href: "https://github.com/cocdeshijie/Next-Sakurairo"
   - name: X
     src: "/static/social-icons/x.svg"
-    href: "https://twitter.com/cocdeshijie"
+    href: "/"
   - name: BiliBili
     src: "/static/social-icons/bilibili.svg"
-    href: "https://space.bilibili.com/60559166"
+    href: "/"
   - name: Telegram
     src: "/static/social-icons/telegram.svg"
-    href: "https://telegram.me/cocdeshijie"
+    href: "/"
   - name: Discord
     src: "/static/social-icons/discord.svg"
-    href: "https://discordapp.com/channels/@me/390338482951815178/"
+    href: "/"
   - name: QQ
     src: "/static/social-icons/qq.svg"
-    href: "tencent://message/?uin=2049302246"
+    href: "/"
   - name: Steam
     src: "/static/social-icons/steam.svg"
-    href: "https://steamcommunity.com/id/cocdeshijie"
+    href: "/"
 
 footer:
   line_1:
-    - text: Placeholder
+    - text: Home
       href: "/"
-    - text: Placeholder
-      href: "/"
-    - text: Placeholder
-      href: "/"
-    - text: Placeholder
-      href: "/"
-  line_2: Placeholder text
-  line_3: Additional text
+    - text: Post Preview
+      href: "/posts/markdown-preview"
+    - text: Page Preview
+      href: "/page-preview"
+    - text: Tags
+      href: "/tags"
+  line_2: 誰でも大好き!
+  line_3: qwq~
