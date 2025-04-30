@@ -1,5 +1,3 @@
-import path from 'node:path';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
@@ -9,11 +7,6 @@ const nextConfig = {
                 hostname: '*',
             },
         ],
-    },
-    webpack: (config) => {
-        config.resolve.alias ??= {};
-        config.resolve.alias['#site'] = path.resolve(process.cwd(), 'src/site');
-        return config;
     },
 };
 
