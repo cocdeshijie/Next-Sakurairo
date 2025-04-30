@@ -3,14 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "velite dev": "velite --watch",
-    "build": "next build",
-    "velite build": "velite --clean",
-    "start": "next start",
-    "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "dev":            "next dev",
+    "velite:dev":     "velite --watch",
+    "velite:build":   "velite --clean",
+
+    "prebuild":       "npm run velite:build",
+    "build":          "next build",
+
+    "start":          "next start",
+    "lint":           "next lint",
+    "storybook":      "storybook dev -p 6006",
+    "build-storybook":"storybook build"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "1.1.1",
