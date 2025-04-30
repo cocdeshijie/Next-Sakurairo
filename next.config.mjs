@@ -8,6 +8,11 @@ const nextConfig = {
             },
         ],
     },
+    webpack: (config) => {
+        config.resolve.alias ??= {};
+        config.resolve.alias['#site'] = path.resolve(__dirname, 'src/site');
+        return config;
+    },
 };
 
 export default nextConfig;
