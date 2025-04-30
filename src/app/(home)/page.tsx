@@ -1,9 +1,8 @@
-import Home from "../../components/Layout/Home";
+export const dynamic    = "force-dynamic";
+export const revalidate = 0;
 
-const HomePage = () => {
-    return (
-       <Home/>
-    );
-};
+import Home from "@/components/Layout/Home";
 
-export default HomePage;
+export default function HomePage() {
+    return <Home />;
+}
