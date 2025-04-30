@@ -71,3 +71,16 @@ footer:
       href: "/tags"
   line_2: 誰でも大好き!
   line_3: qwq~
+
+giscus:
+  repo: "cocdeshijie/Next-Sakurairo"
+  repo_id: "R_kgDOLtf1_A"
+  category: "Announcements"
+  category_id: "DIC_kwDOLtf1_M4Cpnbn"
+  mapping: "url"
+  strict: "0"
+  reactions_enabled: "1"
+  emit_metadata: "0"
+  input_position: "bottom"
+  theme: "preferred_color_scheme"
+  lang: "en"

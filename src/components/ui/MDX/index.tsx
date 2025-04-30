@@ -6,6 +6,7 @@ import { MDXLink } from "@/components/ui/MDX/MDXLink";
 import { tableComponents } from "@/components/ui/MDX/MDXTable";
 import { listComponents } from "@/components/ui/MDX/MDXList";
 import { AnilistTracker } from "@/components/ui/AnilistTracker";
+import GiscusComments from "@/components/ui/Giscus";
 
 const useMDXComponents = (code: string) => {
     const fn = new Function(code);
@@ -60,6 +61,7 @@ const sharedComponents = {
     MDXCode,
     MDXInlineCode,
     AnilistTracker,
+    GiscusComments,
     ...components,
 };
 

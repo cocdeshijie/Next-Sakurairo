@@ -61,7 +61,19 @@ const config = defineCollection({
             ).optional(),
             line_2: s.string().optional(),
             line_3: s.string().optional(),
-        })
+        }),
+        giscus: s.object({
+            repo: s.string(),
+            repo_id: s.string(),
+            category: s.string(),
+            category_id: s.string(),
+            mapping: s.string(),
+            reactions_enabled: s.string(),
+            emit_metadata: s.string(),
+            input_position: s.string(),
+            theme: s.string(),
+            lang: s.string()
+        }),
     })
 })
 

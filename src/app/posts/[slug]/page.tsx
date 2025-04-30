@@ -7,6 +7,7 @@ import { MDX } from "@/components/ui/MDX";
 import { HiMiniCalendarDays } from "react-icons/hi2";
 import TOC from "@/components/ui/TOC";
 import Tag from "@/components/ui/Tags";
+import GiscusComments from "@/components/ui/Giscus";
 
 interface PostProps {
     params: {
@@ -136,6 +137,7 @@ export default function PostPage({ params }: PostProps) {
                     )}>
                         <div className="p-6 md:p-8 prose-base dark:prose-invert">
                             <MDX code={post.content}/>
+                            <GiscusComments />
                         </div>
                     </div>
 
