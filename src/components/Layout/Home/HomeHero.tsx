@@ -71,7 +71,7 @@ const HomeHero = () => {
                                     "text-theme-800 dark:text-theme-200"
                                 )}
                                 >
-                                    <span className={"text-theme-800 dark:text-theme-300"}>"</span>
+                                    <span className={"text-theme-800 dark:text-theme-300"}>&quot;</span>
                                     <TypeAnimation
                                         sequence={[
                                             `Hi, I'm ${config.site_info.author}.\nWorking with `,
@@ -98,7 +98,7 @@ const HomeHero = () => {
                                             repeat={Infinity}
                                         />
                                     )}
-                                    <span className={"text-theme-800 dark:text-theme-300"}>"</span>
+                                    <span className={"text-theme-800 dark:text-theme-300"}>&quot;</span>
                                 </h2>
                             </div>
                         </div>
