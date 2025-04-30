@@ -8,10 +8,19 @@ import { listComponents } from "@/components/ui/MDX/MDXList";
 import { AnilistTracker } from "@/components/ui/AnilistTracker";
 import GiscusComments from "@/components/ui/Giscus";
 
+/* -------------------------------------------------- */
+/* 🔧 Dynamic compiler                                 */
+/* -------------------------------------------------- */
+
 const useMDXComponents = (code: string) => {
+    // eslint-disable-next-line no-new-func
     const fn = new Function(code);
     return fn({ ...runtime }).default;
 };
+
+/* -------------------------------------------------- */
+/* 🧩 Base components                                  */
+/* -------------------------------------------------- */
 
 const components = {
     h1: H1,
@@ -33,6 +42,23 @@ const components = {
         </p>
     ),
     a: MDXLink,
+
+    /* ——— Horizontal Rule ——— */
+    hr: ({
+             className,
+             ...props
+         }: React.HTMLAttributes<HTMLHRElement>) => (
+        <hr
+            className={cn(
+                "my-8 border-0 border-t-2 mx-4",
+                "border-theme-500 dark:border-theme-500/80",
+                className
+            )}
+            {...props}
+        />
+    ),
+
+    /* ——— Blockquote ——— */
     blockquote: ({
                      className,
                      children,
@@ -45,7 +71,8 @@ const components = {
             className={cn(
                 "border-l-4 border-theme-500/75 pl-4 py-0.5 rounded-r-md",
                 "shadow shadow-theme-800/15 dark:shadow-theme-200/15",
-                "text-theme-800 dark:text-theme-200 bg-theme-200/50 dark:bg-theme-800/50",
+                "text-theme-800 dark:text-theme-200",
+                "bg-theme-200/50 dark:bg-theme-800/50",
                 className
             )}
             {...props}
@@ -53,9 +80,15 @@ const components = {
             {children}
         </blockquote>
     ),
+
+    /* ——— Tables & lists ——— */
     ...tableComponents,
     ...listComponents,
 };
+
+/* -------------------------------------------------- */
+/* 🌐 Shared components (code, tracker, comments)      */
+/* -------------------------------------------------- */
 
 const sharedComponents = {
     MDXCode,
@@ -65,6 +98,10 @@ const sharedComponents = {
     ...components,
 };
 
+/* -------------------------------------------------- */
+/* 🏗 MDX renderer                                     */
+/* -------------------------------------------------- */
+
 interface MDXProps {
     code: string;
     components?: Record<string, React.ComponentType>;
@@ -73,6 +110,5 @@ interface MDXProps {
 
 export function MDX({ code, components, ...props }: MDXProps) {
     const Component = useMDXComponents(code);
-
-    return <Component components={{ ...sharedComponents }} {...props} />;
+    return <Component components={{ ...sharedComponents, ...components }} {...props} />;
 }
