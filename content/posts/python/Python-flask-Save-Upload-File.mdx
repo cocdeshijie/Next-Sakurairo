@@ -1,0 +1,33 @@
+---
+title: Python FLask 保存上传的文件
+date: 2021-01-18
+cover: https://img.qwq.xyz/2023/1f43120ed457f.png
+slug: /python/flask-save-upload-file
+tags:
+    - code
+    - python
+    - webdev
+---
+
+```py file.py
+@app.route('/api/upload/', methods=['POST'])
+def upload():
+    # 获取文件
+    uploaded_file = request.files['file']
+    # 文件后缀（文件全名-> request.files['file'].filename）
+    file_extension = uploaded_file.filename.split('.')[-1]
+    # MIME 类型
+    mimetype = uploaded_file.mimetype
+    # 保存到 当前文件夹+'files/'
+    save_target = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files/', uploaded_file.filename)
+    # 创建/files
+    if not os.path.isdir(os.path.dirname(os.path.abspath(__file__)), 'files/'):
+        os.mkdir(os.path.dirname(os.path.abspath(__file__)), 'files/')
+    # 保存
+    uploaded_file.save(save_target)
+    # return看自己需求填写
+    return jsonify(
+        code=200
+    )
+```
+

@@ -1,5 +1,5 @@
 site_info:
-  title: Next Sakurairo
+  title: cocdeshijie の Blog
   author: cocdeshijie
   profile_image: "/static/next-sakurairo.png"
   theme_color: "#FFAAA7"
@@ -9,16 +9,14 @@ posts_config:
   posts_per_page: 4
 
 header_logo:
-  text_front: Next Sakurairo
+  text_front: cocdeshijie
   text_middle: の
-  text_end: Site
-  text_bottom: work in progress~
+  text_end: Blog
+  text_bottom: qwq~
 
 header_navigation:
   - title: Home
     href: "/"
-  - title: Tags
-    href: "/tags"
   - title: Posts
     href: "/posts"
   - title: Preview

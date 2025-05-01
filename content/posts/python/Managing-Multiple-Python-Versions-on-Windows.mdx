@@ -1,0 +1,38 @@
+---
+title: Managing Multiple Python Versions on Windows
+date: 2023-02-25
+cover: https://img.qwq.xyz/2023/866fbbaab0c43.png
+slug: /python/managing-multiple-python-versions-on-windows
+tags:
+    - code
+    - python
+---
+
+
+After downloading a new python version it's often confusing to call for the specific version from windows command prompt.
+
+## Goal
+Easy way to call a specific version in a way like:
+_`python310`_ -> Python 3.10
+_`python311`_ -> Python 3.11
+etc
+
+
+## Steps
+1. Have multiple python version downloaded.
+2. Open Windows Powershell as administrator.
+3. Use command _`cd $HOME\appdata\local\programs\python`_ and then use _`ls`_ to list python directories like following.
+
+```cmd
+  Directory: C:\Users\*******\appdata\local\programs\python
+Mode                 LastWriteTime         Length Name
+d-----         00/00/0000  00:00 AM                Python310
+d-----         00/00/0000  00:00 AM                Python311
+```
+4. For each Python version use command _`copy python[version]\python.exe python[version]\python[version].exe`_
+For exmaple: Python311 would use _`copy python311\python.exe python311\python311.exe`_
+5. Open Environment Variables from System Properties and edit Path.
+![https://img.qwq.xyz/2023/e58da3fc92f28.png](https://img.qwq.xyz/2023/e58da3fc92f28.png)
+6. For each Python version add _`c:\users\[user]\appdata\local\programs\python\python[version]\scripts\`_ and _`c:\users\[user]\appdata\local\programs\python\python[version]\`_
+7. Set default version by moving them up.
+8. Now python can be called in command prompt using python[version].

@@ -1,0 +1,32 @@
+---
+title: Using PIL Image to Crop Image with Respect to Center
+date: 2022-04-24
+cover: https://img.qwq.xyz/2023/3da5a248336b8.png
+slug: /python/Using-PIL-Image-To-Crop-Image-With-respect-To-Center
+tags:
+    - code
+    - python
+---
+
+```python
+def crop_image()::
+    im = Image.open('example.jpg')
+    width, height = im.size
+    if width > height:
+        left = int((width - height) / 2)
+        top = 0
+        right = width - left
+        bottom = height
+        crop = im.crop((left, top, right, bottom))
+    if height > width:
+        left = 0
+        top = int((height - width) / 2)
+        right = width
+        bottom = height-top
+        crop = im.crop((left, top, right, bottom))
+	# square
+    else:
+        return
+    crop.save('example.jpg')
+```
+
