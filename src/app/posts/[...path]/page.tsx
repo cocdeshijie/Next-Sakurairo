@@ -10,33 +10,42 @@ import Tag from "@/components/ui/Tags";
 import GiscusComments from "@/components/ui/Giscus";
 
 interface PostProps {
-    params: {
-        slug: string
-    }
+    params: { path: string[] }
 }
 
-function getPostBySlug(slug: string) {
-    return posts.find(post => post.slug === slug)
+/* -------------------------------------------------- */
+/* 🔍 helpers                                         */
+/* -------------------------------------------------- */
+function normalise(p: string) {
+    return p.replace(/^posts\//, "");   // strip collection prefix
 }
 
+function getPostByPath(pathArr: string[]) {
+    const joined = pathArr.join("/");
+    return posts.find(p => "path" in p && normalise((p as any).path) === joined);
+}
+
+/* -------------------------------------------------- */
+/* <head> metadata                                    */
+/* -------------------------------------------------- */
 export function generateMetadata({ params }: PostProps): Metadata {
-    const post = getPostBySlug(params.slug)
-    if (post == null) return {}
-    return { title: post.title, description: post.description }
+    const post = getPostByPath(params.path);
+    return post ? { title: post.title, description: post.description } : {};
 }
 
-export function generateStaticParams(): PostProps['params'][] {
-    return posts.map(post => ({
-        slug: post.slug
-    }))
+/* -------------------------------------------------- */
+/* 🏗 static params                                   */
+/* -------------------------------------------------- */
+export function generateStaticParams(): PostProps["params"][] {
+    return posts.map(p => ({
+        path: normalise((p as any).path).split("/")
+    }));
 }
 
 export default function PostPage({ params }: PostProps) {
-    const post = getPostBySlug(params.slug);
+    const post = getPostByPath(params.path);
 
-    if (post == null) {
-        return notFound();
-    }
+    if (!post) return notFound();
 
     return (
         <article>

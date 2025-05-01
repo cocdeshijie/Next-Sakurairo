@@ -84,16 +84,16 @@ const posts = defineCollection({
     schema: s
         .object({
             title: s.string(),
-            slug: s.slug("posts"),
+            path: s.path(),
             date: s.isodate(),
             cover: s.string(),
             tags: s.array(s.string()).default([]),
             metadata: s.metadata(),
             excerpt: s.excerpt(), // TODO: use AI
             content: s.mdx(),
-            toc: s.toc()
+            toc: s.toc(),
         })
-        .transform(data => ({ ...data, permalink: `/posts/${data.slug}` }))
+        .transform(data => ({ ...data, permalink: `/${data.path}` }))
         .transform(data => ({
             ...data,
             edited: (() => {
@@ -117,11 +117,22 @@ const pages = defineCollection({
         .object({
             title: s.string(),
             description: s.string().optional(),
-            slug: s.slug(),
+            path: s.path(),
             cover: s.string().optional(),
             content: s.mdx()
         })
-        .transform(data => ({ ...data, permalink: `/${data.slug}` }))
+        .transform(data => {
+            // If the path starts with "pages/", remove that prefix for the permalink
+            // This preserves any subfolder structure after "pages/"
+            const permalink = data.path.startsWith('pages/')
+                ? `/${data.path.slice(6)}` // Remove "pages/" prefix
+                : `/${data.path}`;
+
+            return {
+                ...data,
+                permalink,
+            };
+        })
 })
 
 const tags = defineCollection({
