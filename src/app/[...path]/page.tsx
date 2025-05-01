@@ -7,32 +7,55 @@ import { MDX } from "@/components/ui/MDX";
 
 interface PageProps {
     params: {
-        slug: string
-    }
+        path: string[];
+    };
+}
+/* ------------------------------------------------------------ *
+ * Helpers
+ * ------------------------------------------------------------ */
+
+function joinPath(segments: string[]): string {
+    /* convert ["foo","bar"] → "foo/bar" */
+    return segments.join("/");
 }
 
-function getPageBySlug(slug: string) {
-    return pages.find(page => page.slug === slug)
+function getPageByPath(segments: string[]) {
+    const target = joinPath(segments);  // "folder/page-test"
+
+    return pages.find(
+        page => page.path === target ||
+            page.permalink === `/${target}` ||
+            // For backward compatibility
+            page.originalPath === target ||
+            page.originalPath === `pages/${target}`
+    );
 }
+
+/* ------------------------------------------------------------ *
+ * Metadata + static generation
+ * ------------------------------------------------------------ */
 
 export function generateMetadata({ params }: PageProps): Metadata {
-    const page = getPageBySlug(params.slug)
-    if (page == null) return {}
-    return { title:  page.title, description: page.description }
+    const page = getPageByPath(params.path);
+    if (page == null) return {};
+    return {
+        title: page.title,
+        description: page.description,
+    };
 }
 
-export function generateStaticParams(): PageProps['params'][] {
-    return pages.map(post => ({
-        slug: post.slug
-    }))
+export function generateStaticParams(): PageProps["params"][] {
+    /*  turn "foo/bar/baz" → ["foo","bar","baz"] so Next can
+        pre-build every page at `next build` time                  */
+    return pages.map(page => ({
+        path: page.path.split("/"),
+    }));
 }
 
 export default function Page({ params }: PageProps) {
-    const page = getPageBySlug(params.slug);
+    const page = getPageByPath(params.path);
 
-    if (page == null) {
-        return notFound();
-    }
+    if (page == null) return notFound();
 
     return (
         <article>
