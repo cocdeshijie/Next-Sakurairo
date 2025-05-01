@@ -11,14 +11,12 @@ posts_config:
 header_logo:
   text_front: cocdeshijie
   text_middle: の
-  text_end: blog
+  text_end: Blog
   text_bottom: qwq~
 
 header_navigation:
   - title: Home
     href: "/"
-  - title: Tags
-    href: "/tags"
   - title: Posts
     href: "/posts"
   - title: Preview
@@ -28,8 +26,6 @@ header_navigation:
         href: "/posts/markdown-preview"
       - title: Page Preview
         href: "/page-preview"
-      - title: Folder Routing Preview
-        href: "/folder/page-folder-preview"
       - title: AniList Preview
         href: "/anilist-preview"
 
@@ -72,8 +68,6 @@ footer:
       href: "/posts/markdown-preview"
     - text: Page Preview
       href: "/page-preview"
-    - text: Folder Routing Preview
-      href: "/folder/page-folder-preview"
     - text: AniList Preview
       href: "/anilist-preview"
     - text: Tags
