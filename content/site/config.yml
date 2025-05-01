@@ -28,6 +28,8 @@ header_navigation:
         href: "/posts/markdown-preview"
       - title: Page Preview
         href: "/page-preview"
+      - title: Folder Routing Preview
+        href: "/folder/page-folder-preview"
       - title: AniList Preview
         href: "/anilist-preview"
 
