@@ -28,6 +28,8 @@ header_navigation:
         href: "/posts/markdown-preview"
       - title: Page Preview
         href: "/page-preview"
+      - title: Folder Routing Preview
+        href: "/folder/page-folder-preview"
       - title: AniList Preview
         href: "/anilist-preview"
 
@@ -70,6 +72,8 @@ footer:
       href: "/posts/markdown-preview"
     - text: Page Preview
       href: "/page-preview"
+    - text: Folder Routing Preview
+      href: "/folder/page-folder-preview"
     - text: AniList Preview
       href: "/anilist-preview"
     - text: Tags
