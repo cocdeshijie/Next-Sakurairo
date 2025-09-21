@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { JSDOM } from 'jsdom';
 
 // Force dynamic rendering for this route
 export const dynamic = 'force-dynamic';
@@ -51,6 +50,9 @@ export async function GET(request: Request) {
         }
 
         const html = await response.text();
+
+        // Dynamically import JSDOM only when needed
+        const { JSDOM } = await import('jsdom');
         const dom = new JSDOM(html);
         const doc = dom.window.document;
         const faviconLink = doc.querySelector("link[rel~='icon']")?.getAttribute('href');
