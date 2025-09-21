@@ -50,7 +50,8 @@ function getPageByPath(segments: string[]) {
  * ------------------------------------------------------------ */
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { path } = await params;
+    const resolvedParams = await params;
+    const { path } = resolvedParams;
     const page = getPageByPath(path);
     if (page == null) return {};
     return {
@@ -68,7 +69,8 @@ export function generateStaticParams(): Params[] {
 }
 
 export default async function Page({ params }: PageProps) {
-    const { path } = await params;
+    const resolvedParams = await params;
+    const { path } = resolvedParams;
     const page = getPageByPath(path) ?? notFound();
 
     return (

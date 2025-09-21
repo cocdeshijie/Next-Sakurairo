@@ -4,7 +4,7 @@ import Image from "next/image";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
 import { HomeIcon } from "@/components/ui/Icons";
-import { type Config, config } from "#site/content";
+import { config } from "#site/content";
 import { cn } from "@/utils/cn";
 import { TypeAnimation } from "react-type-animation";
 
@@ -90,8 +90,8 @@ const HomeHero = () => {
                                                     const j = Math.floor(Math.random() * (i + 1));
                                                     [items[i], items[j]] = [items[j], items[i]];
                                                 }
-                                                return items.flatMap<string | number>((item: string) => [item, 1000]);
-                                            })()}
+                                                return items.flatMap((item) => [item, 1000]);
+                                            })() as (string | number)[]}
                                             speed={25}
                                             wrapper="span"
                                             className={"inline-block text-theme-500"}
@@ -105,7 +105,7 @@ const HomeHero = () => {
                     </div>
 
                     <div className={"mt-6 flex space-x-3"}>
-                        {config.home_social.map((item: Config["home_social"], index: number) => (
+                        {config.home_social.map((item, index) => (
                             <HomeIcon src={item.src} link={item.href} key={index} alt={item.name}/>
                         ))}
                     </div>

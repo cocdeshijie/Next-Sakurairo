@@ -10,7 +10,7 @@ import Tag from "@/components/ui/Tags";
 import GiscusComments from "@/components/ui/Giscus";
 
 interface PostProps {
-    params: { path: string[] }
+    params: Promise<{ path: string[] }>
 }
 
 /* -------------------------------------------------- */
@@ -28,22 +28,24 @@ function getPostByPath(pathArr: string[]) {
 /* -------------------------------------------------- */
 /* <head> metadata                                    */
 /* -------------------------------------------------- */
-export function generateMetadata({ params }: PostProps): Metadata {
-    const post = getPostByPath(params.path);
-    return post ? { title: post.title, description: post.description } : {};
+export async function generateMetadata({ params }: PostProps): Promise<Metadata> {
+    const resolvedParams = await params;
+    const post = getPostByPath(resolvedParams.path);
+    return post ? { title: post.title, description: post.excerpt } : {};
 }
 
 /* -------------------------------------------------- */
 /* 🏗 static params                                   */
 /* -------------------------------------------------- */
-export function generateStaticParams(): PostProps["params"][] {
+export function generateStaticParams(): { path: string[] }[] {
     return posts.map(p => ({
         path: normalise((p as any).path).split("/")
     }));
 }
 
-export default function PostPage({ params }: PostProps) {
-    const post = getPostByPath(params.path);
+export default async function PostPage({ params }: PostProps) {
+    const resolvedParams = await params;
+    const post = getPostByPath(resolvedParams.path);
 
     if (!post) return notFound();
 

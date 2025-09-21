@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { config, type Config } from "#site/content";
+import { config } from "#site/content";
 import React from "react";
 
 const Footer = () => {
@@ -11,28 +11,32 @@ const Footer = () => {
             )}>
                 <div className={"container mx-auto px-4"}>
                     <div className={"md:flex md:justify-between md:items-center md:px-40 text-center md:text-left"}>
-                        <div><div className={"mb-4"}>
-                        <span className={"text-lg font-medium text-theme-700 dark:text-theme-200"}>
-                            {config.footer.line_1.map((item: Config["footer"]["line_1"], index: number) => (
-                                <React.Fragment key={item.href}>
-                                    <a
-                                        key={index}
-                                        href={item.href}
-                                    >
-                                        {item.text}
-                                    </a>
-                                    {index < config.footer.line_1.length - 1 && " | "}
-                                </React.Fragment>
-                            ))}
-                        </span>
-                            </div>
+                        <div>
+                            {config.footer.line_1 && (
+                                <div className={"mb-4"}>
+                                    <span className={"text-lg font-medium text-theme-700 dark:text-theme-200"}>
+                                        {config.footer.line_1.map((item, index) => (
+                                            <React.Fragment key={item.href || index}>
+                                                <a href={item.href}>
+                                                    {item.text}
+                                                </a>
+                                                {index < config.footer.line_1!.length - 1 && " | "}
+                                            </React.Fragment>
+                                        ))}
+                                    </span>
+                                </div>
+                            )}
                             <div>
-                                <h3 className={"text-xl font-bold text-theme-800 dark:text-theme-100"}>
-                                    {config.footer.line_2}
-                                </h3>
-                                <p className={"mt-2 text-theme-600 dark:text-theme-300"}>
-                                    {config.footer.line_3}
-                                </p>
+                                {config.footer.line_2 && (
+                                    <h3 className={"text-xl font-bold text-theme-800 dark:text-theme-100"}>
+                                        {config.footer.line_2}
+                                    </h3>
+                                )}
+                                {config.footer.line_3 && (
+                                    <p className={"mt-2 text-theme-600 dark:text-theme-300"}>
+                                        {config.footer.line_3}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className={"mt-4 md:mt-0 md:flex md:items-center"}>

@@ -5,7 +5,6 @@ import { cn } from "@/utils/cn";
 import Logo from "@/components/Layout/Header/Logo";
 import HeaderDialog from "@/components/Layout/Header/HeaderDialog";
 import { config } from "#site/content";
-import type { Config } from "#site/content";
 import * as HoverCard from "@radix-ui/react-hover-card";
 import { atom, useAtom } from "jotai";
 import { useEffect } from "react";
@@ -65,7 +64,7 @@ const Header = () => {
             )}>
                 <nav className={"relative w-full"}>
                     <ul className={"flex justify-center items-center space-x-4"}>
-                        {config.header_navigation.map((item: Config) => (
+                        {config.header_navigation.map((item) => (
                             <li key={item.title} className={"relative group"}>
                                 {item.children ? (
                                     <HoverCard.Root openDelay={200}
@@ -102,25 +101,25 @@ const Header = () => {
                                                         <animated.div
                                                             style={styles}
                                                             className={cn(
-                                                            "min-w-max max-w-[calc(100vw-40px)]",
-                                                            "rounded-md shadow-md p-1 mt-8 z-50",
-                                                            "ring-1 ring-theme-700/15 dark:ring-theme-300/15",
-                                                            "border border-transparent",
-                                                            "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg"
-                                                        )}>
+                                                                "min-w-max max-w-[calc(100vw-40px)]",
+                                                                "rounded-md shadow-md p-1 mt-8 z-50",
+                                                                "ring-1 ring-theme-700/15 dark:ring-theme-300/15",
+                                                                "border border-transparent",
+                                                                "bg-theme-100/50 dark:bg-theme-800/50 backdrop-blur-lg"
+                                                            )}>
                                                             <ul className={"space-y-1"}>
-                                                                {item.children.map((child: Config) => (
+                                                                {item.children && item.children.map((child) => (
                                                                     <li key={child.title} className={"text-center"}>
-                                                                        {item.href.startsWith('/') ? (
+                                                                        {child.href.startsWith('/') ? (
                                                                             <Link href={child.href}
-                                                                               className={cn(
-                                                                                   "block px-3 py-1 list-none",
-                                                                                   "text-theme-500 dark:text-white rounded duration-200",
-                                                                                   "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
-                                                                               )}>
+                                                                                  className={cn(
+                                                                                      "block px-3 py-1 list-none",
+                                                                                      "text-theme-500 dark:text-white rounded duration-200",
+                                                                                      "hover:bg-theme-300/25 dark:hover:bg-theme-700/25"
+                                                                                  )}>
                                                                                 {child.title}
                                                                             </Link>
-                                                                            ) : (
+                                                                        ) : (
                                                                             <a href={child.href}
                                                                                className={cn(
                                                                                    "block px-3 py-1 list-none",

@@ -6,7 +6,6 @@ import { atom, useAtom } from "jotai";
 import { useTransition, animated, easings } from "@react-spring/web";
 import { config } from "#site/content";
 import { BiMenu, BiChevronDown } from "react-icons/bi";
-import type { Config } from "#site/content";
 import { cn } from "@/utils/cn";
 
 const dialogOpenAtom = atom(false);
@@ -51,7 +50,7 @@ const HeaderDialog = () => {
                                                className={"w-12 h-12 cursor-pointer mx-auto text-theme-50 dark:text-theme-950"}/>
                                 <NavigationMenu.Root>
                                     <NavigationMenu.List className={"flex flex-col space-y-3"}>
-                                        {config.header_navigation.map((item: Config) => (
+                                        {config.header_navigation.map((item) => (
                                             <NavigationMenu.Item key={item.title} className="flex-col">
                                                 <NavigationMenu.Trigger className={cn(
                                                     "flex justify-between items-center w-full p-3 rounded-lg",
@@ -62,7 +61,7 @@ const HeaderDialog = () => {
                                                 </NavigationMenu.Trigger>
                                                 {item.children && (
                                                     <div className={"grid grid-cols-2 gap-2 mt-1 mx-6"}>
-                                                        {item.children.map((child: Config) => (
+                                                        {item.children.map((child) => (
                                                             <NavigationMenu.Link
                                                                 key={child.title}
                                                                 href={child.href}

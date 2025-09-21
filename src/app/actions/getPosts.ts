@@ -1,13 +1,13 @@
 "use server";
 
-import { posts, type Posts } from '#site/content';
+import { posts } from '#site/content';
 
 export async function getPosts(
     offset: number,
     limit: number,
     tagsQuery?: string
 ) {
-    let filteredPosts: Posts = posts;
+    let filteredPosts = posts; // Remove the type annotation
 
     // Filter posts based on a single tag if provided
     if (tagsQuery) {
@@ -16,7 +16,7 @@ export async function getPosts(
 
     // Sort the filtered posts by date in descending order
     filteredPosts.sort(
-        (a: Posts, b: Posts) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
     // Calculate start and end indices for pagination

@@ -10,6 +10,7 @@ interface ScrollContextProps {
 interface ScrollHistoryState {
     scrollPosition: number;
     pathname: string;
+    [key: string]: any; // Allow for other properties in history.state
 }
 
 export const ScrollContext = createContext<ScrollContextProps | undefined>(undefined);
@@ -17,7 +18,7 @@ export const ScrollContext = createContext<ScrollContextProps | undefined>(undef
 export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     const scrollbarThumbRef = useRef<HTMLDivElement>(null);
-    const rafRef = useRef<number>();
+    const rafRef = useRef<number | undefined>(undefined);
     const isRestoringScroll = useRef(false);
     const isHistoryNavigation = useRef(false);
     const isInitialLoad = useRef(true);
@@ -44,7 +45,7 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
     const saveScrollPosition = useCallback(() => {
         if (isHistoryNavigation.current) return;
 
-        const currentState = history.state || {};
+        const currentState = (history.state as ScrollHistoryState) || {};
         const newState: ScrollHistoryState = {
             ...currentState,
             scrollPosition: window.scrollY,
@@ -62,7 +63,7 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const handlePopState = (event: PopStateEvent) => {
             isHistoryNavigation.current = true;
-            const state = event.state as ScrollHistoryState;
+            const state = event.state as ScrollHistoryState | null;
 
             if (state?.scrollPosition !== undefined && state.pathname === pathname) {
                 isRestoringScroll.current = true;
@@ -76,7 +77,7 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
                 // Fallback to localStorage if history state is missing
                 const savedPosition = localStorage.getItem(`scrollPosition-${pathname}`);
                 if (savedPosition !== null) {
-                    window.scrollTo(0, parseInt(savedPosition));
+                    window.scrollTo(0, parseInt(savedPosition, 10));
                     updateScrollbarThumb();
                 }
                 setTimeout(() => {
@@ -117,7 +118,7 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
             // Handle initial page load
             const restoreScrollPosition = () => {
                 // Try to get position from history state first
-                const state = history.state as ScrollHistoryState;
+                const state = history.state as ScrollHistoryState | null;
                 if (state?.scrollPosition !== undefined && state.pathname === pathname) {
                     window.scrollTo(0, state.scrollPosition);
                     updateScrollbarThumb();
@@ -127,7 +128,7 @@ export const ScrollProvider = ({ children }: { children: React.ReactNode }) => {
                 // Fallback to localStorage
                 const savedPosition = localStorage.getItem(`scrollPosition-${pathname}`);
                 if (savedPosition !== null) {
-                    window.scrollTo(0, parseInt(savedPosition));
+                    window.scrollTo(0, parseInt(savedPosition, 10));
                     updateScrollbarThumb();
                     localStorage.removeItem(`scrollPosition-${pathname}`);
                 }

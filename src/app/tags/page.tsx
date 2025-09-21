@@ -21,8 +21,11 @@ const getSizeLevel = (count: number, minCount: number, maxCount: number): number
 };
 
 export default function TagsPage() {
+    // Flatten the tags array first
+    const flatTags = tags.flat();
+
     // Count tag frequencies
-    const tagFrequencies = tags.reduce<Record<string, number>>((acc, tag) => {
+    const tagFrequencies = flatTags.reduce<Record<string, number>>((acc, tag) => {
         acc[tag] = (acc[tag] || 0) + 1;
         return acc;
     }, {});

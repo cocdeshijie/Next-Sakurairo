@@ -1,23 +1,26 @@
 import { getPosts } from "@/app/actions/getPosts";
 import PostList from "@/components/ui/Posts/list";
 import Tag from "@/components/ui/Tags";
-import { config, tags, type Tags } from "#site/content";
+import { config, tags } from "#site/content";
 
 interface TagProps {
-    params: {
+    params: Promise<{
         slug: string
-    }
+    }>
 }
 
-export function generateStaticParams(): TagProps['params'][] {
-    const uniqueTags: Tags = Array.from(new Set(tags)); // Remove duplicates
+export function generateStaticParams(): { slug: string }[] {
+    // Flatten the nested array first, then remove duplicates
+    const flatTags = tags.flat();
+    const uniqueTags = Array.from(new Set(flatTags));
     return uniqueTags.map((tag: string) => ({
         slug: tag
     }));
 }
 
 export default async function TagPage({ params }: TagProps) {
-    const tag = params.slug;
+    const resolvedParams = await params;
+    const tag = resolvedParams.slug;
     const result = await getPosts(0, config.posts_config.posts_per_page, tag)
     const initialPosts = result.posts;
     const lastPage = result.lastPage

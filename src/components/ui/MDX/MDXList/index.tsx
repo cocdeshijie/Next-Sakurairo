@@ -18,8 +18,9 @@ interface ListItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
  */
 function isCheckboxInput(element: React.ReactNode): element is React.ReactElement<InputHTMLAttributes<HTMLInputElement>> {
     return React.isValidElement(element) &&
+        typeof element.type === 'string' &&
         element.type === 'input' &&
-        element.props.type === 'checkbox';
+        (element.props as InputHTMLAttributes<HTMLInputElement>).type === 'checkbox';
 }
 
 // Unordered List Component
