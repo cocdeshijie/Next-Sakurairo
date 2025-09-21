@@ -5,10 +5,23 @@ import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
 
-interface PageProps {
-    params: {
-        path: string[];
-    };
+type Params = {
+    path: string[];
+};
+
+type PageProps = {
+    params: Promise<Params>;
+};
+
+type PageEntry = (typeof pages)[number];
+
+type LegacyPageEntry = PageEntry & {
+    originalPath?: string;
+};
+
+function getLegacyOriginalPath(page: PageEntry): string | undefined {
+    const candidate = (page as LegacyPageEntry).originalPath;
+    return typeof candidate === "string" ? candidate : undefined;
 }
 /* ------------------------------------------------------------ *
  * Helpers
@@ -22,21 +35,23 @@ function joinPath(segments: string[]): string {
 function getPageByPath(segments: string[]) {
     const target = joinPath(segments);  // "folder/page-test"
 
-    return pages.find(
-        page => page.path === target ||
+    return pages.find(page => {
+        const legacyOriginalPath = getLegacyOriginalPath(page);
+        return page.path === target ||
             page.permalink === `/${target}` ||
             // For backward compatibility
-            page.originalPath === target ||
-            page.originalPath === `pages/${target}`
-    );
+            legacyOriginalPath === target ||
+            legacyOriginalPath === `pages/${target}`;
+    });
 }
 
 /* ------------------------------------------------------------ *
  * Metadata + static generation
  * ------------------------------------------------------------ */
 
-export function generateMetadata({ params }: PageProps): Metadata {
-    const page = getPageByPath(params.path);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { path } = await params;
+    const page = getPageByPath(path);
     if (page == null) return {};
     return {
         title: page.title,
@@ -44,7 +59,7 @@ export function generateMetadata({ params }: PageProps): Metadata {
     };
 }
 
-export function generateStaticParams(): PageProps["params"][] {
+export function generateStaticParams(): Params[] {
     /*  turn "foo/bar/baz" → ["foo","bar","baz"] so Next can
         pre-build every page at `next build` time                  */
     return pages.map(page => ({
@@ -52,10 +67,9 @@ export function generateStaticParams(): PageProps["params"][] {
     }));
 }
 
-export default function Page({ params }: PageProps) {
-    const page = getPageByPath(params.path);
-
-    if (page == null) return notFound();
+export default async function Page({ params }: PageProps) {
+    const { path } = await params;
+    const page = getPageByPath(path) ?? notFound();
 
     return (
         <article>
