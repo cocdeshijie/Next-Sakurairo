@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { JSDOM } from 'jsdom';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Optional: Implement a more robust caching mechanism for production
 const faviconCache: { [key: string]: string } = {};
 
@@ -11,7 +15,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const href = url.searchParams.get('href');
 
-    if (!href || typeof href !== 'string') {
+    if (!href) {
         return NextResponse.json({ error: 'Invalid href parameter' }, { status: 400 });
     }
 
