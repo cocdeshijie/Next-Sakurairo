@@ -73,19 +73,22 @@ const Header = () => {
                                                     open={hoverCardIsHovered}
                                                     onOpenChange={setHoverCardIsHovered}>
                                         <span className={"hover:underline group-hover:no-underline"}>
-                                            {item.href.startsWith('/') ? (
-                                                <Link href={item.href} passHref legacyBehavior>
-                                                    <HoverCard.Trigger
-                                                        className={"font-semibold text-theme-500 dark:text-white"}>
+                                            {item.href.startsWith("/") ? (
+                                                <HoverCard.Trigger asChild>
+                                                    <Link
+                                                        href={item.href}
+                                                        className="font-semibold text-theme-500 dark:text-white"
+                                                    >
                                                         {item.title}
-                                                    </HoverCard.Trigger>
-                                                </Link>
+                                                    </Link>
+                                                </HoverCard.Trigger>
                                             ) : (
-                                                <HoverCard.Trigger
-                                                    href={item.href}
-                                                    className={"font-semibold text-theme-500 dark:text-white"}
-                                                    target={"_blank"}>
-                                                    {item.title}
+                                                <HoverCard.Trigger asChild>
+                                                    <a href={item.href}
+                                                       className={"font-semibold text-theme-500 dark:text-white"}
+                                                       target={"_blank"}>
+                                                        {item.title}
+                                                    </a>
                                                 </HoverCard.Trigger>
                                             )}
                                         </span>

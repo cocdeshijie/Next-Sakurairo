@@ -1,5 +1,6 @@
 import { cn } from "@/utils/cn";
 import { config, type Config } from "#site/content";
+import React from "react";
 
 const Footer = () => {
     return (
@@ -13,7 +14,7 @@ const Footer = () => {
                         <div><div className={"mb-4"}>
                         <span className={"text-lg font-medium text-theme-700 dark:text-theme-200"}>
                             {config.footer.line_1.map((item: Config["footer"]["line_1"], index: number) => (
-                                <>
+                                <React.Fragment key={item.href}>
                                     <a
                                         key={index}
                                         href={item.href}
@@ -21,7 +22,7 @@ const Footer = () => {
                                         {item.text}
                                     </a>
                                     {index < config.footer.line_1.length - 1 && " | "}
-                                </>
+                                </React.Fragment>
                             ))}
                         </span>
                             </div>
