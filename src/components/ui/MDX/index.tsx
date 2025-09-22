@@ -7,6 +7,7 @@ import { tableComponents } from "@/components/ui/MDX/MDXTable";
 import { listComponents } from "@/components/ui/MDX/MDXList";
 import { AnilistTracker } from "@/components/ui/AnilistTracker";
 import GiscusComments from "@/components/ui/Giscus";
+import LinkCard from "@/components/ui/LinkCard";
 
 /* -------------------------------------------------- */
 /* 🔧 Dynamic compiler                                 */
@@ -95,6 +96,7 @@ const sharedComponents = {
     MDXInlineCode,
     AnilistTracker,
     GiscusComments,
+    LinkCard,
     ...components,
 };
 

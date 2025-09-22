@@ -32,6 +32,8 @@ header_navigation:
         href: "/folder/page-folder-preview"
       - title: AniList Preview
         href: "/anilist-preview"
+      - title: Components Preview
+        href: "/components-preview"
 
 home_working_on:
   - Next.js
@@ -74,6 +76,8 @@ footer:
       href: "/page-preview"
     - text: AniList Preview
       href: "/anilist-preview"
+    - text: Components Preview
+      href: "/components-preview"
     - text: Tags
       href: "/tags"
   line_2: 誰でも大好き!
