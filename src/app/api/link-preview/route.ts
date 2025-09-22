@@ -24,7 +24,7 @@ type LinkPreviewPayload = {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const CACHE_DURATION_MS = 1000 * 60 * 30; // 30 minutes
+const CACHE_DURATION_MS = 1000 * 60 * 60 * 12; // 12 hours
 const REQUEST_TIMEOUT_MS = 8000;
 const MAX_IMAGE_BYTES = 1024 * 1024 * 4; // 4 MB
 const metadataCache = new Map<string, { expires: number; payload: LinkPreviewPayload }>();
@@ -32,8 +32,12 @@ const metadataCache = new Map<string, { expires: number; payload: LinkPreviewPay
 /* --------------------------------- Route --------------------------------- */
 
 export async function GET(request: Request) {
-    const url = new URL(request.url);
-    const targetUrl = url.searchParams.get("url");
+    // ✅ Ensure absolute URL for robust parsing across hosts
+    const reqUrl = new URL(
+        request.url,
+        process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost"
+    );
+    const targetUrl = reqUrl.searchParams.get("url");
 
     if (!targetUrl) {
         return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
@@ -117,13 +121,13 @@ async function extractMetadata(html: string, baseUrl: URL): Promise<LinkPreviewP
     let accentBase: string | null;
     const candidates: { hex: string; source: LinkPreviewColorSource }[] = [];
 
-    if (imageUrl) {
-        const c = await extractImageColor(imageUrl);
+    if (isHttpUrl(imageUrl)) {
+        const c = await extractImageColor(imageUrl!);
         if (c) candidates.push({ hex: c, source: "image" });
     }
 
-    if (faviconUrl) {
-        const c = await extractImageColor(faviconUrl);
+    if (isHttpUrl(faviconUrl)) {
+        const c = await extractImageColor(faviconUrl!);
         if (c) candidates.push({ hex: c, source: "favicon" });
     }
 
@@ -172,7 +176,7 @@ async function fetchWithTimeout(resource: string, timeout: number, referer?: str
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 Accept:
                     "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-                ...(referer ? { Referer: referer } : {}),
+                ...(referer && referer !== "null" && referer !== "undefined" ? { Referer: referer } : {}),
             },
         });
     } finally {
@@ -184,7 +188,7 @@ async function fetchWithTimeout(resource: string, timeout: number, referer?: str
 
 async function loadManifestColor(manifestUrl: string): Promise<string | null> {
     try {
-        const res = await fetchWithTimeout(manifestUrl, REQUEST_TIMEOUT_MS, new URL(manifestUrl).origin);
+        const res = await fetchWithTimeout(manifestUrl, REQUEST_TIMEOUT_MS, refererFor(manifestUrl));
         if (!res.ok) return null;
         const manifest = await res.json();
         const candidates = [manifest.theme_color, manifest.background_color].filter(Boolean) as string[];
@@ -285,12 +289,15 @@ function extractColorFromSVG(svg: string): string | null {
 
 async function extractImageColor(imageUrl: string): Promise<string | null> {
     try {
-        const res = await fetchWithTimeout(imageUrl, REQUEST_TIMEOUT_MS, new URL(imageUrl).origin);
+        const res = await fetchWithTimeout(imageUrl, REQUEST_TIMEOUT_MS, refererFor(imageUrl));
         if (!res.ok) return null;
 
-        const contentType = res.headers.get("content-type")?.toLowerCase() ?? "";
-        const contentLength = res.headers.get("content-length");
-        if (contentLength && Number(contentLength) > MAX_IMAGE_BYTES) return null;
+        const contentType = readHeader(res.headers as any, "content-type")?.toLowerCase() ?? "";
+        const contentLengthHeader = readHeader(res.headers as any, "content-length");
+        if (contentLengthHeader) {
+            const len = parseInt(contentLengthHeader, 10);
+            if (!Number.isNaN(len) && len > MAX_IMAGE_BYTES) return null;
+        }
 
         const buf = Buffer.from(await res.arrayBuffer());
         if (buf.byteLength > MAX_IMAGE_BYTES) return null;
@@ -600,4 +607,53 @@ function decodeHtmlEntities(text: string) {
 
 function cleanText(value: string) {
     return value.replace(/\s+/g, " ").trim();
+}
+
+function isHttpUrl(u?: string | null) {
+    if (!u) return false;
+    try {
+        const x = new URL(u);
+        return x.protocol === "http:" || x.protocol === "https:";
+    } catch {
+        return false;
+    }
+}
+
+function refererFor(u: string): string | undefined {
+    try {
+        const x = new URL(u);
+        return x.protocol === "http:" || x.protocol === "https:" ? x.origin : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
+/**
+ * Read a header value defensively. Some runtimes return a plain object
+ * instead of a real Headers instance.
+ */
+function readHeader(
+    headers: Headers | Record<string, unknown> | null | undefined,
+    name: string
+): string | null {
+    if (!headers) return null;
+    const lower = name.toLowerCase();
+
+    const any = headers as any;
+    if (typeof any.get === "function") {
+        try {
+            return any.get(name) ?? any.get(lower) ?? null;
+        } catch {
+            // fall through
+        }
+    }
+
+    for (const key in any) {
+        if (Object.prototype.hasOwnProperty.call(any, key) && key.toLowerCase() === lower) {
+            const v = (any as Record<string, unknown>)[key];
+            if (Array.isArray(v)) return (v[0] as string) ?? null;
+            return (v as string) ?? null;
+        }
+    }
+    return null;
 }
