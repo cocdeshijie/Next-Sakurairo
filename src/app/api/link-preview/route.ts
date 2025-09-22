@@ -24,50 +24,74 @@ type LinkPreviewPayload = {
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-const CACHE_DURATION_MS = 1000 * 60 * 60 * 12; // 12 hours
+const CACHE_DURATION_MS = 1000 * 60 * 30; // 30 minutes
 const REQUEST_TIMEOUT_MS = 8000;
 const MAX_IMAGE_BYTES = 1024 * 1024 * 4; // 4 MB
-const metadataCache = new Map<string, { expires: number; payload: LinkPreviewPayload }>();
+
+/* ------------------------------ Global cache ------------------------------ */
+/** Avoid Map.get() entirely; use a plain object stored on globalThis. */
+declare global {
+    // eslint-disable-next-line no-var
+    var __linkPreviewCache__:
+        | Record<string, { expires: number; payload: LinkPreviewPayload }>
+        | undefined;
+}
+const metadataCache =
+    (globalThis as any).__linkPreviewCache__ ??
+    ((globalThis as any).__linkPreviewCache__ = {});
 
 /* --------------------------------- Route --------------------------------- */
 
 export async function GET(request: Request) {
-    // ✅ Ensure absolute URL for robust parsing across hosts
-    const reqUrl = new URL(
-        request.url,
-        process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost"
-    );
-    const targetUrl = reqUrl.searchParams.get("url");
-
-    if (!targetUrl) {
-        return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
-    }
-
-    let parsedUrl: URL;
-    try {
-        parsedUrl = new URL(targetUrl);
-    } catch {
-        return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
-    }
-
-    const cacheKey = parsedUrl.toString();
-    const cached = metadataCache.get(cacheKey);
-    if (cached && cached.expires > Date.now()) {
-        return NextResponse.json(cached.payload);
-    }
+    const stage = (s: string, extra?: unknown) =>
+        console.warn("[link-preview stage]", s, extra ?? "");
 
     try {
+        // Ensure absolute URL for robust parsing
+        const base =
+            process.env.NEXT_PUBLIC_SITE_URL ??
+            process.env.VERCEL_URL?.startsWith("http")
+                ? (process.env.VERCEL_URL as string)
+                : `http://${process.env.VERCEL_URL ?? "localhost"}`;
+        const reqUrl = new URL(request.url, base);
+
+        // Read ?url= param without relying on URLSearchParams.get
+        const targetUrl = safeQueryParam(reqUrl, "url");
+        if (!targetUrl) {
+            return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
+        }
+
+        let parsedUrl: URL;
+        try {
+            parsedUrl = new URL(targetUrl);
+        } catch {
+            return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+        }
+
+        const cacheKey = parsedUrl.toString();
+        const cached = metadataCache[cacheKey];
+        if (cached && cached.expires > Date.now()) {
+            stage("cache-hit", cacheKey);
+            return NextResponse.json(cached.payload);
+        }
+
+        stage("fetch-page:start", cacheKey);
         const response = await fetchWithTimeout(parsedUrl.toString(), REQUEST_TIMEOUT_MS);
-        if (!response.ok) throw new Error(`Failed to fetch URL: ${response.statusText}`);
-
-        const finalUrl = response.url || parsedUrl.toString();
+        if (!response || !response.ok) {
+            throw new Error(`Failed to fetch URL: ${response?.status} ${response?.statusText}`);
+        }
+        const finalUrl = (response as any).url || parsedUrl.toString();
         const html = await response.text();
-        const metadata = await extractMetadata(html, new URL(finalUrl));
+        stage("fetch-page:ok", (response as any).status ?? "");
 
-        metadataCache.set(cacheKey, {
+        stage("extract:start");
+        const metadata = await extractMetadata(html, new URL(finalUrl));
+        stage("extract:ok");
+
+        metadataCache[cacheKey] = {
             expires: Date.now() + CACHE_DURATION_MS,
             payload: metadata,
-        });
+        };
 
         return NextResponse.json(metadata);
     } catch (error) {
@@ -172,10 +196,12 @@ async function fetchWithTimeout(resource: string, timeout: number, referer?: str
             redirect: "follow",
             signal: controller.signal,
             headers: {
+                // Being a bit friendlier to large sites/CDNs:
                 "User-Agent":
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 Accept:
                     "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
                 ...(referer && referer !== "null" && referer !== "undefined" ? { Referer: referer } : {}),
             },
         });
@@ -189,7 +215,7 @@ async function fetchWithTimeout(resource: string, timeout: number, referer?: str
 async function loadManifestColor(manifestUrl: string): Promise<string | null> {
     try {
         const res = await fetchWithTimeout(manifestUrl, REQUEST_TIMEOUT_MS, refererFor(manifestUrl));
-        if (!res.ok) return null;
+        if (!res || !res.ok) return null;
         const manifest = await res.json();
         const candidates = [manifest.theme_color, manifest.background_color].filter(Boolean) as string[];
         let best: { c: string; score: number } | null = null;
@@ -290,10 +316,10 @@ function extractColorFromSVG(svg: string): string | null {
 async function extractImageColor(imageUrl: string): Promise<string | null> {
     try {
         const res = await fetchWithTimeout(imageUrl, REQUEST_TIMEOUT_MS, refererFor(imageUrl));
-        if (!res.ok) return null;
+        if (!res || !res.ok) return null;
 
-        const contentType = readHeader(res.headers as any, "content-type")?.toLowerCase() ?? "";
-        const contentLengthHeader = readHeader(res.headers as any, "content-length");
+        const contentType = readHeader((res as any).headers, "content-type")?.toLowerCase() ?? "";
+        const contentLengthHeader = readHeader((res as any).headers, "content-length");
         if (contentLengthHeader) {
             const len = parseInt(contentLengthHeader, 10);
             if (!Number.isNaN(len) && len > MAX_IMAGE_BYTES) return null;
@@ -629,7 +655,7 @@ function refererFor(u: string): string | undefined {
 }
 
 /**
- * Read a header value defensively. Some runtimes return a plain object
+ * Read a header value defensively. Some runtimes hand back a plain object
  * instead of a real Headers instance.
  */
 function readHeader(
@@ -640,7 +666,7 @@ function readHeader(
     const lower = name.toLowerCase();
 
     const any = headers as any;
-    if (typeof any.get === "function") {
+    if (typeof any?.get === "function") {
         try {
             return any.get(name) ?? any.get(lower) ?? null;
         } catch {
@@ -653,6 +679,38 @@ function readHeader(
             const v = (any as Record<string, unknown>)[key];
             if (Array.isArray(v)) return (v[0] as string) ?? null;
             return (v as string) ?? null;
+        }
+    }
+    return null;
+}
+
+/**
+ * Safely read a query param without assuming URLSearchParams.get exists.
+ */
+function safeQueryParam(u: URL, key: string): string | null {
+    try {
+        const sp: any = (u as any).searchParams;
+        if (sp && typeof sp.get === "function") {
+            const v = sp.get(key);
+            return typeof v === "string" ? v : v == null ? null : String(v);
+        }
+    } catch {
+        // fall through to manual parse
+    }
+    const q = u.search && u.search.startsWith("?") ? u.search.slice(1) : u.search ?? "";
+    if (!q) return null;
+    for (const pair of q.split("&")) {
+        if (!pair) continue;
+        const idx = pair.indexOf("=");
+        const rawK = idx >= 0 ? pair.slice(0, idx) : pair;
+        const rawV = idx >= 0 ? pair.slice(idx + 1) : "";
+        try {
+            const k = decodeURIComponent(rawK.replace(/\+/g, "%20"));
+            if (k === key) {
+                return decodeURIComponent(rawV.replace(/\+/g, "%20"));
+            }
+        } catch {
+            // ignore malformed components
         }
     }
     return null;
