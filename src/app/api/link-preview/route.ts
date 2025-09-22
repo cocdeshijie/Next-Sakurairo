@@ -29,7 +29,7 @@ const REQUEST_TIMEOUT_MS = 8000;
 const MAX_IMAGE_BYTES = 1024 * 1024 * 4; // 4 MB
 
 /* ------------------------------ Global cache ------------------------------ */
-/** Avoid Map.get() entirely; use a plain object stored on globalThis. */
+/** Use a plain object on globalThis (avoid Map.get in odd runtimes). */
 declare global {
     // eslint-disable-next-line no-var
     var __linkPreviewCache__:
@@ -50,12 +50,11 @@ export async function GET(request: Request) {
         // Ensure absolute URL for robust parsing
         const base =
             process.env.NEXT_PUBLIC_SITE_URL ??
-            process.env.VERCEL_URL?.startsWith("http")
+            (process.env.VERCEL_URL?.startsWith("http")
                 ? (process.env.VERCEL_URL as string)
-                : `http://${process.env.VERCEL_URL ?? "localhost"}`;
+                : `http://${process.env.VERCEL_URL ?? "localhost"}`);
         const reqUrl = new URL(request.url, base);
 
-        // Read ?url= param without relying on URLSearchParams.get
         const targetUrl = safeQueryParam(reqUrl, "url");
         if (!targetUrl) {
             return NextResponse.json({ error: "Missing url parameter" }, { status: 400 });
@@ -101,21 +100,21 @@ export async function GET(request: Request) {
 }
 
 /* ----------------------------- Core Extraction ---------------------------- */
-
+/** Lightweight, dependency-free HTML scanning (no jsdom). */
 async function extractMetadata(html: string, baseUrl: URL): Promise<LinkPreviewPayload> {
-    const { JSDOM } = await import("jsdom");
-    const dom = new JSDOM(html);
-    const doc = dom.window.document;
+    const titleTag =
+        firstMatch(html, /<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ??
+        baseUrl.hostname;
 
     const rawTitle =
         getFirstTruthy([
-            getMetaContent(doc, ["og:title", "twitter:title", "title"]),
-            doc.title,
+            getMetaContent(html, ["og:title", "twitter:title", "title"]),
+            titleTag,
             baseUrl.hostname,
         ]) || baseUrl.hostname;
 
     const rawDescription = getFirstTruthy([
-        getMetaContent(doc, ["og:description", "twitter:description", "description"]),
+        getMetaContent(html, ["og:description", "twitter:description", "description"]),
     ]);
 
     const title = decodeHtmlEntities(cleanText(rawTitle));
@@ -123,18 +122,18 @@ async function extractMetadata(html: string, baseUrl: URL): Promise<LinkPreviewP
 
     const imageUrl = resolveUrl(
         baseUrl,
-        getMetaContent(doc, ["og:image", "og:image:url", "twitter:image", "twitter:image:src", "image"])
+        getMetaContent(html, ["og:image", "og:image:url", "twitter:image", "twitter:image:src", "image"])
     );
 
-    const faviconHref = getFaviconHref(doc);
+    const faviconHref = getFaviconHref(html);
     const faviconUrl = resolveUrl(baseUrl, faviconHref || undefined) ?? `${baseUrl.origin}/favicon.ico`;
 
     const themeColor =
-        pickBestThemeColor(doc) ||
-        normalizeColor(getMetaContent(doc, ["msapplication-TileColor", "msapplication-navbutton-color"]));
+        pickBestThemeColor(html) ||
+        normalizeColor(getMetaContent(html, ["msapplication-TileColor", "msapplication-navbutton-color"]));
 
     let manifestColor: string | null = null;
-    const manifestHref = doc.querySelector("link[rel='manifest']")?.getAttribute("href");
+    const manifestHref = getLinkHref(html, (rel) => rel === "manifest");
     const manifestUrl = resolveUrl(baseUrl, manifestHref || undefined);
     if (manifestUrl) {
         manifestColor = await loadManifestColor(manifestUrl);
@@ -196,7 +195,6 @@ async function fetchWithTimeout(resource: string, timeout: number, referer?: str
             redirect: "follow",
             signal: controller.signal,
             headers: {
-                // Being a bit friendlier to large sites/CDNs:
                 "User-Agent":
                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
                 Accept:
@@ -233,57 +231,121 @@ async function loadManifestColor(manifestUrl: string): Promise<string | null> {
     }
 }
 
-function pickBestThemeColor(doc: Document): string | null {
-    const metas = Array.from(doc.querySelectorAll("meta[name='theme-color']"));
+/* ------------------------------ HTML Scanners ----------------------------- */
+
+function firstMatch(s: string, re: RegExp): RegExpMatchArray | null {
+    try {
+        return s.match(re);
+    } catch {
+        return null;
+    }
+}
+
+function scanTags(html: string, tag: "meta" | "link"): string[] {
+    const re = tag === "meta" ? /<meta[^>]*>/gi : /<link[^>]*>/gi;
+    return html.match(re) ?? [];
+}
+
+function parseAttrs(tagHtml: string): Record<string, string> {
+    const attrs: Record<string, string> = {};
+    const re = /(\w[\w:-]*)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^'"\s<>`]+)))?/g;
+    let m: RegExpExecArray | null;
+    // eslint-disable-next-line no-cond-assign
+    while ((m = re.exec(tagHtml))) {
+        const key = m[1].toLowerCase();
+        const val = m[2] ?? m[3] ?? m[4] ?? "";
+        attrs[key] = val;
+    }
+    return attrs;
+}
+
+function getMetaContent(html: string, names: string[]): string | null {
+    const metas = scanTags(html, "meta").map(parseAttrs);
+    for (const name of names) {
+        const lower = name.toLowerCase();
+        for (const at of metas) {
+            const nm = (at.name ?? at.property ?? "").toLowerCase();
+            if (nm === lower && typeof at.content === "string" && at.content.trim()) {
+                return at.content.trim();
+            }
+        }
+    }
+    return null;
+}
+
+function getAllMetaContents(html: string, name: string): string[] {
+    const out: string[] = [];
+    const metas = scanTags(html, "meta").map(parseAttrs);
+    const lower = name.toLowerCase();
+    for (const at of metas) {
+        const nm = (at.name ?? at.property ?? "").toLowerCase();
+        if (nm === lower && typeof at.content === "string" && at.content.trim()) {
+            out.push(at.content.trim());
+        }
+    }
+    return out;
+}
+
+function getLinkHref(
+    html: string,
+    relPredicate: (rel: string) => boolean
+): string | null {
+    const links = scanTags(html, "link").map(parseAttrs);
+    for (const at of links) {
+        const rel = (at.rel ?? "").toLowerCase();
+        if (!rel) continue;
+        if (relPredicate(rel)) {
+            const href = at.href ?? "";
+            if (href) return href;
+        }
+    }
+    return null;
+}
+
+function getFaviconHref(html: string): string | null {
+    const links = scanTags(html, "link").map(parseAttrs);
+    type Item = { href: string; area: number; isMask: boolean };
+    const items: Item[] = [];
+    for (const at of links) {
+        const rel = (at.rel ?? "").toLowerCase();
+        if (!rel) continue;
+        const isIcon = rel.includes("icon") || rel === "mask-icon";
+        if (!isIcon) continue;
+
+        const href = at.href ?? "";
+        if (!href) continue;
+
+        const sizesAttr = (at.sizes ?? "").toLowerCase();
+        let area = 0;
+        if (sizesAttr && sizesAttr.includes("x")) {
+            const parts = sizesAttr.split("x").map((n) => Number(n));
+            if (parts.length === 2 && !parts.some(Number.isNaN)) {
+                area = parts[0] * parts[1];
+            }
+        }
+        const isMask = rel.includes("mask");
+        items.push({ href, area, isMask });
+    }
+
+    items.sort((a, b) => {
+        if (a.isMask !== b.isMask) return a.isMask ? 1 : -1; // prefer non-mask
+        return b.area - a.area; // prefer bigger
+    });
+
+    return items[0]?.href ?? null;
+}
+
+function pickBestThemeColor(html: string): string | null {
+    const contents = getAllMetaContents(html, "theme-color");
     let best: { c: string; score: number } | null = null;
-    for (const m of metas) {
-        const c = normalizeColor(m.getAttribute("content"));
+    for (const raw of contents) {
+        const c = normalizeColor(raw);
         if (!c) continue;
         const { s, l } = hexToHsl(c);
         const score = s * (1 - Math.abs(l - 0.5) * 1.2);
         if (!best || score > best.score) best = { c, score };
     }
     return best?.c ?? null;
-}
-
-function getMetaContent(doc: Document, names: string[]): string | null {
-    const found: string[] = [];
-    for (const name of names) {
-        const nodes = [
-            ...doc.querySelectorAll(`meta[name='${name}']`),
-            ...doc.querySelectorAll(`meta[property='${name}']`),
-        ];
-        for (const meta of nodes) {
-            const content = meta.getAttribute("content");
-            if (content) found.push(content.trim());
-        }
-    }
-    return found.length ? found[0] : null;
-}
-
-function getFaviconHref(doc: Document): string | null {
-    const links = Array.from(doc.querySelectorAll("link[rel*='icon'], link[rel='mask-icon']"));
-    if (!links.length) return null;
-
-    const parsed = links.map((link) => {
-        const href = link.getAttribute("href") || "";
-        const sizesAttr = (link.getAttribute("sizes") || "").toLowerCase();
-        const sizes =
-            sizesAttr && sizesAttr.includes("x")
-                ? sizesAttr.split("x").map((n) => Number(n))
-                : [0, 0];
-        const area =
-            sizes.length === 2 && !sizes.some(Number.isNaN) ? sizes[0] * sizes[1] : 0;
-        const isMask = (link.getAttribute("rel") || "").includes("mask");
-        return { href, area, isMask };
-    });
-
-    parsed.sort((a, b) => {
-        if (a.isMask !== b.isMask) return a.isMask ? 1 : -1; // prefer non-mask
-        return b.area - a.area; // prefer bigger
-    });
-
-    return parsed[0]?.href || null;
 }
 
 /* ---------------------------- Image Color Logic --------------------------- */
