@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { config } from "#site/content";
+import { generateColorPalette } from "./themeColor";
 
 const OG_WIDTH = 1200;
 const OG_HEIGHT = 630;
@@ -117,6 +118,10 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
 
     const profileImagePath = config.site_info?.profile_image;
     const profileImageUrl = resolveAssetUrl(profileImagePath, assetBase);
+    const palette = generateColorPalette(config.site_info.theme_color, config.site_info.theme_color_hue_shift ?? 0);
+    const gradientBackground = `linear-gradient(140deg, ${palette[600]} 0%, ${palette[400]} 48%, ${palette[500]} 100%)`;
+    const domain = config.site_info.domain?.trim();
+    const domainLabel = domain ? domain.toUpperCase() : undefined;
 
     return new ImageResponse(
         (
@@ -127,21 +132,37 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "#f8fafc",
+                    backgroundImage: gradientBackground,
+                    backgroundColor: palette[500],
                     color: "#0f172a",
                     fontFamily: FONT_FAMILY,
                     position: "relative",
                     letterSpacing: "-0.01em",
+                    overflow: "hidden",
                 }}
             >
                 <div
                     style={{
                         position: "absolute",
+                        inset: 0,
+                        background: "radial-gradient(80% 120% at 20% 20%, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0) 68%)",
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "radial-gradient(55% 70% at 82% 85%, rgba(15,23,42,0.2) 0%, rgba(15,23,42,0) 70%)",
+                    }}
+                />
+                <div
+                    style={{
+                        position: "absolute",
                         inset: 72,
                         borderRadius: 48,
-                        border: "2px solid #e2e8f0",
-                        backgroundColor: "rgba(255,255,255,0.92)",
-                        boxShadow: "0 32px 80px rgba(15,23,42,0.08)",
+                        border: "1.6px solid rgba(255,255,255,0.55)",
+                        background: "linear-gradient(150deg, rgba(255,255,255,0.32) 0%, rgba(255,255,255,0.08) 100%)",
+                        boxShadow: "0 48px 120px rgba(15,23,42,0.24)",
                     }}
                 />
                 <div
@@ -156,6 +177,7 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                         justifyContent: "center",
                         gap: contentGap,
                         textAlign: isCentered ? "center" : "left",
+                        color: "rgba(15,23,42,0.94)",
                     }}
                 >
                     <span
@@ -173,7 +195,7 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                             style={{
                                 fontSize: subtitleSize,
                                 fontWeight: 500,
-                                color: "#475569",
+                                color: "rgba(15,23,42,0.74)",
                                 lineHeight: 1.3,
                                 maxWidth: "100%",
                             }}
@@ -188,17 +210,42 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                         alt="Profile"
                         style={{
                             position: "absolute",
-                            bottom: 72,
-                            left: 72,
-                            width: 140,
-                            height: 140,
-                            borderRadius: 32,
+                            bottom: 56,
+                            left: 64,
+                            width: 116,
+                            height: 116,
+                            borderRadius: 28,
                             objectFit: "cover",
-                            border: "2px solid #e2e8f0",
-                            backgroundColor: "#ffffff",
-                            padding: 12,
+                            border: "1.6px solid rgba(255,255,255,0.6)",
+                            background: "rgba(255,255,255,0.28)",
+                            padding: 10,
+                            boxShadow: "0 24px 48px rgba(15,23,42,0.18)",
                         }}
                     />
+                ) : null}
+                {domainLabel ? (
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: 64,
+                            right: 72,
+                            padding: "18px 44px",
+                            borderRadius: 999,
+                            border: "1.8px solid rgba(255,255,255,0.55)",
+                            background: "rgba(255,255,255,0.18)",
+                            color: "rgba(15,23,42,0.82)",
+                            fontSize: 32,
+                            fontWeight: 600,
+                            letterSpacing: "0.24em",
+                            textTransform: "uppercase",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 24px 64px rgba(15,23,42,0.22)",
+                        }}
+                    >
+                        {domainLabel}
+                    </div>
                 ) : null}
             </div>
         ),
