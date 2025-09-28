@@ -1,9 +1,5 @@
 site_info:
-  title:
-    text_front: Next Sakurairo
-    text_middle: の
-    text_end: Site
-    text_bottom: work in progress~
+  title: Next Sakurairo
   author: cocdeshijie
   profile_image: "/static/next-sakurairo.png"
   theme_color: "#FFAAA7"
