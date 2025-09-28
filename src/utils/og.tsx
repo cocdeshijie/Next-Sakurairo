@@ -96,6 +96,8 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                     style={{
                         position: "absolute",
                         inset: 0,
+                        display: "flex",
+                        flexDirection: "column",
                         overflow: "hidden",
                     }}
                 >
