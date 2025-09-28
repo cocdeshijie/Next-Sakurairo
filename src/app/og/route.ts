@@ -24,5 +24,6 @@ export async function GET(request: Request) {
         title,
         subtitle,
         align,
+        assetBase: request.url,
     });
 }
