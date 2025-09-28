@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Layout/Header";
@@ -27,7 +27,23 @@ const defaultOgImage = getOgImageUrl({ title: siteTitle, subtitle: homeSubtitle,
 const defaultOgAlt = `${siteTitle} open graph image`;
 const profileImage = config.site_info.profile_image;
 
+const metadataBase = (() => {
+    const domain = config.site_info.domain?.trim();
+    if (!domain) return undefined;
+
+    try {
+        const withProtocol = domain.startsWith("http://") || domain.startsWith("https://")
+            ? domain
+            : `https://${domain}`;
+        return new URL(withProtocol);
+    } catch (error) {
+        console.warn("Invalid metadataBase domain configured:", domain, error);
+        return undefined;
+    }
+})();
+
 export const metadata: Metadata = {
+    metadataBase,
     title: {
         default: siteTitle,
         template: `%s | ${siteTitle}`,
@@ -58,6 +74,9 @@ export const metadata: Metadata = {
         description: siteDescription,
         images: [defaultOgImage],
     },
+};
+
+export const viewport: Viewport = {
     themeColor: config.site_info.theme_color,
 };
 
