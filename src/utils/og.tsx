@@ -239,16 +239,16 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                         alt="Profile"
                         style={{
                             position: "absolute",
-                            bottom: 56,
-                            left: 64,
-                            width: 116,
-                            height: 116,
-                            borderRadius: 28,
+                            bottom: 36,
+                            left: 40,
+                            width: 92,
+                            height: 92,
+                            borderRadius: 24,
                             objectFit: "cover",
-                            border: "1.6px solid rgba(255,255,255,0.6)",
-                            background: "rgba(255,255,255,0.28)",
-                            padding: 10,
-                            boxShadow: "0 24px 48px rgba(15,23,42,0.18)",
+                            border: "1.4px solid rgba(255,255,255,0.6)",
+                            background: "rgba(255,255,255,0.24)",
+                            padding: 8,
+                            boxShadow: "0 20px 40px rgba(15,23,42,0.18)",
                         }}
                     />
                 ) : null}
@@ -256,21 +256,21 @@ export function createOgImage({ title, subtitle, align = "start", assetBase }: O
                     <div
                         style={{
                             position: "absolute",
-                            bottom: 64,
-                            right: 72,
-                            padding: "18px 44px",
+                            bottom: 44,
+                            right: 52,
+                            padding: "14px 32px",
                             borderRadius: 999,
-                            border: "1.8px solid rgba(255,255,255,0.55)",
-                            background: "rgba(255,255,255,0.18)",
+                            border: "1.6px solid rgba(255,255,255,0.5)",
+                            background: "rgba(255,255,255,0.16)",
                             color: "rgba(15,23,42,0.82)",
-                            fontSize: 32,
+                            fontSize: 26,
                             fontWeight: 600,
-                            letterSpacing: "0.24em",
+                            letterSpacing: "0.22em",
                             textTransform: "uppercase",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            boxShadow: "0 24px 64px rgba(15,23,42,0.22)",
+                            boxShadow: "0 20px 52px rgba(15,23,42,0.2)",
                         }}
                     >
                         {domainLabel}
