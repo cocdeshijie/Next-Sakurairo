@@ -31,7 +31,23 @@ function getPostByPath(pathArr: string[]) {
 export async function generateMetadata({ params }: PostProps): Promise<Metadata> {
     const resolvedParams = await params;
     const post = getPostByPath(resolvedParams.path);
-    return post ? { title: post.title, description: post.excerpt } : {};
+    if (!post) return {};
+
+    const description = post.excerpt;
+
+    return {
+        title: post.title,
+        description,
+        openGraph: {
+            title: post.title,
+            description,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description,
+        },
+    };
 }
 
 /* -------------------------------------------------- */

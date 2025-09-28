@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getPosts } from "@/app/actions/getPosts";
 import PostList from "@/components/ui/Posts/list";
 import Tag from "@/components/ui/Tags";
@@ -16,6 +17,27 @@ export function generateStaticParams(): { slug: string }[] {
     return uniqueTags.map((tag: string) => ({
         slug: tag
     }));
+}
+
+export async function generateMetadata({ params }: TagProps): Promise<Metadata> {
+    const resolvedParams = await params;
+    const tag = decodeURIComponent(resolvedParams.slug);
+    const title = `Tag: ${tag}`;
+    const description = `Posts tagged with ${tag} on ${config.site_info.title}`;
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title,
+            description,
+        },
+    };
 }
 
 export default async function TagPage({ params }: TagProps) {

@@ -17,9 +17,27 @@ type RootLayoutProps = {
 const inter = Inter({ subsets: ["latin"] });
 
 // TODO: metadata
+const siteTitle = config.site_info.title;
+const siteDescription = `by ${config.site_info.author}`;
+
 export const metadata: Metadata = {
-    title: `${config.site_info.title}`,
-    description: `by ${config.site_info.author}`,
+    title: {
+        default: siteTitle,
+        template: `%s | ${siteTitle}`,
+    },
+    description: siteDescription,
+    openGraph: {
+        title: siteTitle,
+        description: siteDescription,
+        type: "website",
+        siteName: siteTitle,
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: siteTitle,
+        description: siteDescription,
+    },
+    themeColor: config.site_info.theme_color,
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {

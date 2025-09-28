@@ -54,9 +54,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { path } = resolvedParams;
     const page = getPageByPath(path);
     if (page == null) return {};
+    const description = page.description;
     return {
         title: page.title,
-        description: page.description,
+        description,
+        openGraph: {
+            title: page.title,
+            description,
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: page.title,
+            description,
+        },
     };
 }
 
