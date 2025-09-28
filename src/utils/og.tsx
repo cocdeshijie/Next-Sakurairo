@@ -83,6 +83,66 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
 
     const isCentered = align === "center";
 
+    const trimmedTitle = title.trim();
+    const trimmedSubtitle = subtitle?.trim();
+
+    const normalisedTitleLength = Math.max(
+        1,
+        Math.max(
+            ...trimmedTitle
+                .split(/\s+/)
+                .filter(Boolean)
+                .map((word) => word.length),
+            trimmedTitle.length
+        )
+    );
+
+    const subtitleLength = trimmedSubtitle?.length ?? 0;
+    const longestLine = Math.max(normalisedTitleLength, Math.floor(subtitleLength * 0.85));
+
+    const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+    const baseWidth = isCentered ? 560 : 640;
+    const widthGrowFactor = isCentered ? 24 : 22;
+    const maxWidth = isCentered ? 1020 : 1120;
+    const cardWidth = Math.round(clamp(baseWidth + longestLine * widthGrowFactor, baseWidth, maxWidth));
+
+    const baseTitleSize = isCentered ? 112 : 92;
+    const minTitleSize = isCentered ? 56 : 52;
+    const titlePenaltyStart = isCentered ? 18 : 24;
+    const titlePenaltySlope = isCentered ? 1.45 : 1.15;
+    const titleSize = Math.round(
+        clamp(
+            baseTitleSize - Math.max(0, trimmedTitle.length - titlePenaltyStart) * titlePenaltySlope,
+            minTitleSize,
+            baseTitleSize
+        )
+    );
+
+    const baseSubtitleSize = isCentered ? 44 : 36;
+    const minSubtitleSize = 26;
+    const subtitlePenaltyStart = 32;
+    const subtitlePenaltySlope = 0.55;
+    const subtitleSize = Math.round(
+        clamp(
+            baseSubtitleSize - Math.max(0, subtitleLength - subtitlePenaltyStart) * subtitlePenaltySlope,
+            minSubtitleSize,
+            baseSubtitleSize
+        )
+    );
+
+    const horizontalPadding = Math.round(
+        clamp(cardWidth * (isCentered ? 0.16 : 0.18), isCentered ? 88 : 96, isCentered ? 170 : 188)
+    );
+    const verticalPadding = Math.round(clamp(titleSize * 0.92 + 64 + (subtitle ? subtitleSize * 0.45 : 0), 82, 168));
+
+    const estimatedTitleHeight = titleSize * (isCentered ? 1.18 : 1.12);
+    const estimatedSubtitleHeight = subtitle ? subtitleSize * 1.35 : 0;
+    const baseHeight = verticalPadding * 2 + estimatedTitleHeight + estimatedSubtitleHeight;
+    const cardHeight = Math.round(clamp(baseHeight, 320, 560));
+
+    const contentGap = subtitle ? Math.round(clamp(titleSize * 0.22, 18, 42)) : 0;
+
     return new ImageResponse(
         (
             <div
@@ -162,70 +222,72 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                 </div>
                 <div
                     style={{
-                        position: "absolute",
-                        inset: 48,
-                        borderRadius: 46,
+                        position: "relative",
+                        borderRadius: 52,
+                        width: cardWidth,
+                        minHeight: cardHeight,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        padding: `${verticalPadding}px ${horizontalPadding}px`,
                     }}
                 >
                     <div
                         style={{
                             position: "absolute",
                             inset: 0,
-                            borderRadius: 46,
-                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.16))",
-                            border: "1px solid rgba(255,255,255,0.52)",
-                            boxShadow: "0 60px 140px rgba(15,23,42,0.34), inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -36px 60px rgba(15,23,42,0.24)",
+                            borderRadius: 52,
+                            backgroundImage: `linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.18))`,
+                            border: "1.2px solid rgba(255,255,255,0.62)",
+                            boxShadow: `0 68px 160px ${hexToRgba(accentShadow, 0.38)}, 0 32px 80px ${hexToRgba(accentShadow, 0.28)}, inset 0 1px 0 rgba(255,255,255,0.82), inset 0 -46px 88px ${hexToRgba(accentShadow, 0.32)}`,
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
-                            inset: "30px 34px 46px",
-                            borderRadius: 36,
-                            backgroundImage: `linear-gradient(125deg, rgba(255,255,255,0.32), rgba(255,255,255,0.06)), linear-gradient(155deg, ${hexToRgba(accentGlassTint, 0.22)}, ${hexToRgba(accentGlassShadow, 0.32)})`,
-                            border: "1px solid rgba(255,255,255,0.28)",
-                            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -24px 55px ${hexToRgba(accentShadow, 0.35)}`,
-                            backdropFilter: "blur(16px)",
-                            opacity: 0.92,
+                            inset: 18,
+                            borderRadius: 44,
+                            backgroundImage: `linear-gradient(125deg, rgba(255,255,255,0.32), rgba(255,255,255,0.08)), linear-gradient(155deg, ${hexToRgba(accentGlassTint, 0.28)}, ${hexToRgba(accentGlassShadow, 0.36)})`,
+                            border: "1px solid rgba(255,255,255,0.32)",
+                            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.58), inset 0 -32px 72px ${hexToRgba(accentShadow, 0.38)}`,
+                            backdropFilter: "blur(18px)",
+                            opacity: 0.95,
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
                             inset: 0,
-                            borderRadius: 46,
-                            backgroundImage: `radial-gradient(120% 140% at 18% 12%, rgba(255,255,255,0.85), transparent 60%), radial-gradient(160% 140% at 88% 92%, rgba(148,163,184,0.45), transparent 62%)`,
+                            borderRadius: 52,
+                            backgroundImage: `radial-gradient(115% 140% at 20% 15%, rgba(255,255,255,0.9), transparent 58%), radial-gradient(140% 160% at 88% 92%, ${hexToRgba(accentDark, 0.35)}, transparent 64%)`,
                             mixBlendMode: "screen",
-                            opacity: 0.6,
+                            opacity: 0.7,
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
                             top: 32,
-                            left: 108,
-                            right: 108,
-                            height: 140,
-                            borderRadius: 420,
-                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.75), ${hexToRgba(accentLight, 0.08)})`,
-                            opacity: 0.5,
-                            filter: "blur(26px)",
+                            left: Math.max(52, horizontalPadding - 24),
+                            right: Math.max(52, horizontalPadding - 24),
+                            height: Math.round(clamp(titleSize * 1.1, 120, 200)),
+                            borderRadius: 480,
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.82), ${hexToRgba(accentLight, 0.16)})`,
+                            opacity: 0.6,
+                            filter: "blur(30px)",
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
-                            bottom: 54,
-                            left: 96,
-                            right: 96,
-                            height: 120,
-                            borderRadius: 36,
-                            backgroundImage: `linear-gradient(180deg, ${hexToRgba(accentShadow, 0.55)}, rgba(15,23,42,0))`,
-                            opacity: 0.38,
-                            filter: "blur(28px)",
+                            bottom: 42,
+                            left: Math.max(42, horizontalPadding - 36),
+                            right: Math.max(42, horizontalPadding - 36),
+                            height: Math.round(clamp(cardHeight * 0.18, 90, 160)),
+                            borderRadius: 40,
+                            backgroundImage: `linear-gradient(180deg, ${hexToRgba(accentShadow, 0.58)}, rgba(15,23,42,0))`,
+                            opacity: 0.45,
+                            filter: "blur(30px)",
                         }}
                     />
                     <div
@@ -233,23 +295,23 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                             position: "relative",
                             display: "flex",
                             flexDirection: "column",
-                            gap: 24,
+                            gap: contentGap,
                             textAlign: isCentered ? "center" : "left",
                             alignItems: isCentered ? "center" : "flex-start",
-                            padding: "72px 96px",
                             width: "100%",
-                            maxWidth: isCentered ? 820 : 920,
+                            maxWidth: cardWidth - horizontalPadding * 2,
                         }}
                     >
                         <span
                             style={{
-                                fontSize: isCentered ? 96 : 78,
+                                fontSize: titleSize,
                                 fontWeight: 700,
-                                lineHeight: 1.04,
+                                lineHeight: 1.05,
                                 color: "#0b1120",
-                                textShadow: "0 24px 55px rgba(15,23,42,0.38), 0 10px 24px rgba(255,255,255,0.25)",
-                                letterSpacing: "-0.5px",
+                                textShadow: `0 28px 60px ${hexToRgba(accentShadow, 0.42)}, 0 12px 28px rgba(255,255,255,0.3)`,
+                                letterSpacing: "-0.6px",
                                 wordBreak: "break-word",
+                                hyphens: "auto",
                             }}
                         >
                             {title}
@@ -257,11 +319,12 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                         {subtitle ? (
                             <span
                                 style={{
-                                    fontSize: isCentered ? 40 : 34,
+                                    fontSize: subtitleSize,
                                     fontWeight: 500,
-                                    color: "rgba(15,23,42,0.7)",
-                                    textShadow: "0 16px 36px rgba(15,23,42,0.25)",
-                                    maxWidth: 880,
+                                    color: "rgba(15,23,42,0.72)",
+                                    textShadow: `0 20px 42px ${hexToRgba(accentShadow, 0.32)}`,
+                                    lineHeight: 1.3,
+                                    maxWidth: cardWidth - horizontalPadding * 2,
                                 }}
                             >
                                 {subtitle}
