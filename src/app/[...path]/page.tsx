@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { pages } from "#site/content";
+import { config, pages } from "#site/content";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle } from "@/utils/site";
 
 type Params = {
     path: string[];
@@ -54,9 +56,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { path } = resolvedParams;
     const page = getPageByPath(path);
     if (page == null) return {};
+    const description = page.description;
+    const siteTitle = buildSiteTitle(config.header_logo);
+    const ogImage = getOgImageUrl({
+        title: page.title,
+        subtitle: siteTitle,
+    });
+    const ogAlt = `${page.title} – ${siteTitle}`;
     return {
         title: page.title,
-        description: page.description,
+        description,
+        openGraph: {
+            title: page.title,
+            description,
+            images: [
+                {
+                    url: ogImage,
+                    width: ogImageSize.width,
+                    height: ogImageSize.height,
+                    alt: ogAlt,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: page.title,
+            description,
+            images: [ogImage],
+        },
     };
 }
 

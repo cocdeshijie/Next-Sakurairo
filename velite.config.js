@@ -21,6 +21,7 @@ const config = defineCollection({
             title: s.string(),
             author: s.string(),
             profile_image: s.string(),
+            domain: s.string(),
             theme_color: s.string(),
             theme_color_hue_shift: s.number(),
         }),

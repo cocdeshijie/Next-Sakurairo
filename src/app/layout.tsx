@@ -8,7 +8,9 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { ScrollProvider } from "@/providers/scroll-provider";
 import { cn } from "@/utils/cn";
 import { UtilityButtons } from "@/components/Layout/UtilityButtons";
-import { type Config, config } from "#site/content";
+import { config } from "#site/content";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle, getSiteSubtitle } from "@/utils/site";
 
 type RootLayoutProps = {
     children: React.ReactNode;
@@ -17,9 +19,46 @@ type RootLayoutProps = {
 const inter = Inter({ subsets: ["latin"] });
 
 // TODO: metadata
+const logoTitleParts = config.header_logo;
+const siteTitle = buildSiteTitle(logoTitleParts);
+const siteDescription = `by ${config.site_info.author}`;
+const homeSubtitle = getSiteSubtitle(logoTitleParts);
+const defaultOgImage = getOgImageUrl({ title: siteTitle, subtitle: homeSubtitle, align: "center" });
+const defaultOgAlt = `${siteTitle} open graph image`;
+const profileImage = config.site_info.profile_image;
+
 export const metadata: Metadata = {
-    title: `${config.site_info.title}`,
-    description: `by ${config.site_info.author}`,
+    title: {
+        default: siteTitle,
+        template: `%s | ${siteTitle}`,
+    },
+    description: siteDescription,
+    icons: {
+        icon: profileImage,
+        shortcut: profileImage,
+        apple: profileImage,
+    },
+    openGraph: {
+        title: siteTitle,
+        description: siteDescription,
+        type: "website",
+        siteName: siteTitle,
+        images: [
+            {
+                url: defaultOgImage,
+                width: ogImageSize.width,
+                height: ogImageSize.height,
+                alt: defaultOgAlt,
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: siteTitle,
+        description: siteDescription,
+        images: [defaultOgImage],
+    },
+    themeColor: config.site_info.theme_color,
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {

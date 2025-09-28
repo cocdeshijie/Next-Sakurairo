@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { posts } from "#site/content";
+import { config, posts } from "#site/content";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
@@ -8,6 +8,8 @@ import { HiMiniCalendarDays } from "react-icons/hi2";
 import TOC from "@/components/ui/TOC";
 import Tag from "@/components/ui/Tags";
 import GiscusComments from "@/components/ui/Giscus";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle } from "@/utils/site";
 
 interface PostProps {
     params: Promise<{ path: string[] }>
@@ -31,7 +33,38 @@ function getPostByPath(pathArr: string[]) {
 export async function generateMetadata({ params }: PostProps): Promise<Metadata> {
     const resolvedParams = await params;
     const post = getPostByPath(resolvedParams.path);
-    return post ? { title: post.title, description: post.excerpt } : {};
+    if (!post) return {};
+
+    const description = post.excerpt;
+    const siteTitle = buildSiteTitle(config.header_logo);
+    const ogImage = getOgImageUrl({
+        title: post.title,
+        subtitle: siteTitle,
+    });
+    const ogAlt = `${post.title} – ${siteTitle}`;
+
+    return {
+        title: post.title,
+        description,
+        openGraph: {
+            title: post.title,
+            description,
+            images: [
+                {
+                    url: ogImage,
+                    width: ogImageSize.width,
+                    height: ogImageSize.height,
+                    alt: ogAlt,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: post.title,
+            description,
+            images: [ogImage],
+        },
+    };
 }
 
 /* -------------------------------------------------- */
