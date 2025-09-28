@@ -70,6 +70,9 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
     const baseColor = config.site_info?.theme_color ?? DEFAULT_THEME_COLOR;
     const accentLight = lighten(baseColor, 0.35);
     const accentDark = darken(baseColor, 0.25);
+    const accentHighlight = lighten(baseColor, 0.6);
+    const accentShadow = darken(baseColor, 0.45);
+    const accentMid = lighten(baseColor, 0.1);
 
     const isCentered = align === "center";
 
@@ -81,13 +84,73 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                     height: "100%",
                     display: "flex",
                     position: "relative",
-                    backgroundImage: `linear-gradient(135deg, ${accentDark}, ${baseColor}, ${accentLight})`,
+                    backgroundImage: `radial-gradient(circle at 18% 24%, ${accentHighlight}, ${accentMid} 42%, ${accentDark} 92%)`,
                     color: "#0f172a",
                     fontFamily: "'Inter', 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif",
                     justifyContent: "center",
                     alignItems: "center",
+                    overflow: "hidden",
                 }}
             >
+                <div
+                    style={{
+                        position: "absolute",
+                        inset: 0,
+                        overflow: "hidden",
+                    }}
+                >
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: -220,
+                            left: -160,
+                            width: 620,
+                            height: 620,
+                            backgroundImage: `radial-gradient(circle at 30% 30%, ${accentHighlight}, rgba(255,255,255,0) 65%)`,
+                            opacity: 0.85,
+                            filter: "blur(18px)",
+                            transform: "rotate(-8deg)",
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: -260,
+                            right: -120,
+                            width: 720,
+                            height: 720,
+                            backgroundImage: `radial-gradient(circle at 72% 68%, ${accentShadow}, rgba(15,23,42,0) 60%)`,
+                            opacity: 0.65,
+                            filter: "blur(24px)",
+                            transform: "rotate(12deg)",
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: -140,
+                            right: -280,
+                            width: 540,
+                            height: 540,
+                            backgroundImage: `linear-gradient(140deg, rgba(255,255,255,0.32), rgba(255,255,255,0) 60%)`,
+                            filter: "blur(26px)",
+                            opacity: 0.8,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: 120,
+                            left: -260,
+                            width: 520,
+                            height: 520,
+                            backgroundImage: `linear-gradient(120deg, rgba(255,255,255,0.22), rgba(255,255,255,0))`,
+                            filter: "blur(32px)",
+                            opacity: 0.75,
+                            transform: "rotate(-18deg)",
+                        }}
+                    />
+                </div>
                 <div
                     style={{
                         position: "absolute",
@@ -103,20 +166,20 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                             position: "absolute",
                             inset: 0,
                             borderRadius: 46,
-                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.12))",
-                            border: "1px solid rgba(255,255,255,0.55)",
-                            boxShadow: "0 50px 120px rgba(15,23,42,0.32), inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -28px 56px rgba(15,23,42,0.22)",
+                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.18))",
+                            border: "1px solid rgba(255,255,255,0.58)",
+                            boxShadow: "0 60px 140px rgba(15,23,42,0.34), inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -36px 60px rgba(15,23,42,0.2)",
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
-                            inset: "24px 28px 32px",
+                            inset: "32px 36px 40px",
                             borderRadius: 34,
-                            backgroundImage: "linear-gradient(120deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05))",
-                            border: "1px solid rgba(255,255,255,0.3)",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -20px 45px rgba(15,23,42,0.18)",
-                            opacity: 0.92,
+                            backgroundImage: "linear-gradient(120deg, rgba(255,255,255,0.48), rgba(255,255,255,0.05))",
+                            border: "1px solid rgba(255,255,255,0.32)",
+                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -24px 55px rgba(15,23,42,0.18)",
+                            opacity: 0.95,
                         }}
                     />
                     <div
@@ -124,21 +187,35 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                             position: "absolute",
                             inset: 0,
                             borderRadius: 46,
-                            backgroundImage: "radial-gradient(120% 120% at 18% 12%, rgba(255,255,255,0.7), transparent 62%), radial-gradient(120% 120% at 82% 88%, rgba(148,163,184,0.35), transparent 58%)",
+                            backgroundImage: `radial-gradient(120% 140% at 18% 12%, rgba(255,255,255,0.85), transparent 60%), radial-gradient(160% 140% at 88% 92%, rgba(148,163,184,0.45), transparent 62%)`,
                             mixBlendMode: "screen",
-                            opacity: 0.55,
+                            opacity: 0.6,
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
-                            top: 36,
+                            top: 38,
                             left: 120,
                             right: 120,
-                            height: 10,
+                            height: 12,
                             borderRadius: 999,
-                            backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2))",
-                            opacity: 0.85,
+                            backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.92), rgba(255,255,255,0.3))",
+                            opacity: 0.88,
+                            filter: "blur(0.6px)",
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: 54,
+                            left: 96,
+                            right: 96,
+                            height: 120,
+                            borderRadius: 36,
+                            backgroundImage: "linear-gradient(180deg, rgba(15,23,42,0.35), rgba(15,23,42,0))",
+                            opacity: 0.38,
+                            filter: "blur(28px)",
                         }}
                     />
                     <div
