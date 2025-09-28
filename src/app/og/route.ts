@@ -10,8 +10,9 @@ function resolveAlign(value: string | null): OgImageAlign {
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
-    const siteTitle = buildSiteTitle(config.site_info.title);
-    const fallbackSubtitle = getSiteSubtitle(config.site_info.title);
+    const logoTitleParts = config.header_logo;
+    const siteTitle = buildSiteTitle(logoTitleParts);
+    const fallbackSubtitle = getSiteSubtitle(logoTitleParts);
     const title = searchParams.get("title")?.trim() || siteTitle;
     const subtitleRaw = searchParams.get("subtitle");
     const subtitleTrimmed = subtitleRaw?.trim();

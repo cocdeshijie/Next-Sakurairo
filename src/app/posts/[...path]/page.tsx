@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     if (!post) return {};
 
     const description = post.excerpt;
-    const siteTitle = buildSiteTitle(config.site_info.title);
+    const siteTitle = buildSiteTitle(config.header_logo);
     const ogImage = getOgImageUrl({
         title: post.title,
         subtitle: siteTitle,

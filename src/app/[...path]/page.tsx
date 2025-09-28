@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const page = getPageByPath(path);
     if (page == null) return {};
     const description = page.description;
-    const siteTitle = buildSiteTitle(config.site_info.title);
+    const siteTitle = buildSiteTitle(config.header_logo);
     const ogImage = getOgImageUrl({
         title: page.title,
         subtitle: siteTitle,

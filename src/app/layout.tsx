@@ -19,11 +19,13 @@ type RootLayoutProps = {
 const inter = Inter({ subsets: ["latin"] });
 
 // TODO: metadata
-const siteTitle = buildSiteTitle(config.site_info.title);
+const logoTitleParts = config.header_logo;
+const siteTitle = buildSiteTitle(logoTitleParts);
 const siteDescription = `by ${config.site_info.author}`;
-const homeSubtitle = getSiteSubtitle(config.site_info.title);
+const homeSubtitle = getSiteSubtitle(logoTitleParts);
 const defaultOgImage = getOgImageUrl({ title: siteTitle, subtitle: homeSubtitle, align: "center" });
 const defaultOgAlt = `${siteTitle} open graph image`;
+const profileImage = config.site_info.profile_image;
 
 export const metadata: Metadata = {
     title: {
@@ -31,6 +33,11 @@ export const metadata: Metadata = {
         template: `%s | ${siteTitle}`,
     },
     description: siteDescription,
+    icons: {
+        icon: profileImage,
+        shortcut: profileImage,
+        apple: profileImage,
+    },
     openGraph: {
         title: siteTitle,
         description: siteDescription,

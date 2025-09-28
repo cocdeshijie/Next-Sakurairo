@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: TagProps): Promise<Metadata> 
     const resolvedParams = await params;
     const tag = decodeURIComponent(resolvedParams.slug);
     const title = `Tag: ${tag}`;
-    const siteTitle = buildSiteTitle(config.site_info.title);
+    const siteTitle = buildSiteTitle(config.header_logo);
     const description = `Posts tagged with ${tag} on ${siteTitle}`;
     const ogImage = getOgImageUrl({
         title,

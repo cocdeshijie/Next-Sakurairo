@@ -4,8 +4,9 @@ import { buildSiteTitle, getSiteSubtitle } from "@/utils/site";
 
 export const size = ogImageSize;
 export const contentType = ogImageContentType;
-const siteTitle = buildSiteTitle(config.site_info.title);
-const homeSubtitle = getSiteSubtitle(config.site_info.title);
+const logoTitleParts = config.header_logo;
+const siteTitle = buildSiteTitle(logoTitleParts);
+const homeSubtitle = getSiteSubtitle(logoTitleParts);
 export const alt = `${siteTitle} open graph image`;
 
 export default function OgImage() {
