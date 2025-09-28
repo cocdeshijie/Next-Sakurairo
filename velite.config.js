@@ -18,7 +18,12 @@ const config = defineCollection({
     single: true,
     schema: s.object({
         site_info: s.object({
-            title: s.string(),
+            title: s.object({
+                text_front: s.string(),
+                text_middle: s.string(),
+                text_end: s.string(),
+                text_bottom: s.string().optional(),
+            }),
             author: s.string(),
             profile_image: s.string(),
             theme_color: s.string(),

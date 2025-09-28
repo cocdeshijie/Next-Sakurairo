@@ -10,6 +10,7 @@ import { cn } from "@/utils/cn";
 import { UtilityButtons } from "@/components/Layout/UtilityButtons";
 import { config } from "#site/content";
 import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle, getSiteSubtitle } from "@/utils/site";
 
 type RootLayoutProps = {
     children: React.ReactNode;
@@ -18,9 +19,10 @@ type RootLayoutProps = {
 const inter = Inter({ subsets: ["latin"] });
 
 // TODO: metadata
-const siteTitle = config.site_info.title;
+const siteTitle = buildSiteTitle(config.site_info.title);
 const siteDescription = `by ${config.site_info.author}`;
-const defaultOgImage = getOgImageUrl({ title: siteTitle, align: "center" });
+const homeSubtitle = getSiteSubtitle(config.site_info.title);
+const defaultOgImage = getOgImageUrl({ title: siteTitle, subtitle: homeSubtitle, align: "center" });
 const defaultOgAlt = `${siteTitle} open graph image`;
 
 export const metadata: Metadata = {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
 import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle } from "@/utils/site";
 
 type Params = {
     path: string[];
@@ -56,11 +57,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const page = getPageByPath(path);
     if (page == null) return {};
     const description = page.description;
+    const siteTitle = buildSiteTitle(config.site_info.title);
     const ogImage = getOgImageUrl({
         title: page.title,
-        subtitle: config.site_info.title,
+        subtitle: siteTitle,
     });
-    const ogAlt = `${page.title} – ${config.site_info.title}`;
+    const ogAlt = `${page.title} – ${siteTitle}`;
     return {
         title: page.title,
         description,

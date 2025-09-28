@@ -4,6 +4,7 @@ import PostList from "@/components/ui/Posts/list";
 import Tag from "@/components/ui/Tags";
 import { config, tags } from "#site/content";
 import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle } from "@/utils/site";
 
 interface TagProps {
     params: Promise<{
@@ -24,12 +25,13 @@ export async function generateMetadata({ params }: TagProps): Promise<Metadata> 
     const resolvedParams = await params;
     const tag = decodeURIComponent(resolvedParams.slug);
     const title = `Tag: ${tag}`;
-    const description = `Posts tagged with ${tag} on ${config.site_info.title}`;
+    const siteTitle = buildSiteTitle(config.site_info.title);
+    const description = `Posts tagged with ${tag} on ${siteTitle}`;
     const ogImage = getOgImageUrl({
         title,
-        subtitle: config.site_info.title,
+        subtitle: siteTitle,
     });
-    const ogAlt = `${title} – ${config.site_info.title}`;
+    const ogAlt = `${title} – ${siteTitle}`;
 
     return {
         title,

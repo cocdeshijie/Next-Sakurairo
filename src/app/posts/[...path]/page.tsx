@@ -9,6 +9,7 @@ import TOC from "@/components/ui/TOC";
 import Tag from "@/components/ui/Tags";
 import GiscusComments from "@/components/ui/Giscus";
 import { getOgImageUrl, ogImageSize } from "@/utils/og";
+import { buildSiteTitle } from "@/utils/site";
 
 interface PostProps {
     params: Promise<{ path: string[] }>
@@ -35,11 +36,12 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     if (!post) return {};
 
     const description = post.excerpt;
+    const siteTitle = buildSiteTitle(config.site_info.title);
     const ogImage = getOgImageUrl({
         title: post.title,
-        subtitle: config.site_info.title,
+        subtitle: siteTitle,
     });
-    const ogAlt = `${post.title} – ${config.site_info.title}`;
+    const ogAlt = `${post.title} – ${siteTitle}`;
 
     return {
         title: post.title,

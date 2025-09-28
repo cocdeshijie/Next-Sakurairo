@@ -92,33 +92,76 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                     style={{
                         position: "absolute",
                         inset: 48,
-                        borderRadius: 40,
-                        border: "4px solid rgba(255,255,255,0.25)",
-                        backgroundColor: "rgba(255,255,255,0.82)",
+                        borderRadius: 46,
                         display: "flex",
-                        flexDirection: "column",
+                        alignItems: "center",
                         justifyContent: "center",
-                        padding: "72px 96px",
-                        boxShadow: "0 30px 80px rgba(15,23,42,0.25)",
                     }}
                 >
                     <div
                         style={{
+                            position: "absolute",
+                            inset: 0,
+                            borderRadius: 46,
+                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.12))",
+                            border: "1px solid rgba(255,255,255,0.55)",
+                            boxShadow: "0 50px 120px rgba(15,23,42,0.32), inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -28px 56px rgba(15,23,42,0.22)",
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: "24px 28px 32px",
+                            borderRadius: 34,
+                            backgroundImage: "linear-gradient(120deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05))",
+                            border: "1px solid rgba(255,255,255,0.3)",
+                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -20px 45px rgba(15,23,42,0.18)",
+                            opacity: 0.92,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            inset: 0,
+                            borderRadius: 46,
+                            backgroundImage: "radial-gradient(120% 120% at 18% 12%, rgba(255,255,255,0.7), transparent 62%), radial-gradient(120% 120% at 82% 88%, rgba(148,163,184,0.35), transparent 58%)",
+                            mixBlendMode: "screen",
+                            opacity: 0.55,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 36,
+                            left: 120,
+                            right: 120,
+                            height: 10,
+                            borderRadius: 999,
+                            backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2))",
+                            opacity: 0.85,
+                        }}
+                    />
+                    <div
+                        style={{
+                            position: "relative",
                             display: "flex",
                             flexDirection: "column",
                             gap: 24,
                             textAlign: isCentered ? "center" : "left",
                             alignItems: isCentered ? "center" : "flex-start",
+                            padding: "72px 96px",
+                            width: "100%",
+                            maxWidth: isCentered ? 820 : 920,
                         }}
                     >
                         <span
                             style={{
                                 fontSize: isCentered ? 96 : 78,
                                 fontWeight: 700,
-                                lineHeight: 1.05,
-                                color: "#111827",
-                                textShadow: "0 14px 30px rgba(148,163,184,0.45)",
-                                maxWidth: isCentered ? 820 : 920,
+                                lineHeight: 1.04,
+                                color: "#0b1120",
+                                textShadow: "0 24px 55px rgba(15,23,42,0.38), 0 10px 24px rgba(255,255,255,0.25)",
+                                letterSpacing: "-0.5px",
                                 wordBreak: "break-word",
                             }}
                         >
@@ -129,7 +172,8 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                                 style={{
                                     fontSize: isCentered ? 40 : 34,
                                     fontWeight: 500,
-                                    color: "rgba(30,41,59,0.75)",
+                                    color: "rgba(15,23,42,0.7)",
+                                    textShadow: "0 16px 36px rgba(15,23,42,0.25)",
                                     maxWidth: 880,
                                 }}
                             >

@@ -1,5 +1,6 @@
 import { config } from "#site/content";
 import { createOgImage, type OgImageAlign } from "@/utils/og";
+import { buildSiteTitle, getSiteSubtitle } from "@/utils/site";
 
 export const runtime = "edge";
 
@@ -9,11 +10,14 @@ function resolveAlign(value: string | null): OgImageAlign {
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
-    const title = searchParams.get("title")?.trim() || config.site_info.title;
+    const siteTitle = buildSiteTitle(config.site_info.title);
+    const fallbackSubtitle = getSiteSubtitle(config.site_info.title);
+    const title = searchParams.get("title")?.trim() || siteTitle;
     const subtitleRaw = searchParams.get("subtitle");
     const subtitleTrimmed = subtitleRaw?.trim();
-    const subtitle = subtitleTrimmed ? subtitleTrimmed : undefined;
-    const align = resolveAlign(searchParams.get("align"));
+    const subtitle = subtitleTrimmed ? subtitleTrimmed : fallbackSubtitle;
+    const alignParam = searchParams.get("align");
+    const align = alignParam ? resolveAlign(alignParam) : subtitle === fallbackSubtitle ? "center" : "start";
 
     return createOgImage({
         title,
