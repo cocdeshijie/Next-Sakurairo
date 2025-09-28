@@ -34,6 +34,28 @@ const ENVIRONMENT_BASE = (() => {
     return undefined;
 })();
 
+function normalizeLocalhostProtocol(url: URL): URL {
+    if (url.protocol === "https:" && /^(localhost|127\.|0\.0\.0\.0)/.test(url.hostname)) {
+        url.protocol = "http:";
+    }
+
+    return url;
+}
+
+function tryResolve(path: string, base?: string): string | undefined {
+    if (!base) {
+        return undefined;
+    }
+
+    try {
+        const resolved = normalizeLocalhostProtocol(new URL(path, base));
+        return resolved.toString();
+    } catch (error) {
+        console.warn("Failed to resolve OG asset URL", { path, base, error });
+        return undefined;
+    }
+}
+
 function resolveAssetUrl(path?: string, base?: string): string | undefined {
     if (!path) {
         return undefined;
@@ -43,16 +65,23 @@ function resolveAssetUrl(path?: string, base?: string): string | undefined {
         return path;
     }
 
-    try {
-        if (base) {
-            return new URL(path, base).toString();
-        }
+    const resolvedFromRequest = tryResolve(path, base);
+    if (resolvedFromRequest) {
+        return resolvedFromRequest;
+    }
 
-        if (ENVIRONMENT_BASE) {
-            return new URL(path, ENVIRONMENT_BASE).toString();
+    const resolvedFromEnv = tryResolve(path, ENVIRONMENT_BASE);
+    if (resolvedFromEnv) {
+        return resolvedFromEnv;
+    }
+
+    const domain = config.site_info.domain?.trim();
+    if (domain) {
+        const withProtocol = domain.startsWith("http://") || domain.startsWith("https://") ? domain : `https://${domain}`;
+        const resolvedFromDomain = tryResolve(path, withProtocol);
+        if (resolvedFromDomain) {
+            return resolvedFromDomain;
         }
-    } catch (error) {
-        console.warn("Failed to resolve OG asset URL", error);
     }
 
     return undefined;
