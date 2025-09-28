@@ -66,6 +66,11 @@ function darken(hex: string, amount: number): string {
     return rgbToHex(mix(hexToRgb(hex), black, amount));
 }
 
+function hexToRgba(hex: string, alpha: number): string {
+    const { r, g, b } = hexToRgb(hex);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
 export function createOgImage({ title, subtitle, align = "start" }: OgImageOptions) {
     const baseColor = config.site_info?.theme_color ?? DEFAULT_THEME_COLOR;
     const accentLight = lighten(baseColor, 0.35);
@@ -73,6 +78,8 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
     const accentHighlight = lighten(baseColor, 0.6);
     const accentShadow = darken(baseColor, 0.45);
     const accentMid = lighten(baseColor, 0.1);
+    const accentGlassTint = lighten(baseColor, 0.55);
+    const accentGlassShadow = darken(baseColor, 0.32);
 
     const isCentered = align === "center";
 
@@ -168,20 +175,21 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                             position: "absolute",
                             inset: 0,
                             borderRadius: 46,
-                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.18))",
-                            border: "1px solid rgba(255,255,255,0.58)",
-                            boxShadow: "0 60px 140px rgba(15,23,42,0.34), inset 0 1px 0 rgba(255,255,255,0.75), inset 0 -36px 60px rgba(15,23,42,0.2)",
+                            backgroundImage: "linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.16))",
+                            border: "1px solid rgba(255,255,255,0.52)",
+                            boxShadow: "0 60px 140px rgba(15,23,42,0.34), inset 0 1px 0 rgba(255,255,255,0.78), inset 0 -36px 60px rgba(15,23,42,0.24)",
                         }}
                     />
                     <div
                         style={{
                             position: "absolute",
-                            inset: "32px 36px 40px",
-                            borderRadius: 34,
-                            backgroundImage: "linear-gradient(120deg, rgba(255,255,255,0.48), rgba(255,255,255,0.05))",
-                            border: "1px solid rgba(255,255,255,0.32)",
-                            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -24px 55px rgba(15,23,42,0.18)",
-                            opacity: 0.95,
+                            inset: "30px 34px 46px",
+                            borderRadius: 36,
+                            backgroundImage: `linear-gradient(125deg, rgba(255,255,255,0.32), rgba(255,255,255,0.06)), linear-gradient(155deg, ${hexToRgba(accentGlassTint, 0.22)}, ${hexToRgba(accentGlassShadow, 0.32)})`,
+                            border: "1px solid rgba(255,255,255,0.28)",
+                            boxShadow: `inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -24px 55px ${hexToRgba(accentShadow, 0.35)}`,
+                            backdropFilter: "blur(16px)",
+                            opacity: 0.92,
                         }}
                     />
                     <div
@@ -197,14 +205,14 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                     <div
                         style={{
                             position: "absolute",
-                            top: 38,
-                            left: 120,
-                            right: 120,
-                            height: 12,
-                            borderRadius: 999,
-                            backgroundImage: "linear-gradient(90deg, rgba(255,255,255,0.92), rgba(255,255,255,0.3))",
-                            opacity: 0.88,
-                            filter: "blur(0.6px)",
+                            top: 32,
+                            left: 108,
+                            right: 108,
+                            height: 140,
+                            borderRadius: 420,
+                            backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.75), ${hexToRgba(accentLight, 0.08)})`,
+                            opacity: 0.5,
+                            filter: "blur(26px)",
                         }}
                     />
                     <div
@@ -215,7 +223,7 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
                             right: 96,
                             height: 120,
                             borderRadius: 36,
-                            backgroundImage: "linear-gradient(180deg, rgba(15,23,42,0.35), rgba(15,23,42,0))",
+                            backgroundImage: `linear-gradient(180deg, ${hexToRgba(accentShadow, 0.55)}, rgba(15,23,42,0))`,
                             opacity: 0.38,
                             filter: "blur(28px)",
                         }}
