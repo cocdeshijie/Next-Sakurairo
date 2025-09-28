@@ -3,6 +3,7 @@ import { getPosts } from "@/app/actions/getPosts";
 import PostList from "@/components/ui/Posts/list";
 import Tag from "@/components/ui/Tags";
 import { config, tags } from "#site/content";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
 
 interface TagProps {
     params: Promise<{
@@ -24,6 +25,11 @@ export async function generateMetadata({ params }: TagProps): Promise<Metadata> 
     const tag = decodeURIComponent(resolvedParams.slug);
     const title = `Tag: ${tag}`;
     const description = `Posts tagged with ${tag} on ${config.site_info.title}`;
+    const ogImage = getOgImageUrl({
+        title,
+        subtitle: config.site_info.title,
+    });
+    const ogAlt = `${title} – ${config.site_info.title}`;
 
     return {
         title,
@@ -31,11 +37,20 @@ export async function generateMetadata({ params }: TagProps): Promise<Metadata> 
         openGraph: {
             title,
             description,
+            images: [
+                {
+                    url: ogImage,
+                    width: ogImageSize.width,
+                    height: ogImageSize.height,
+                    alt: ogAlt,
+                },
+            ],
         },
         twitter: {
             card: "summary_large_image",
             title,
             description,
+            images: [ogImage],
         },
     };
 }

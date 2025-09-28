@@ -8,7 +8,8 @@ import { ThemeProvider } from "@/providers/theme-provider";
 import { ScrollProvider } from "@/providers/scroll-provider";
 import { cn } from "@/utils/cn";
 import { UtilityButtons } from "@/components/Layout/UtilityButtons";
-import { type Config, config } from "#site/content";
+import { config } from "#site/content";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
 
 type RootLayoutProps = {
     children: React.ReactNode;
@@ -19,6 +20,8 @@ const inter = Inter({ subsets: ["latin"] });
 // TODO: metadata
 const siteTitle = config.site_info.title;
 const siteDescription = `by ${config.site_info.author}`;
+const defaultOgImage = getOgImageUrl({ title: siteTitle, align: "center" });
+const defaultOgAlt = `${siteTitle} open graph image`;
 
 export const metadata: Metadata = {
     title: {
@@ -31,11 +34,20 @@ export const metadata: Metadata = {
         description: siteDescription,
         type: "website",
         siteName: siteTitle,
+        images: [
+            {
+                url: defaultOgImage,
+                width: ogImageSize.width,
+                height: ogImageSize.height,
+                alt: defaultOgAlt,
+            },
+        ],
     },
     twitter: {
         card: "summary_large_image",
         title: siteTitle,
         description: siteDescription,
+        images: [defaultOgImage],
     },
     themeColor: config.site_info.theme_color,
 };

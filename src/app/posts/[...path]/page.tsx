@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { posts } from "#site/content";
+import { config, posts } from "#site/content";
 import Image from "next/image";
 import { cn } from "@/utils/cn";
 import { MDX } from "@/components/ui/MDX";
@@ -8,6 +8,7 @@ import { HiMiniCalendarDays } from "react-icons/hi2";
 import TOC from "@/components/ui/TOC";
 import Tag from "@/components/ui/Tags";
 import GiscusComments from "@/components/ui/Giscus";
+import { getOgImageUrl, ogImageSize } from "@/utils/og";
 
 interface PostProps {
     params: Promise<{ path: string[] }>
@@ -34,6 +35,11 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
     if (!post) return {};
 
     const description = post.excerpt;
+    const ogImage = getOgImageUrl({
+        title: post.title,
+        subtitle: config.site_info.title,
+    });
+    const ogAlt = `${post.title} – ${config.site_info.title}`;
 
     return {
         title: post.title,
@@ -41,11 +47,20 @@ export async function generateMetadata({ params }: PostProps): Promise<Metadata>
         openGraph: {
             title: post.title,
             description,
+            images: [
+                {
+                    url: ogImage,
+                    width: ogImageSize.width,
+                    height: ogImageSize.height,
+                    alt: ogAlt,
+                },
+            ],
         },
         twitter: {
             card: "summary_large_image",
             title: post.title,
             description,
+            images: [ogImage],
         },
     };
 }

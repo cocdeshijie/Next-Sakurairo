@@ -11,11 +11,15 @@ const black = { r: 0, g: 0, b: 0 } as const;
 
 type RGB = { r: number; g: number; b: number };
 
-type OgImageOptions = {
+export type OgImageAlign = "center" | "start";
+
+export type OgImageOptions = {
     title: string;
     subtitle?: string;
-    align?: "center" | "start";
+    align?: OgImageAlign;
 };
+
+const OG_IMAGE_ROUTE = "/og" as const;
 
 function normaliseHex(hex: string): string {
     const trimmed = hex.trim();
@@ -145,3 +149,18 @@ export function createOgImage({ title, subtitle, align = "start" }: OgImageOptio
 
 export const ogImageSize = { width: OG_WIDTH, height: OG_HEIGHT } as const;
 export const ogImageContentType = "image/png" as const;
+
+export function getOgImageUrl({ title, subtitle, align }: OgImageOptions): string {
+    const params = new URLSearchParams({ title });
+
+    if (subtitle) {
+        params.set("subtitle", subtitle);
+    }
+
+    if (align === "center") {
+        params.set("align", align);
+    }
+
+    const query = params.toString();
+    return query ? `${OG_IMAGE_ROUTE}?${query}` : OG_IMAGE_ROUTE;
+}
