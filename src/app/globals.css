@@ -5,6 +5,7 @@
 :root {
     --theme-transition-x: 50vw;
     --theme-transition-y: 50vh;
+    --theme-transition-duration: 420ms;
     --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -30,16 +31,14 @@ body {
     ::view-transition-new(root) {
         --theme-transition-radius: 0px;
         clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
-        animation: theme-switch-reveal 420ms var(--expo-out) forwards;
+        animation: theme-switch-reveal var(--theme-transition-duration) var(--expo-out) forwards;
         z-index: 1;
     }
 
     ::view-transition-old(root),
     .dark::view-transition-old(root) {
-        --theme-transition-radius: 150vmax;
-        clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
-        animation: theme-switch-conceal 420ms var(--expo-out) forwards;
-        z-index: -1;
+        animation: theme-switch-fade var(--theme-transition-duration) var(--expo-out) forwards;
+        z-index: 0;
     }
 
     @keyframes theme-switch-reveal {
@@ -48,9 +47,17 @@ body {
         }
     }
 
-    @keyframes theme-switch-conceal {
+    @keyframes theme-switch-fade {
+        from {
+            opacity: 1;
+        }
+
+        60% {
+            opacity: 1;
+        }
+
         to {
-            --theme-transition-radius: 0px;
+            opacity: 0;
         }
     }
 
