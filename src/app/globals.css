@@ -5,7 +5,7 @@
 :root {
     --theme-transition-x: 50vw;
     --theme-transition-y: 50vh;
-    --theme-transition-duration: 420ms;
+    --theme-transition-duration: 1s;
     --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
