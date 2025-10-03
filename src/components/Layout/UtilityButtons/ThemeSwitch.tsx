@@ -71,14 +71,8 @@ const ThemeSwitch = () => {
             document.documentElement.style.setProperty("--theme-transition-x", `${x}px`);
             document.documentElement.style.setProperty("--theme-transition-y", `${y}px`);
 
-            const transition = doc.startViewTransition(async () => {
+            const transition = doc.startViewTransition(() => {
                 applyTheme();
-
-                await new Promise<void>((resolve) => {
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => resolve());
-                    });
-                });
             });
 
             transition.finished.finally(() => {

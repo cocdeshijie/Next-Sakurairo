@@ -8,6 +8,12 @@
     --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+@property --theme-transition-radius {
+    syntax: "<length-percentage>";
+    inherits: false;
+    initial-value: 0px;
+}
+
 :root {
     view-transition-name: root;
 }
@@ -22,28 +28,44 @@ body {
     }
 
     ::view-transition-new(root) {
-        clip-path: circle(0rem at var(--theme-transition-x) var(--theme-transition-y));
-        animation: theme-switch-reveal 420ms var(--expo-out);
-        animation-fill-mode: forwards;
+        --theme-transition-radius: 0px;
+        mask-image: radial-gradient(
+            circle var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y),
+            rgb(255 255 255 / 1) 0%,
+            rgb(255 255 255 / 1) 60%,
+            rgb(255 255 255 / 0) 100%
+        );
+        mask-mode: alpha;
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+        animation: theme-switch-reveal 420ms var(--expo-out) forwards;
     }
 
     ::view-transition-old(root),
     .dark::view-transition-old(root) {
-        clip-path: circle(150% at var(--theme-transition-x) var(--theme-transition-y));
-        animation: theme-switch-conceal 420ms var(--expo-out);
-        animation-fill-mode: forwards;
+        --theme-transition-radius: 350vmax;
+        mask-image: radial-gradient(
+            circle var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y),
+            rgb(255 255 255 / 1) 0%,
+            rgb(255 255 255 / 1) 60%,
+            rgb(255 255 255 / 0) 100%
+        );
+        mask-mode: alpha;
+        mask-repeat: no-repeat;
+        mask-size: 100% 100%;
+        animation: theme-switch-conceal 420ms var(--expo-out) forwards;
         z-index: -1;
     }
 
     @keyframes theme-switch-reveal {
         to {
-            clip-path: circle(150% at var(--theme-transition-x) var(--theme-transition-y));
+            --theme-transition-radius: 350vmax;
         }
     }
 
     @keyframes theme-switch-conceal {
         to {
-            clip-path: circle(0rem at var(--theme-transition-x) var(--theme-transition-y));
+            --theme-transition-radius: 0px;
         }
     }
 
