@@ -2,6 +2,77 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --theme-transition-x: 50vw;
+    --theme-transition-y: 50vh;
+    --theme-transition-duration: 1s;
+    --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@property --theme-transition-radius {
+    syntax: "<length-percentage>";
+    inherits: false;
+    initial-value: 0px;
+}
+
+:root {
+    view-transition-name: root;
+}
+
+body {
+    view-transition-name: none;
+}
+
+@supports (view-transition-name: root) {
+    ::view-transition-group(root) {
+        animation-timing-function: var(--expo-out);
+    }
+
+    ::view-transition-new(root) {
+        --theme-transition-radius: 0px;
+        clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
+        animation: theme-switch-reveal var(--theme-transition-duration) var(--expo-out) forwards;
+        z-index: 1;
+    }
+
+    ::view-transition-old(root),
+    .dark::view-transition-old(root) {
+        animation: theme-switch-fade var(--theme-transition-duration) var(--expo-out) forwards;
+        z-index: 0;
+    }
+
+    @keyframes theme-switch-reveal {
+        to {
+            --theme-transition-radius: 150vmax;
+        }
+    }
+
+    @keyframes theme-switch-fade {
+        from {
+            opacity: 1;
+        }
+
+        60% {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(root),
+        ::view-transition-new(root),
+        ::view-transition-old(root),
+        .dark::view-transition-old(root) {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1;
+            animation-fill-mode: both;
+        }
+    }
+}
+
 .light {
     --scrollbar: theme('colors.theme.500');
     --scrollbar-bg: theme('colors.theme.200');
