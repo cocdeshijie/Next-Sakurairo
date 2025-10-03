@@ -22,24 +22,39 @@ body {
     }
 
     ::view-transition-new(root) {
-        mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="0" cy="0" r="18" fill="white" filter="url(%23blur)"/></svg>')
-            var(--theme-transition-x) var(--theme-transition-y) / 0 no-repeat;
-        mask-origin: content-box;
-        mask-size: 0;
-        animation: theme-switch-scale 0.9s;
-        transform-origin: var(--theme-transition-x) var(--theme-transition-y);
+        clip-path: circle(0rem at var(--theme-transition-x) var(--theme-transition-y));
+        animation: theme-switch-reveal 420ms var(--expo-out);
+        animation-fill-mode: forwards;
     }
 
     ::view-transition-old(root),
     .dark::view-transition-old(root) {
-        animation: theme-switch-scale 0.9s;
-        transform-origin: var(--theme-transition-x) var(--theme-transition-y);
+        clip-path: circle(150% at var(--theme-transition-x) var(--theme-transition-y));
+        animation: theme-switch-conceal 420ms var(--expo-out);
+        animation-fill-mode: forwards;
         z-index: -1;
     }
 
-    @keyframes theme-switch-scale {
+    @keyframes theme-switch-reveal {
         to {
-            mask-size: 350vmax 350vmax;
+            clip-path: circle(150% at var(--theme-transition-x) var(--theme-transition-y));
+        }
+    }
+
+    @keyframes theme-switch-conceal {
+        to {
+            clip-path: circle(0rem at var(--theme-transition-x) var(--theme-transition-y));
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(root),
+        ::view-transition-new(root),
+        ::view-transition-old(root),
+        .dark::view-transition-old(root) {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1;
+            animation-fill-mode: both;
         }
     }
 }
