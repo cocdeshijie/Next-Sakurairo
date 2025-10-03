@@ -29,37 +29,22 @@ body {
 
     ::view-transition-new(root) {
         --theme-transition-radius: 0px;
-        mask-image: radial-gradient(
-            circle var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y),
-            rgb(255 255 255 / 1) 0%,
-            rgb(255 255 255 / 1) 60%,
-            rgb(255 255 255 / 0) 100%
-        );
-        mask-mode: alpha;
-        mask-repeat: no-repeat;
-        mask-size: 100% 100%;
+        clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
         animation: theme-switch-reveal 420ms var(--expo-out) forwards;
+        z-index: 1;
     }
 
     ::view-transition-old(root),
     .dark::view-transition-old(root) {
-        --theme-transition-radius: 350vmax;
-        mask-image: radial-gradient(
-            circle var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y),
-            rgb(255 255 255 / 1) 0%,
-            rgb(255 255 255 / 1) 60%,
-            rgb(255 255 255 / 0) 100%
-        );
-        mask-mode: alpha;
-        mask-repeat: no-repeat;
-        mask-size: 100% 100%;
+        --theme-transition-radius: 150vmax;
+        clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
         animation: theme-switch-conceal 420ms var(--expo-out) forwards;
         z-index: -1;
     }
 
     @keyframes theme-switch-reveal {
         to {
-            --theme-transition-radius: 350vmax;
+            --theme-transition-radius: 150vmax;
         }
     }
 
