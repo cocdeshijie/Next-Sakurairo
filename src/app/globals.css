@@ -2,6 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --theme-transition-x: 50vw;
+    --theme-transition-y: 50vh;
+    --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+    view-transition-name: root;
+}
+
+body {
+    view-transition-name: none;
+}
+
+@supports (view-transition-name: root) {
+    ::view-transition-group(root) {
+        animation-timing-function: var(--expo-out);
+    }
+
+    ::view-transition-new(root) {
+        mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="0" cy="0" r="18" fill="white" filter="url(%23blur)"/></svg>')
+            var(--theme-transition-x) var(--theme-transition-y) / 0 no-repeat;
+        mask-origin: content-box;
+        mask-size: 0;
+        animation: theme-switch-scale 0.9s;
+        transform-origin: var(--theme-transition-x) var(--theme-transition-y);
+    }
+
+    ::view-transition-old(root),
+    .dark::view-transition-old(root) {
+        animation: theme-switch-scale 0.9s;
+        transform-origin: var(--theme-transition-x) var(--theme-transition-y);
+        z-index: -1;
+    }
+
+    @keyframes theme-switch-scale {
+        to {
+            mask-size: 350vmax 350vmax;
+        }
+    }
+}
+
 .light {
     --scrollbar: theme('colors.theme.500');
     --scrollbar-bg: theme('colors.theme.200');
